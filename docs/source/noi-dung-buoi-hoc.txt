@@ -1,0 +1,1287 @@
+HỌC VIỆN VIETTEL
+HỘI ĐỒNG XÂY DỰNG CHƯƠNG TRÌNH ĐÀO TẠO
+KẾ HOẠCH NỘI DUNG BUỔI HỌC
+VÀ BÀI THỰC HÀNH
+AI-Native Application Engineering
+Phát triển ứng dụng AI · 24 giờ · 03 ngày
+Case study xuyên suốt: Trợ lý xử lý ticket Chăm sóc khách hàng viễn thông
+Hà Nội, năm 2026
+
+1. THÔNG TIN CHUNG
+Hạng mục
+Nội dung
+Tên môn học
+AI-Native Application Engineering – Phát triển ứng dụng AI
+Thời lượng
+24 giờ (03 ngày × 8 giờ). Lý thuyết 46%, thực hành 54%
+Cấu trúc
+04 module – 06 session, mỗi session 4 giờ (2 giờ lý thuyết + 2 giờ thực hành)
+Đối tượng
+Ưu tiên nhân sự Khoa học dữ liệu / Trí tuệ nhân tạo. Mở rộng cho nhân sự CNTT và phát triển phần mềm
+Phương pháp
+Action-oriented learning, guided workshop, project-based learning. Offline toàn bộ
+Case study
+01 Development Starter Kit duy nhất, bồi đắp liên tục qua 06 session
+Hạ tầng AI
+Hai cấu hình ngang hàng: cấu hình S dùng server chung có GPU (vLLM, Qwen2.5-7B), cấu hình L chạy cục bộ trên laptop (Ollama, Qwen2.5-3B). Cùng một mô hình embedding bge-m3. Cấu hình nào làm chuẩn được quyết bằng phép đo năng lực trước khóa
+Tài liệu ràng buộc kỹ thuật
+PROJECT-SPEC.md (đi kèm) – mọi quyết định kỹ thuật tra cứu tại đó
+
+1.1. Nguyên tắc thiết kế chuỗi buổi học
+Sáu buổi học không phải sáu bài tập độc lập. Toàn khóa xây dựng một sản phẩm duy nhất, mỗi buổi bổ sung một tầng năng lực cho sản phẩm đó. Deliverable của buổi trước là đầu vào bắt buộc của buổi sau.
+
+Buổi
+Deliverable
+Tầng được bổ sung vào sản phẩm
+Session 1
+AI Opportunity Canvas
+Xác định phạm vi và ranh giới. Chưa viết code
+Session 2
+AI Solution Blueprint
+Kiến trúc hệ thống. Starter Kit chạy được ở trạng thái khung
+Session 3
+Context Specification
+Bộ não: prompt, ngữ cảnh, kho tri thức, truy hồi
+Session 4
+AI Prototype v1
+Quy trình: workflow, gọi công cụ, human-in-the-loop
+Session 5
+Production-ready Prototype
+Vỏ bọc: API, Docker, đánh giá, guardrails, logging
+Session 6
+Final AI Application
+Cải tiến dựa trên số liệu, demo và phản biện
+Hệ quả điều hành: bắt buộc duy trì các nhánh solution/session-N. Học viên không hoàn thành buổi trước vẫn phải tham gia được buổi sau, nếu không chuỗi deliverable sẽ đứt gãy.
+1.2. Ba tầng độ khó trong mỗi bài thực hành
+Lớp học có hai nhóm trình độ khác nhau, nên mỗi bài thực hành được chia ba tầng:
+Tầng lõi (bắt buộc, khoảng 70% thời lượng): starter code đầy đủ, học viên điền vào các vị trí TODO đã đánh dấu. Người ít dùng Python vẫn hoàn thành được.
+Tầng nâng cao (tùy chọn, khoảng 30%): cải tiến chất lượng, có đo lường. Người mạnh làm được ngay, người yếu bỏ qua không ảnh hưởng deliverable.
+Tầng thử thách (không chấm điểm): ghi trong CHALLENGE.md, dành cho nhóm hoàn thành sớm.
+Cách tổ chức khuyến nghị: ghép cặp một học viên nhóm DS/AI với một học viên nhóm CNTT, luân phiên vai trò người gõ và người dẫn sau mỗi 30 phút.
+1.3. Công cụ kỹ thuật đi kèm
+Song song với nội dung chuyên môn, khóa học rèn thói quen quản lý dự án AI theo chuẩn kỹ thuật: quản lý môi trường có khóa phiên bản, kiểm tra mã tự động, ghi nhận quyết định kiến trúc, tích hợp liên tục có cổng chất lượng, và theo dõi thí nghiệm. Các công cụ này được tích hợp sẵn trong Starter Kit và giới thiệu đúng lúc học viên cần dùng. Chi tiết xem chương 3.
+1.4. Hai cấu hình chạy
+Hệ thống hỗ trợ hai cấu hình, chuyển đổi chỉ bằng một biến môi trường. Cả hai đều là lựa chọn chính thức, không phải một chính một phụ.
+
+Cấu hình S — server dùng chung
+Cấu hình L — chạy cục bộ
+Máy chủ suy luận
+vLLM trên GPU, có gộp lô liên tục
+Ollama trên máy học viên
+Mô hình sinh văn bản
+Qwen2.5-7B-Instruct hoặc lớn hơn
+Qwen2.5-3B-Instruct
+Mô hình embedding
+bge-m3
+bge-m3, giống hệt cấu hình S
+Điểm mạnh
+Chất lượng cao hơn, phục vụ đồng thời tốt
+Độc lập, không có điểm hỏng chung
+Điểm yếu
+Điểm hỏng đơn, phụ thuộc đường truyền
+Chậm hơn, chất lượng thấp hơn
+
+Mô hình embedding cố ý giữ giống nhau ở cả hai cấu hình. Nhờ đó chỉ mục tri thức dựng ở cấu hình nào cũng đọc được ở cấu hình kia, và quyết định về hạ tầng không ảnh hưởng tới kho tri thức. Nếu để hai mô hình embedding khác nhau, học viên sẽ gặp lỗi sai lệch số chiều vector giữa buổi và mất rất nhiều thời gian truy nguyên.
+1.5. Cách chọn cấu hình chuẩn cho lớp
+Cấu hình nào làm chuẩn không được quyết bằng phỏng đoán về năng lực phần cứng, mà bằng một phép đo thực hiện trước khóa tối thiểu một tuần. Đơn vị tổ chức chạy công cụ đo có sẵn, ghi thông lượng và độ trễ p95 ở các mức đồng thời 1, 5, 10, 20, 30 với chính prompt của khóa học, rồi đối chiếu bảng sau:
+
+Bộ nhớ GPU khả dụng
+Độ trễ p95 ở mức đồng thời 10
+Kết luận
+Từ 24 GB trở lên
+Dưới 15 giây
+Cấu hình S làm chuẩn, mô hình 7B hoặc lớn hơn
+16 đến 24 GB
+Dưới 20 giây
+Cấu hình S làm chuẩn, mô hình 7B lượng tử hóa
+8 đến 16 GB
+Dưới 25 giây
+Cấu hình S làm chuẩn, giảm mức đồng thời tối đa xuống 15
+Bất kỳ
+Trên 25 giây, hoặc GPU dùng chung với tải khác
+Cấu hình L làm chuẩn; cấu hình S chỉ dùng cho phần trình diễn cuối khóa
+Không đo được trước khóa
+—
+Cấu hình L làm chuẩn
+Nguyên tắc khi phân vân: chọn cấu hình L. Phải hạ chuẩn giữa khóa vì server không tải nổi gây thiệt hại lớn hơn nhiều so với việc chấp nhận chất lượng đầu ra thấp hơn một chút ngay từ đầu.
+Dù chọn cấu hình nào, mọi học viên đều phải chuẩn bị sẵn cả hai. Nếu cấu hình S làm chuẩn thì cấu hình L là đường lùi khi server sự cố, và vì server sập là cả lớp dừng nên đường lùi này không phải tùy chọn. Nếu cấu hình L làm chuẩn thì cấu hình S vẫn cần cho phần so sánh ở Session 5.
+
+2. CASE STUDY XUYÊN SUỐT
+2.1. Bài toán nghiệp vụ
+Trung tâm Chăm sóc khách hàng viễn thông tiếp nhận ticket từ nhiều kênh: tổng đài, ứng dụng di động và thư điện tử. Quy trình thủ công hiện tại gồm các bước đọc hiểu, phân loại, tra cứu chính sách liên quan, soạn phản hồi, rồi xử lý hoặc chuyển tuyến. Khối lượng lớn và lặp lại khiến thời gian xử lý trung bình mỗi ticket kéo dài, đồng thời chất lượng phản hồi phụ thuộc nhiều vào kinh nghiệm của từng giao dịch viên.
+Hệ thống xây dựng trong khóa học hỗ trợ giao dịch viên ở các bước phân loại, tra cứu và soạn thảo. Hệ thống không thay thế giao dịch viên: mọi phản hồi đều phải qua thao tác duyệt của con người trước khi gửi tới khách hàng.
+2.2. Năng lực AI mà hệ thống cần có
+Năng lực
+Mô tả
+Được xây ở buổi
+Phân loại
+Xác định nhóm vấn đề, mức ưu tiên và sắc thái khách hàng
+Session 3
+Trích xuất
+Rút thông tin có cấu trúc: số thuê bao, gói cước, thời điểm sự cố, số tiền tranh chấp
+Session 3
+Truy hồi tri thức
+Tìm chính sách và quy trình xử lý liên quan trong kho tài liệu nội bộ
+Session 3
+Gọi công cụ
+Lấy dữ liệu thuê bao, lịch sử cước, tình trạng sự cố khu vực
+Session 4
+Sinh phản hồi
+Soạn dự thảo trả lời có căn cứ, kèm trích dẫn nguồn
+Session 4
+Kiểm soát an toàn
+Chặn nội dung vi phạm và quyết định khi nào phải chuyển người
+Session 5
+
+2.3. Vì sao chọn bài toán này
+Bối cảnh nghiệp vụ quen thuộc với mọi học viên, không mất thời gian giải thích domain.
+Có nhãn đúng sai, nên Session 5 đánh giá được bằng số liệu thay vì bằng cảm nhận.
+Bao phủ đầy đủ bốn nhóm năng lực mà đề cương yêu cầu.
+Ranh giới giữa việc AI được tự quyết và việc phải chuyển người rất rõ ràng, thuận lợi cho phần guardrails.
+2.4. Dữ liệu sử dụng
+Toàn bộ dữ liệu là dữ liệu sinh tổng hợp, mô phỏng cấu trúc nghiệp vụ. Nghiêm cấm đưa dữ liệu khách hàng thật vào bất kỳ phần nào của khóa học.
+
+Tập dữ liệu
+Quy mô
+Mục đích sử dụng
+Ticket huấn luyện
+80 ticket có nhãn
+Phát triển và thử nghiệm prompt, công khai từ Session 3
+Ticket kiểm định
+40 ticket có nhãn
+Đánh giá cuối, giữ kín cho tới Session 5
+Kho tri thức
+28 tài liệu, mỗi tài liệu 1–3 trang
+Chính sách gói cước, quy định bồi thường, quy trình xử lý, biểu phí
+Bộ hỏi đáp vàng
+40 cặp câu hỏi và đáp án
+Đo chất lượng truy hồi
+Bộ ca đối kháng
+12 ca
+Kiểm thử guardrails ở Session 5
+
+Trong dữ liệu có cài sẵn một số tình huống phục vụ mục đích giảng dạy:
+Tình huống cài sẵn
+Số lượng
+Nội dung sẽ dạy được
+Hai tài liệu chính sách mâu thuẫn nhau
+2 cặp
+Quản lý phiên bản tri thức doanh nghiệp
+Câu hỏi không có đáp án trong kho
+5 câu
+Hệ thống phải biết nói không đủ căn cứ thay vì bịa
+Ticket mơ hồ, có thể gán hai nhãn
+8 ticket
+Ngưỡng tin cậy và quyết định chuyển người
+Ticket chứa thông tin cá nhân nhạy cảm
+3 ticket
+Guardrail bảo vệ dữ liệu cá nhân
+Ticket rác, nội dung vô nghĩa
+2 ticket
+Xử lý lỗi có kiểm soát
+
+3. CÔNG CỤ KỸ THUẬT SỬ DỤNG TRONG KHÓA HỌC
+Khóa học không chỉ dạy cách xây dựng ứng dụng AI mà còn dạy cách quản lý một dự án AI theo chuẩn kỹ thuật. Các công cụ dưới đây được tích hợp sẵn trong Development Starter Kit và được giới thiệu đúng thời điểm học viên cần dùng, thay vì dạy tách rời thành một buổi riêng.
+3.1. Nguyên tắc lựa chọn công cụ
+Một công cụ chỉ được đưa vào khóa học khi thỏa mãn đồng thời ba điều kiện: chạy được ngoại tuyến trên laptop không có card đồ họa, không đòi hỏi dựng thêm dịch vụ nền, và có thể giới thiệu trong dưới 15 phút. Công cụ vi phạm một trong ba điều kiện chỉ được trình diễn để học viên biết sự tồn tại, không đưa vào thực hành.
+3.2. Danh mục công cụ và thời điểm giới thiệu
+Công cụ
+Vai trò trong dự án
+Giới thiệu tại
+Git
+Quản lý mã nguồn, nhánh làm việc theo nhóm, gắn thẻ nộp bài
+Lab 0
+uv
+Quản lý môi trường và khóa phiên bản thư viện, bảo đảm mọi máy học viên giống nhau
+Lab 0
+ruff và pre-commit
+Tự động định dạng mã, chặn commit vi phạm quy ước hoặc chứa dữ liệu nhạy cảm
+Lab 0, sau đó chạy ngầm
+ADR
+Ghi nhận quyết định kiến trúc theo mẫu bốn phần, không sửa quyết định cũ mà tạo quyết định thay thế
+Session 2
+Ollama Modelfile
+Ghim tham số mô hình để cấu hình tái lập được giữa các máy
+Session 2
+Tích hợp liên tục
+Tự động kiểm tra mã, chạy kiểm thử, chạy đánh giá và dựng ảnh trên mỗi lần đẩy mã
+Session 2 giới thiệu, Session 5 đầy đủ
+pytest
+Kiểm thử tự động cho từng bài thực hành, học viên tự biết mình đúng hay sai
+Session 3
+promptfoo
+So sánh nhiều phiên bản prompt trên cùng bộ ca kiểm thử, chạy hoàn toàn tại chỗ
+Session 3
+MLflow
+Theo dõi tham số và chỉ số của mỗi lần đánh giá, so sánh các lần chạy
+Session 5
+Docker và Docker Compose
+Đóng gói ứng dụng nhiều dịch vụ, bảo đảm chạy lại được trên máy khác
+Session 5
+vLLM
+Máy chủ suy luận cho cấu hình S, phục vụ nhiều yêu cầu đồng thời nhờ gộp lô liên tục
+Lab 0
+Ollama
+Máy chủ suy luận cho cấu hình L và cho phép đo đường nền ở Session 5
+Lab 0
+
+Ngoài phạm vi khóa học nhưng có giới thiệu để học viên biết hướng phát triển tiếp: các công cụ tracing chuyên dụng cho mô hình ngôn ngữ, và công cụ quản lý phiên bản dữ liệu quy mô lớn. Hai nhóm này đòi hỏi dựng thêm dịch vụ, vượt quá điều kiện hạ tầng của lớp học.
+3.3. Vì sao tích hợp liên tục khả thi trong khóa học này
+Thông thường việc chạy đánh giá tự động cho ứng dụng AI rất tốn kém, vì mỗi lần chạy đều phải gọi mô hình. Trong khóa học này, lớp cache được thiết kế từ Session 2 khiến kết quả gọi mô hình trở nên tất định: cùng một đầu vào luôn cho cùng một đầu ra đã lưu. Tệp cache được đưa vào kho mã nguồn, nên hệ thống tích hợp liên tục đọc lại kết quả đã lưu mà không cần cài mô hình và không cần card đồ họa.
+Đây là thực hành phân biệt kỹ thuật phần mềm AI với kỹ thuật phần mềm truyền thống: chất lượng mô hình được kiểm soát tự động giống như kiểm soát lỗi biên dịch. Không có cơ chế này, học viên giữ nguyên thói quen sửa prompt rồi chạy tay xem có ổn không, đúng thói quen mà khóa học cần thay đổi.
+3.4. Cổng chất lượng tự động
+Từ Session 5, mỗi lần đẩy mã lên nhánh của nhóm sẽ tự động chạy bốn giai đoạn và bị chặn nếu chất lượng tụt dưới ngưỡng:
+
+Giai đoạn
+Nội dung
+Bật từ
+1. Kiểm tra mã
+Định dạng và lỗi cú pháp
+Session 2
+2. Kiểm thử
+Toàn bộ bộ kiểm thử tự động
+Session 3
+3. Đánh giá rút gọn
+Chạy trên 15 ticket, đối chiếu ngưỡng tối thiểu về độ chính xác phân loại, chỉ số truy hồi và kết quả ca đối kháng
+Session 5
+4. Dựng ảnh
+Đóng gói ứng dụng
+Session 5
+
+3.5. Quy định về việc sử dụng trợ lý lập trình AI
+Học viên được phép sử dụng trợ lý lập trình AI trong quá trình thực hành, với hai ràng buộc bắt buộc:
+Học viên phải giải thích được mọi dòng mã trong bài nộp. Phần phản biện ở Session 6 sẽ kiểm tra điều này.
+Phần thiết kế gồm Canvas, Blueprint, ADR, điều kiện chuyển người và luật guardrail phải do học viên tự quyết định. Trợ lý AI có thể hỗ trợ diễn đạt nhưng không thay thế quyết định thiết kế.
+Session 6 dành 10 phút thảo luận về chủ đề này, tập trung vào câu hỏi: điều gì thay đổi trong khâu rà soát mã và kiểm thử khi phần lớn mã do AI sinh ra.
+
+4. BUỔI CHUẨN BỊ (LAB 0)
+Hình thức: tự thực hiện tại nhà. Chia hai phần với hai hạn nộp khác nhau. Phần A khoảng 20 phút, hạn trước ngày học đầu tiên 48 giờ. Phần B khoảng 40 phút, hạn trước Session 5.
+4.1. Mục tiêu
+Bảo đảm 100% học viên có môi trường chạy được trước khi vào lớp. Nếu để việc cài đặt diễn ra trong giờ học, buổi sáng ngày đầu tiên sẽ bị mất gần như hoàn toàn.
+Vì hệ thống chạy trên hai cấu hình, phần chuẩn bị cũng chia làm hai. Phần A là cấu hình đã được chọn làm chuẩn cho lớp, cần cho mọi buổi học. Phần B là cấu hình còn lại, cần cho bước kiểm thử tải ở Session 5 và cho tình huống cấu hình chuẩn gặp sự cố. Đơn vị tổ chức thông báo cấu hình nào là chuẩn khi gửi hướng dẫn này cho học viên.
+4.2. Phần A — Cấu hình chuẩn của lớp (bắt buộc trước ngày học đầu tiên)
+Bước
+Nội dung
+Kết quả cần đạt
+A1
+Cài Python 3.11, Git, Docker Desktop và công cụ quản lý môi trường uv
+Các lệnh chạy được trong terminal
+A2
+Clone repository, chạy uv sync để dựng môi trường, cài pre-commit
+Môi trường dựng xong, pre-commit đã gắn vào Git
+A3
+Nếu lớp dùng cấu hình S: nạp khóa truy cập server vào tệp biến môi trường. Nếu lớp dùng cấu hình L: cài Ollama và tải hai mô hình
+Kết nối được tới máy chủ suy luận tương ứng
+A4
+Chạy scripts/check_env.py ở chế độ cấu hình chuẩn
+Toàn bộ hạng mục báo PASS
+A5
+Nộp ảnh chụp màn hình kết quả kiểm tra
+Giảng viên nhận được trước hạn
+
+4.3. Phần B — Cấu hình còn lại (bắt buộc trước Session 5)
+Bước
+Nội dung
+Kết quả cần đạt
+B1
+Chuẩn bị cấu hình còn lại: cài Ollama và tải mô hình nếu lớp dùng cấu hình S làm chuẩn, hoặc nạp khóa truy cập server nếu lớp dùng cấu hình L làm chuẩn
+Kết nối được tới máy chủ suy luận còn lại
+B2
+Chạy scripts/check_env.py ở chế độ cấu hình còn lại
+Toàn bộ hạng mục báo PASS
+Phần B trông có vẻ thừa khi cấu hình chuẩn hoạt động bình thường, nhưng không được bỏ, vì hai lý do. Thứ nhất, nếu lớp dùng server dùng chung thì server sập đồng nghĩa cả lớp dừng, khác hẳn tình huống mỗi máy chạy độc lập. Thứ hai, bước kiểm thử tải ở Session 5 bắt buộc đo trên cả hai cấu hình để có cơ sở so sánh.
+
+4.4. Nội dung kiểm tra của check_env.py
+Công cụ nhận tham số cấu hình và kiểm tra tương ứng. Phần chung cho cả hai cấu hình: phiên bản Python, môi trường dựng bằng uv, thư viện đúng phiên bản khóa trong uv.lock, pre-commit đã gắn vào Git, Docker khả dụng. Phần riêng của cấu hình S: kết nối tới server, khóa truy cập hợp lệ. Phần riêng của cấu hình L: dịch vụ Ollama đang chạy, hai mô hình đã tải. Với cả hai cấu hình đều thực hiện một lần sinh văn bản và một lần tạo embedding để xác nhận đường chạy thông. Kết thúc bằng bảng tổng hợp PASS hoặc FAIL kèm hướng dẫn khắc phục cho mỗi mục FAIL.
+Yêu cầu quan trọng: mỗi hạng mục FAIL phải kèm hướng dẫn khắc phục cụ thể ngay trong kết quả. Học viên thực hiện bước này tại nhà, không có giảng viên bên cạnh để hỗ trợ.
+4.5. Phương án dự phòng về hậu cần
+Ba lớp bảo vệ, áp dụng như nhau bất kể cấu hình nào được chọn làm chuẩn:
+Lớp
+Phương án
+Kích hoạt khi
+1
+Cấu hình đã chọn làm chuẩn cho lớp
+Mặc định cho mọi buổi học
+2
+Cấu hình còn lại
+Cấu hình chuẩn gặp sự cố, hoặc bước kiểm thử tải ở Session 5
+3
+Chế độ chỉ dùng cache, kèm chỉ mục tri thức dựng sẵn
+Mất cả hai đường trên, hoặc khi trình diễn
+Chuyển đổi giữa ba lớp chỉ bằng một biến môi trường, không sửa mã nguồn. Đây là yêu cầu thiết kế bắt buộc: nếu phải sửa mã mới chuyển được, đường dự phòng sẽ không bao giờ được kiểm thử và sẽ hỏng đúng lúc cần dùng.
+Nếu lớp dùng cấu hình S, đơn vị tổ chức cần kiểm chứng đường truyền từ phòng học tới server trước khóa và kiểm tra tải với số kết nối đồng thời bằng sĩ số lớp. Kết quả phép đo này cũng chính là căn cứ để chọn cấu hình chuẩn.
+
+5. SESSION 1 — PHÂN TÍCH BÀI TOÁN VÀ CƠ HỘI ỨNG DỤNG AI
+Module 1 · Ngày 1, buổi sáng · 2 giờ lý thuyết + 2 giờ thực hành · Deliverable: AI Opportunity Canvas
+Mục tiêu buổi học
+Phân biệt được AI Application, AI Service và AI Agent, và biết khi nào dùng loại nào.
+Phân tích được một quy trình nghiệp vụ để tìm ra điểm đáng ứng dụng AI.
+Xác định được ranh giới: đâu là việc nên giao cho AI và đâu là việc phải giữ cho con người.
+Xây dựng được AI Opportunity Canvas với chỉ số thành công đo được bằng số.
+A. Nội dung lý thuyết (120 phút)
+Thời lượng
+Chủ đề
+Nội dung trọng tâm
+25 phút
+Tổng quan AI Application và AI Engineering
+Khác biệt giữa làm mô hình và làm ứng dụng. Vì sao phần lớn giá trị và rủi ro nằm ở tầng bao quanh mô hình chứ không nằm ở bản thân mô hình. Vai trò của AI Engineer trong tổ chức.
+20 phút
+Xu hướng phát triển AI Application trong doanh nghiệp
+Các mô hình triển khai phổ biến. Bài toán chi phí và độ trễ. Xu hướng dùng mô hình nhỏ chạy tại chỗ cho các tác vụ có phạm vi hẹp.
+25 phút
+Xác định bài toán phù hợp để ứng dụng AI
+Bốn tiêu chí sàng lọc: tần suất, tính lặp lại, mức độ sẵn có dữ liệu, chi phí sai sót. Các dấu hiệu cho thấy bài toán không phù hợp với AI sinh ngữ.
+30 phút
+Phân tích quy trình nghiệp vụ và xác định AI Capability
+Cách vẽ bản đồ quy trình. Cách gắn từng bước nghiệp vụ với một năng lực AI cụ thể. Phân biệt giữa hỗ trợ con người và thay thế con người.
+20 phút
+Phân biệt AI Application, AI Service và AI Agent
+Ba mức độ tự chủ và ba mức độ rủi ro tương ứng. Vì sao case study của khóa học được thiết kế ở mức Application chứ không phải Agent.
+Điểm nhấn cần dành thời gian: tiêu chí chi phí sai sót được chấm ngược so với ba tiêu chí còn lại. Bước nghiệp vụ có điểm cao ở ba tiêu chí đầu thường cũng là bước có rủi ro cao nhất khi để AI tự quyết. Nên để học viên tự phát hiện nghịch lý này trong phần thực hành thay vì kết luận sẵn ở phần lý thuyết.
+B. Nội dung thực hành (120 phút)
+Bước
+Thời lượng
+Hoạt động
+Sản phẩm của bước
+1
+25 phút
+Vẽ bản đồ quy trình xử lý ticket thủ công. Mỗi nhóm nhận bản mô tả quy trình một trang kèm thời gian trung bình từng bước, vẽ lại thành sơ đồ 6 đến 8 bước, ghi rõ ai làm, mất bao lâu, lỗi thường gặp là gì.
+Sơ đồ quy trình hiện trạng
+2
+30 phút
+Chấm điểm cơ hội AI cho từng bước theo bốn tiêu chí, thang 1 đến 5. Nhóm phải viết một câu lý do cho mỗi điểm số, không chấm cảm tính.
+Bảng chấm điểm có lập luận
+3
+35 phút
+Điền AI Opportunity Canvas gồm bảy ô: vấn đề nghiệp vụ, người dùng và bối cảnh, năng lực AI cần có, dữ liệu và tri thức, chỉ số thành công, rủi ro và ranh giới, phạm vi MVP. Ô chỉ số thành công bắt buộc kèm ước lượng hiệu quả kinh tế: giả định khối lượng ticket mỗi ngày, thời gian tiết kiệm trên mỗi ticket, chi phí vận hành, và điểm hòa vốn. Con số khối lượng này sẽ được đối chiếu với năng lực phục vụ thực đo ở Session 5.
+AI Opportunity Canvas kèm ước lượng hiệu quả kinh tế
+4
+30 phút
+Trình bày chéo. Mỗi nhóm 3 phút, nhóm khác đặt đúng một câu hỏi phản biện. Giảng viên chốt phạm vi MVP thống nhất cho cả lớp.
+Phạm vi MVP thống nhất
+Bước 4 có vai trò quyết định với toàn khóa: từ Session 2 trở đi mọi nhóm phải xây dựng cùng một hệ thống. Nếu không chốt được phạm vi chung ở đây, các buổi sau sẽ không thể chữa bài tập trung.
+C. Sản phẩm nộp sau buổi học
+Tệp docs/canvas.md gồm đầy đủ bảy ô của Canvas.
+Sơ đồ quy trình hiện trạng, có thể vẽ tay và chụp ảnh.
+Bảng chấm điểm bốn tiêu chí kèm lý do cho từng điểm số.
+D. Tiêu chí đánh giá (thang 10)
+Tiêu chí
+Điểm
+Sơ đồ quy trình phản ánh đúng nghiệp vụ, đủ các bước chính
+2
+Bảng chấm điểm có lập luận rõ ràng, không chấm theo cảm tính
+2
+Canvas đầy đủ bảy ô, phần phạm vi KHÔNG làm nêu cụ thể tối thiểu 4 mục
+3
+Chỉ số thành công đo được bằng số, có ước lượng hiệu quả kinh tế và điểm hòa vốn
+2
+Trình bày mạch lạc, trả lời được câu hỏi phản biện
+1
+E. Lỗi thường gặp và cách xử lý
+Tình huống
+Hướng xử lý
+Nhóm viết chỉ số kiểu tăng sự hài lòng của khách hàng
+Yêu cầu viết lại thành dạng đo được, ví dụ giảm thời gian xử lý trung bình từ 8 phút xuống dưới 3 phút, hoặc độ chính xác phân loại đạt tối thiểu 80% trên bộ kiểm định 40 ticket
+Phần phạm vi KHÔNG làm bị bỏ trống hoặc viết chung chung
+Gợi ý cụ thể: không kết nối hệ thống thật, không gửi phản hồi tự động, không xử lý giọng nói, không dùng dữ liệu khách hàng thật
+Nhóm muốn AI làm toàn bộ quy trình
+Quay lại tiêu chí chi phí sai sót, yêu cầu chỉ ra bước nào nếu sai sẽ gây thiệt hại cho khách hàng
+F. Nội dung mở rộng cho nhóm hoàn thành sớm
+Phân tích độ nhạy của bài toán hiệu quả kinh tế: điểm hòa vốn thay đổi thế nào nếu độ chính xác của hệ thống chỉ đạt 70 phần trăm thay vì 85 phần trăm.
+
+6. SESSION 2 — THIẾT KẾ KIẾN TRÚC ỨNG DỤNG AI
+Module 1 · Ngày 1, buổi chiều · 2 giờ lý thuyết + 2 giờ thực hành · Deliverable: AI Solution Blueprint
+Mục tiêu buổi học
+Nắm được các thành phần cấu thành một AI Application và quan hệ giữa chúng.
+Biết cách lựa chọn Foundation Model dựa trên ràng buộc thực tế thay vì theo bảng xếp hạng.
+Đọc hiểu được cấu trúc của Development Starter Kit.
+Vẽ được AI Solution Blueprint kèm bảng ghi nhận các quyết định thiết kế.
+A. Nội dung lý thuyết (120 phút)
+Thời lượng
+Chủ đề
+Nội dung trọng tâm
+25 phút
+AI Application Architecture
+Mô hình phân tầng: giao diện, API, điều phối, năng lực AI, dữ liệu và công cụ. Nguyên tắc tầng trên không gọi vượt cấp và lý do đằng sau nguyên tắc đó.
+20 phút
+Thành phần của một AI Application
+Lớp truy cập mô hình, lớp cache, lớp quản lý prompt, lớp tri thức, lớp công cụ, lớp guardrails, lớp ghi nhật ký. Thành phần nào bắt buộc và thành phần nào có thể lược bỏ ở giai đoạn prototype.
+25 phút
+Lựa chọn Foundation Model
+Các trục đánh đổi: chất lượng, độ trễ, chi phí, quyền riêng tư dữ liệu, khả năng chạy tại chỗ. So sánh máy chủ suy luận tập trung có gộp lô liên tục với suy luận cục bộ. Vì sao khóa học duy trì hai cấu hình ngang hàng thay vì chọn cứng một cấu hình, và cách quyết định cấu hình nào làm chuẩn bằng phép đo năng lực. Khái niệm cấu hình chuẩn và vì sao mọi số liệu phải gắn với một cấu hình xác định.
+20 phút
+Thiết kế luồng xử lý tổng thể
+Cách chia một nhiệm vụ lớn thành chuỗi bước nhỏ có thể kiểm chứng. Nguyên tắc mỗi lần gọi mô hình chỉ làm một việc. Vị trí đặt các điểm quyết định trong luồng.
+15 phút
+AI Design Pattern
+Các mẫu thường gặp: phân loại rồi định tuyến, truy hồi rồi sinh, gọi công cụ, xác thực và thử lại, con người trong vòng lặp, suy giảm có kiểm soát khi lỗi.
+15 phút
+Quy trình kỹ thuật cho dự án AI
+Quản lý cấu hình và khóa phụ thuộc. Chuẩn viết mã: PEP 8, docstring và chú thích kiểu, được ép tự động bằng công cụ chứ không dựa vào ý thức. Quy trình rà soát mã: nộp bài qua yêu cầu hợp nhất mã, nhóm khác duyệt trước khi hợp nhất. Ghi nhận quyết định kiến trúc bằng ADR: cấu trúc bốn phần và nguyên tắc không sửa ADR cũ. Tích hợp liên tục cho ứng dụng AI và vai trò của lớp cache trong việc làm cho kết quả tái lập được.
+Nội dung lựa chọn Foundation Model nên được trình bày thẳng thắn về ràng buộc của khóa học: mô hình nhỏ chạy CPU là lựa chọn có chủ ý về mặt sư phạm. Nó buộc học viên phải tối ưu ngữ cảnh và xây dựng các lớp phòng vệ, thay vì che giấu thiết kế yếu bằng năng lực của một mô hình mạnh.
+B. Nội dung thực hành (120 phút)
+Bước
+Thời lượng
+Hoạt động
+Sản phẩm của bước
+1
+30 phút
+Giải phẫu Development Starter Kit. Nhóm khám phá repository và trả lời bằng văn bản: luồng dữ liệu đi từ đâu tới đâu khi người dùng gửi một ticket, mỗi tệp chịu trách nhiệm gì, và lớp cache hoạt động theo cơ chế nào.
+Sơ đồ phụ thuộc giữa các module
+2
+25 phút
+Thí nghiệm so sánh cấu hình. Chạy công cụ có sẵn trên cùng 5 ticket với bốn tổ hợp: cấu hình S, cấu hình L, và cấu hình chuẩn của lớp ở hai mức nhiệt độ khác nhau. Ghi lại thời gian phản hồi và nhận xét chất lượng, kèm ghi chú cấu hình cho từng dòng.
+Bảng so sánh cấu hình
+3
+40 phút
+Vẽ AI Solution Blueprint theo mô hình 5 tầng. Với mỗi thành phần ghi rõ đầu vào, đầu ra, kỹ thuật sử dụng, và phương án dự phòng khi thành phần đó gặp sự cố. Song song viết tối thiểu năm ADR theo mẫu bốn phần: bối cảnh, các phương án đã cân nhắc, quyết định, và hệ quả chấp nhận.
+Blueprint và năm ADR
+4
+25 phút
+Nối dây khung hệ thống và kích hoạt quy trình kỹ thuật. Kiểm chứng việc chuyển đổi giữa hai cấu hình chỉ bằng biến môi trường, đẩy mã lên nhánh của nhóm và quan sát giai đoạn kiểm tra mã nguồn của tích hợp liên tục chạy lần đầu. Khởi động toàn bộ dịch vụ, gửi thử một ticket và nhận về kết quả giả lập.
+Hệ thống khung chạy được, CI xanh
+Bước 2 dẫn tới một kết luận cần được chốt rõ: tác vụ phân loại cho kết quả ổn định hơn hẳn ở nhiệt độ bằng không, trong khi tác vụ soạn phản hồi cần nhiệt độ cao hơn. Từ đó suy ra một ứng dụng AI không dùng chung một cấu hình mô hình cho mọi bước.
+Bảng quyết định thiết kế ở bước 3 chính là tài liệu được dùng để phản biện ở Session 6. Cần nói rõ điều này với học viên ngay từ bây giờ để họ ghi chép nghiêm túc thay vì cố nhớ lại vào ngày cuối.
+C. Sản phẩm nộp sau buổi học
+Tệp docs/blueprint.md gồm sơ đồ kiến trúc 5 tầng và mô tả từng thành phần.
+Tối thiểu năm ADR trong thư mục docs/adr, mỗi ADR theo đúng mẫu bốn phần.
+Kết quả kiểm chứng chuyển đổi giữa hai cấu hình mà không sửa mã nguồn.
+Ảnh chụp màn hình giao diện chạy được với dữ liệu giả lập.
+D. Tiêu chí đánh giá (thang 10)
+Tiêu chí
+Điểm
+Sơ đồ kiến trúc đủ 5 tầng, mô tả rõ trách nhiệm từng thành phần
+3
+Mỗi thành phần có nêu phương án dự phòng khi gặp sự cố
+2
+Tối thiểu 5 ADR đúng mẫu, nêu được phương án đã cân nhắc và hệ quả chấp nhận
+3
+Hệ thống khung khởi động được và tích hợp liên tục chạy xanh
+2
+E. Lỗi thường gặp và cách xử lý
+Tình huống
+Hướng xử lý
+Nhóm vẽ kiến trúc quá chi tiết ở mức mã nguồn
+Nhắc lại rằng blueprint mô tả trách nhiệm và giao diện giữa các thành phần, không mô tả cách hiện thực bên trong
+ADR chỉ ghi đã chọn gì mà không ghi phương án đã loại và lý do loại
+Yêu cầu bổ sung đủ bốn phần. Một ADR không nêu được phương án đã cân nhắc thì không phải ADR, và không dùng để bảo vệ ở buổi cuối được
+Nhóm ghi số liệu mà quên ghi cấu hình đã dùng
+Yêu cầu bổ sung. Từ buổi này trở đi, mọi bảng số liệu thiếu cột cấu hình đều không được chấp nhận
+F. Nội dung mở rộng cho nhóm hoàn thành sớm
+Bổ sung sơ đồ tuần tự cho luồng xử lý một ticket có gọi công cụ, dự đoán trước cấu trúc sẽ xây dựng ở Session 4.
+
+7. SESSION 3 — XÂY DỰNG TRÍ TUỆ CHO ỨNG DỤNG AI
+Module 2 · Ngày 2, buổi sáng · 2 giờ lý thuyết + 2 giờ thực hành · Deliverable: Context Specification
+Mục tiêu buổi học
+Thiết kế được prompt có cấu trúc và có phiên bản, thay vì viết prompt tùy hứng.
+Bảo đảm được độ tin cậy của đầu ra có cấu trúc, kể cả khi mô hình nhỏ trả về sai định dạng.
+Xây dựng được kho tri thức và cơ chế truy hồi cho bài toán.
+Đo được chất lượng truy hồi bằng chỉ số và cải tiến dựa trên số liệu.
+A. Nội dung lý thuyết (120 phút)
+Thời lượng
+Chủ đề
+Nội dung trọng tâm
+25 phút
+Prompt Engineering
+Cấu trúc bắt buộc năm phần: vai trò, nhiệm vụ, ràng buộc, ngữ cảnh, định dạng đầu ra. Nguyên tắc một prompt chỉ làm một nhiệm vụ. Cách dùng ví dụ mẫu hiệu quả. Quản lý phiên bản prompt như quản lý mã nguồn.
+20 phút
+Context Engineering
+Ngân sách ngữ cảnh và cách phân bổ. Vì sao đưa nhiều thông tin hơn không đồng nghĩa với kết quả tốt hơn. Vì sao ngân sách này được ép bằng kiểm thử tự động thay vì để tốc độ phần cứng tự ép: khi hạ tầng đủ nhanh, kỷ luật tối ưu ngữ cảnh chỉ còn giữ được bằng cổng kiểm tra. Kỹ thuật phân tách ngữ cảnh do người dùng cung cấp bằng thẻ đánh dấu, và liên hệ với rủi ro chèn lệnh.
+20 phút
+Knowledge Engineering
+Phân biệt tri thức tĩnh, tri thức thay đổi theo thời gian và dữ liệu giao dịch. Vòng đời tài liệu trong doanh nghiệp. Vấn đề tài liệu cũ chưa được gỡ bỏ.
+30 phút
+Retrieval-Augmented Generation
+Kiến trúc RAG cơ bản. Chiến lược chia đoạn tài liệu. Nhúng và tìm kiếm tương đồng. Viết lại truy vấn. Ngưỡng điểm và quy tắc từ chối khi không đủ căn cứ. Trích dẫn nguồn.
+15 phút
+Quản lý tri thức doanh nghiệp
+Siêu dữ liệu bắt buộc cho mỗi tài liệu. Cơ chế đánh dấu tài liệu bị thay thế. Truy xuất nguồn gốc dữ liệu: từ một câu trả lời truy ngược được về tài liệu, phiên bản và ngày hiệu lực nào. Quy trình cập nhật kho tri thức khi chính sách thay đổi.
+10 phút
+Công cụ đánh giá và so sánh prompt
+Vì sao so sánh prompt bằng cảm nhận là không đủ. Giới thiệu promptfoo: khai báo bộ ca kiểm thử, chạy nhiều phiên bản prompt trên cùng dữ liệu, đọc bảng kết quả. Công cụ chạy hoàn toàn tại chỗ, không cần mạng.
+Phần RAG nên dành thời gian cho quy tắc từ chối khi không đủ căn cứ. Với bài toán chăm sóc khách hàng, một trợ lý bịa ra chính sách gây rủi ro nghiệp vụ nghiêm trọng hơn nhiều so với một trợ lý im lặng và chuyển tiếp cho người xử lý.
+B. Nội dung thực hành (120 phút)
+Bước
+Thời lượng
+Hoạt động
+Sản phẩm của bước
+1
+30 phút
+Thiết kế prompt và thiết kế ngữ cảnh. Xây dựng prompt phân loại và trích xuất theo cấu trúc năm phần, yêu cầu mô hình trả về dữ liệu có cấu trúc gồm nhóm vấn đề, mức ưu tiên, sắc thái, độ tin cậy và các thực thể trích xuất được. Đồng thời lập bảng phân bổ ngân sách ngữ cảnh cho từng thành phần và phân tách ngữ cảnh do người dùng cung cấp bằng thẻ đánh dấu. Chạy thử trên 20 ticket.
+Prompt phiên bản 1, bảng ngân sách ngữ cảnh, kết quả thô
+2
+30 phút
+Xây dựng bốn lớp phòng vệ cho đầu ra có cấu trúc: khai báo lược đồ, bóc tách dữ liệu khỏi văn bản thừa, thử lại tối đa hai lần với thông báo lỗi đưa vào prompt, và phương án dự phòng đánh dấu cần người xem. Chạy lại 20 ticket và so sánh tỉ lệ thành công trước sau.
+Số liệu trước và sau khi có lớp phòng vệ
+3
+35 phút
+Xây dựng kho tri thức: chia đoạn tài liệu theo cấu trúc mục, giữ lại siêu dữ liệu, tạo vector nhúng bằng mô hình embedding trên server và lưu vào cơ sở dữ liệu vector, cài đặt hàm truy hồi trả về kết quả kèm điểm tương đồng.
+Kho tri thức dựng xong
+4
+25 phút
+Đo chất lượng truy hồi trên bộ 40 câu hỏi vàng, tính chỉ số Recall. Thử tối thiểu hai cải tiến và đo lại: thay đổi kích thước đoạn, thêm tiêu đề tài liệu vào đầu mỗi đoạn, hoặc viết lại truy vấn trước khi tìm. Song song, dùng promptfoo so sánh hai phiên bản prompt phân loại trên cùng bộ ca kiểm thử.
+Bảng kết quả thí nghiệm và bảng so sánh prompt
+Mô hình 3 tỉ tham số chắc chắn sẽ trả về sai định dạng ở một số trường hợp trong bước 1. Đây không phải sự cố mà là nội dung giảng dạy chính thức của bước 2. Bài học cần chốt lại rõ ràng: một ứng dụng AI đáng tin không phải nhờ mô hình giỏi, mà nhờ tầng xử lý bao quanh mô hình.
+Việc dựng chỉ mục mất khoảng 2 đến 4 phút trên CPU cho khoảng 300 đoạn. Cần chuẩn bị sẵn bản chỉ mục dựng trước để nhóm nào chậm có thể sử dụng ngay.
+Bước 4 là lần đầu tiên học viên nhìn thấy con số cho biết mình đang tốt lên hay xấu đi. Đây là thời điểm thích hợp để nhấn mạnh: không có phép đo thì không có kỹ thuật, chỉ có cảm giác.
+C. Sản phẩm nộp sau buổi học
+Tệp docs/context_spec.md gồm: các mẫu prompt kèm giải thích lý do thiết kế, bảng phân bổ ngân sách ngữ cảnh, lược đồ đầu ra, chiến lược chia đoạn, và bảng kết quả thí nghiệm truy hồi.
+Mã nguồn chạy được cho phần phân loại và truy hồi, vượt qua bộ kiểm thử tự động của buổi, nộp qua yêu cầu hợp nhất mã và được một nhóm khác rà soát.
+D. Tiêu chí đánh giá (thang 10)
+Tiêu chí
+Điểm
+Prompt có đủ cấu trúc năm phần và được lưu thành tệp có phiên bản
+2
+Cơ chế xác thực và thử lại hoạt động, có số liệu chứng minh trước sau
+2
+Kho tri thức dựng được, truy hồi trả về kết quả đúng chủ đề
+2
+Có tối thiểu hai thí nghiệm cải tiến kèm số đo, và một bảng so sánh prompt
+2
+Tài liệu giải thích được lý do lựa chọn, không chỉ mô tả đã làm gì
+2
+E. Lỗi thường gặp và cách xử lý
+Tình huống
+Hướng xử lý
+Nhóm gộp phân loại và soạn phản hồi vào cùng một lần gọi mô hình
+Yêu cầu tách. Việc gộp làm suy giảm chất lượng rõ rệt với mô hình nhỏ và làm mất khả năng đo riêng từng bước ở Session 5
+Prompt được viết thẳng trong mã Python
+Yêu cầu chuyển ra tệp riêng có đánh số phiên bản, vì Session 6 cần so sánh giữa các phiên bản
+Nhóm thử cải tiến nhưng không đo lại
+Không chấp nhận. Yêu cầu chạy lại phép đo, mỗi lần chỉ thay đổi một biến
+Việc dựng chỉ mục quá chậm hoặc server bận
+Cho phép dùng bản chỉ mục dựng sẵn đi kèm Starter Kit
+F. Nội dung mở rộng cho nhóm hoàn thành sớm
+Cài đặt tìm kiếm lai kết hợp tìm kiếm từ khóa với tìm kiếm vector. Với tiếng Việt và tài liệu chứa nhiều mã gói cước, tìm kiếm từ khóa thường bắt được những trường hợp mà vector bỏ sót.
+
+8. SESSION 4 — XÂY DỰNG QUY TRÌNH XỬ LÝ AI
+Module 2 · Ngày 2, buổi chiều · 2 giờ lý thuyết + 2 giờ thực hành · Deliverable: AI Prototype v1
+Mục tiêu buổi học
+Thiết kế được quy trình xử lý đầy đủ với các nhánh rẽ và điểm quyết định.
+Tích hợp được cơ chế gọi công cụ, kèm đường dự phòng khi mô hình gọi sai.
+Cài đặt được cơ chế con người trong vòng lặp và ghi nhận thao tác duyệt.
+Hệ thống chạy thông suốt từ ticket đầu vào tới dự thảo phản hồi chờ duyệt.
+A. Nội dung lý thuyết (120 phút)
+Thời lượng
+Chủ đề
+Nội dung trọng tâm
+25 phút
+AI Workflow
+Phân biệt quy trình cố định và quy trình tự quyết. Cách phân rã nhiệm vụ thành chuỗi bước kiểm chứng được. Vị trí đặt điểm quyết định và tiêu chí rẽ nhánh.
+30 phút
+Tool Calling
+Cơ chế khai báo công cụ và vòng lặp gọi công cụ. Xác thực tham số trước khi thực thi. Giới hạn số lần gọi và thời gian chờ. Vì sao mô hình nhỏ gọi công cụ không ổn định và cần đường dự phòng theo luật.
+20 phút
+Agent Workflow (giới thiệu)
+Vòng lặp lập kế hoạch, hành động và quan sát. Sự khác biệt về mức độ tự chủ và mức độ rủi ro so với quy trình cố định. Khi nào nên và khi nào chưa nên dùng agent trong môi trường doanh nghiệp.
+25 phút
+Human-in-the-loop
+Ba mô hình đưa con người vào vòng lặp: duyệt trước khi thực thi, giám sát sau khi thực thi, và can thiệp khi vượt ngưỡng. Cách xác định điều kiện bắt buộc chuyển người. Thao tác duyệt như một nguồn dữ liệu cải tiến hệ thống.
+20 phút
+Thiết kế AI Pipeline
+Ghép các thành phần thành đường ống hoàn chỉnh. Xử lý lỗi ở từng mắt xích. Nguyên tắc suy giảm có kiểm soát thay vì dừng hệ thống.
+Phần Human-in-the-loop cần được nhấn mạnh như một quyết định kiến trúc chứ không phải một tính năng giao diện. Nguyên tắc bất biến của hệ thống: không có đường dẫn nào cho phép phản hồi tới khách hàng mà chưa qua thao tác duyệt của con người, kể cả trong bản demo cuối khóa.
+B. Nội dung thực hành (120 phút)
+Bước
+Thời lượng
+Hoạt động
+Sản phẩm của bước
+1
+30 phút
+Thiết kế quy trình trên giấy trước khi viết mã. Vẽ sơ đồ luồng đầy đủ với các nhánh rẽ. Mỗi nhóm phải liệt kê tối thiểu bốn điều kiện bắt buộc chuyển người và giải thích lý do cho từng điều kiện.
+Sơ đồ luồng và danh sách điều kiện chuyển người
+2
+30 phút
+Cài đặt gọi công cụ: khai báo lược đồ ba công cụ giả lập, để mô hình quyết định gọi công cụ nào với tham số gì, thực thi và đưa kết quả trở lại vòng suy luận. Đồng thời cài đặt đường dự phòng theo luật.
+Ba công cụ hoạt động, có đường dự phòng
+3
+35 phút
+Xây dựng bước sinh phản hồi có căn cứ, với các ràng buộc bắt buộc trong prompt. Sau đó ghép toàn bộ các bước thành quy trình hoàn chỉnh và chạy thử trên 5 ticket đa dạng.
+Quy trình chạy thông từ đầu tới cuối
+4
+25 phút
+Bật màn hình duyệt trên giao diện: hiển thị ticket gốc, kết quả phân loại, các đoạn tri thức đã truy hồi và dự thảo phản hồi. Người duyệt có ba lựa chọn là duyệt, sửa rồi duyệt, hoặc từ chối kèm lý do. Mọi thao tác được ghi vào cơ sở dữ liệu.
+Màn hình duyệt và nhật ký thao tác
+Gợi ý cho nhóm bí ở bước 1: độ tin cậy phân loại thấp, không tìm được căn cứ trong kho tri thức, khách hàng yêu cầu bồi thường tiền, ticket ở mức ưu tiên cao nhất, khách hàng có dấu hiệu sẽ khiếu nại lên cấp trên.
+Ở bước 2, việc phải xây dựng đường dự phòng cho quyết định của mô hình là một nguyên tắc thiết kế cần được nêu rõ, không nên trình bày như một sự thỏa hiệp kỹ thuật.
+Ở bước 4 cần nhấn mạnh: nhật ký thao tác duyệt không phải để giao diện trông đầy đủ. Tỉ lệ sửa và lý do từ chối là chỉ số chất lượng đáng tin cậy nhất mà hệ thống có, và là nguồn dữ liệu chính cho sprint cải tiến ở Session 6.
+C. Sản phẩm nộp sau buổi học
+Prototype chạy được từ đầu tới cuối, đã tích hợp gọi công cụ và màn hình duyệt.
+Video quay màn hình khoảng 2 phút, trình diễn ba tình huống: một ca xử lý trơn tru, một ca phải gọi công cụ, và một ca bị chuyển người.
+Sơ đồ luồng xử lý cập nhật, phản ánh đúng những gì đã cài đặt.
+D. Tiêu chí đánh giá (thang 10)
+Tiêu chí
+Điểm
+Quy trình chạy thông suốt trên các ticket thử nghiệm
+3
+Gọi công cụ hoạt động, có đường dự phòng khi mô hình gọi sai
+2
+Có tối thiểu bốn điều kiện chuyển người, được cài đặt và kiểm chứng
+2
+Màn hình duyệt hoạt động, ghi được nhật ký thao tác
+2
+Video trình diễn đủ ba tình huống theo yêu cầu
+1
+E. Lỗi thường gặp và cách xử lý
+Tình huống
+Hướng xử lý
+Nhóm chỉ ghép được luồng thuận lợi, bỏ qua các nhánh lỗi
+Kiểm tra bằng cách gửi một ticket rác. Hệ thống phải chuyển người một cách có kiểm soát, không được dừng đột ngột vì lỗi
+Mô hình gọi công cụ sai tham số hoặc không gọi
+Đây là hành vi đã dự liệu. Kích hoạt đường dự phòng theo luật và ghi nhận tỉ lệ để phân tích ở Session 5
+Hệ thống sinh phản hồi ngay cả khi không tìm được căn cứ
+Lỗi nghiêm trọng. Yêu cầu cài đặt lại quy tắc từ chối, đây là ranh giới an toàn quan trọng nhất của hệ thống
+Thời gian không đủ cho bước 4
+Ưu tiên hoàn thành phần ghi nhật ký thao tác, phần giao diện có thể đơn giản hóa
+F. Nội dung mở rộng cho nhóm hoàn thành sớm
+Cài đặt vòng lặp agent thực thụ cho nhánh xử lý phức tạp: mô hình tự lập kế hoạch, chọn công cụ, quan sát kết quả và quyết định bước tiếp theo, với giới hạn số vòng lặp.
+
+9. SESSION 5 — TÍCH HỢP, TRIỂN KHAI VÀ ĐÁNH GIÁ ỨNG DỤNG AI
+Module 3 · Ngày 3, buổi sáng · 2 giờ lý thuyết + 2 giờ thực hành · Deliverable: Production-ready Prototype
+Mục tiêu buổi học
+Thiết kế và triển khai được API cho ứng dụng AI.
+Đóng gói được ứng dụng bằng Docker để chạy lại trên máy khác.
+Đánh giá được chất lượng hệ thống bằng bộ chỉ số đầy đủ, không dựa vào cảm nhận.
+Cài đặt được guardrails và vượt qua bộ kiểm thử đối kháng.
+Ghi nhật ký đủ để truy vết trọn vẹn một ticket bất kỳ.
+A. Nội dung lý thuyết (120 phút)
+Thời lượng
+Chủ đề
+Nội dung trọng tâm
+25 phút
+Thiết kế API cho AI Application
+Đặc thù của API có thành phần AI: độ trễ cao và biến động. Vì sao mô hình đồng bộ không phù hợp khi mỗi yêu cầu mất hàng chục giây. Mô hình bất đồng bộ: nhận việc và trả mã công việc ngay, xử lý ở tiến trình nền, tra kết quả sau. Thiết kế điểm cuối, xác thực đầu vào, định dạng lỗi. Tài liệu API tự sinh theo chuẩn OpenAPI.
+15 phút
+Đóng gói ứng dụng bằng Docker
+Cấu trúc nhiều dịch vụ. Lý do đặt dịch vụ mô hình bên ngoài container. Quản lý biến môi trường và dữ liệu lưu trữ lâu dài. Tiêu chí chạy lại được trên máy sạch.
+15 phút
+Triển khai cho nhiều người dùng
+Giới hạn đồng thời của dịch vụ mô hình và vì sao nó là nút thắt của toàn hệ thống. Cơ chế gộp lô liên tục và vì sao nó thay đổi hoàn toàn bài toán đồng thời so với suy luận tuần tự. Vì sao cùng một ứng dụng đặt trên hai hạ tầng khác nhau cho năng lực phục vụ chênh nhau hàng chục lần. Hàng đợi công việc và tiến trình xử lý nền. Cách đo năng lực phục vụ. Nguyên tắc tách trạng thái ra khỏi tiến trình để mở rộng ngang được. Vì sao tầng API và tầng mô hình phải mở rộng độc lập với nhau. Giới thiệu khái niệm điều phối container ở mức nhận biết.
+20 phút
+Đánh giá chất lượng AI Application
+Năm nhóm chỉ số: phân loại, truy hồi, sinh văn bản, vận hành và an toàn. Vì sao cần giữ riêng tập kiểm định. Đọc ma trận nhầm lẫn để tìm nguyên nhân. Manifest lần chạy và yêu cầu tái lập kết quả.
+20 phút
+Guardrails và Production Readiness
+Ba lớp: đầu vào, đầu ra và vận hành. Chèn lệnh và cách phòng vệ. Bảo vệ dữ liệu cá nhân. Ngắt mạch và suy giảm có kiểm soát. Danh mục kiểm tra mức độ sẵn sàng triển khai.
+15 phút
+Giám sát và phát hiện suy giảm chất lượng
+Nhật ký có cấu trúc và mã truy vết xuyên suốt. Chỉ số theo dõi thường xuyên. Khái niệm trôi dữ liệu và trôi khái niệm áp dụng cho ứng dụng ngôn ngữ: phân bố ticket thay đổi, chính sách được cập nhật, mô hình đổi phiên bản. Tỉ lệ sửa và tỉ lệ từ chối của người duyệt như tín hiệu phát hiện suy giảm sớm nhất. Ngưỡng cảnh báo và thời điểm cần đánh giá lại.
+10 phút
+Theo dõi thí nghiệm và cổng chất lượng tự động
+Ghi lại tham số, chỉ số và sản phẩm của mỗi lần đánh giá bằng MLflow chạy tại chỗ. Thiết lập ngưỡng chặn hợp nhất mã khi chất lượng tụt. Vì sao lớp cache khiến việc chạy đánh giá tự động trở nên khả thi mà không cần mô hình.
+Phần đánh giá nên dành thời gian cho việc đọc ma trận nhầm lẫn. Kết quả thường gặp là nhóm cước và thanh toán bị nhầm với nhóm gói cước và khuyến mãi, do hai nhóm chồng lấn về ngữ nghĩa. Từ đó rút ra bài học: đôi khi vấn đề nằm ở định nghĩa nhãn chứ không nằm ở mô hình.
+B. Nội dung thực hành (120 phút)
+Bước
+Thời lượng
+Hoạt động
+Sản phẩm của bước
+1
+30 phút
+Hoàn thiện API bất đồng bộ và đóng gói. Điểm cuối tiếp nhận ticket trả về mã công việc ngay, tiến trình nền xử lý theo hàng đợi với số luồng giới hạn, điểm cuối tra cứu trạng thái và kết quả. Bổ sung điểm cuối duyệt phản hồi, kiểm tra sức khỏe và trả chỉ số. Kiểm tra tài liệu API tự sinh. Viết cấu hình Docker cho ba dịch vụ, giữ dịch vụ mô hình bên ngoài container.
+Hệ thống bất đồng bộ khởi động bằng một lệnh
+2
+30 phút
+Chạy đánh giá trên tập kiểm định 40 ticket, đo đủ năm nhóm chỉ số, ghi toàn bộ tham số và chỉ số vào MLflow để so sánh được giữa các lần chạy. Đọc ma trận nhầm lẫn và trả lời: nhóm vấn đề nào bị nhầm nhiều nhất và vì sao.
+Bảng số liệu, lần chạy trên MLflow, phân tích lỗi
+3
+25 phút
+Cài đặt guardrails ba lớp và kiểm chứng bằng bộ 12 ca đối kháng, gồm chèn lệnh, dò hỏi thông tin thuê bao khác, dụ hệ thống cam kết bồi thường, câu hỏi ngoài phạm vi tri thức, ticket rác và nội dung xúc phạm.
+Kết quả 12 ca đối kháng
+4
+20 phút
+Cài đặt nhật ký có cấu trúc cho từng bước xử lý, gắn mã truy vết xuyên suốt. Bổ sung trang theo dõi hiển thị tỉ lệ sửa và tỉ lệ từ chối của người duyệt như tín hiệu suy giảm chất lượng. Bật đầy đủ bốn giai đoạn tích hợp liên tục kèm ngưỡng chặn hợp nhất mã.
+Nhật ký, trang theo dõi, CI có cổng chất lượng
+5
+15 phút
+Kiểm thử tải trên cả hai cấu hình, bất kể cấu hình nào là chuẩn của lớp. Trên cấu hình L: đo ở các mức đồng thời 1, 3, 5, 10 để có đường nền của một phiên bản suy luận đơn lẻ. Trên cấu hình S, trong khung giờ riêng của nhóm: đo ở các mức 1, 5, 10, 20. Ghi độ trễ trung bình và p95 ở từng mức, tìm điểm suy giảm, tính số ticket xử lý được mỗi giờ ở mỗi cấu hình và đối chiếu với giả định khối lượng trong Canvas ở Session 1.
+Bảng năng lực phục vụ hai cấu hình
+Do tập kiểm định có 40 ticket và mô hình chạy trên CPU, việc đánh giá nên được khởi động chạy nền ngay từ đầu buổi thực hành, và dành thời gian ở bước 2 cho việc phân tích kết quả. Không để cả lớp ngồi chờ thanh tiến trình.
+Tập kiểm định 40 ticket đến buổi này mới được công bố. Nếu công bố sớm hơn, học viên sẽ vô tình tinh chỉnh prompt theo tập kiểm định và mọi con số đánh giá mất ý nghĩa.
+Tiêu chí nghiệm thu cho phần nhật ký: với một mã ticket bất kỳ, phải tái dựng được đã dùng prompt phiên bản nào, truy hồi ra những đoạn nào với điểm bao nhiêu, gọi công cụ gì với tham số gì, guardrail nào kích hoạt, và người duyệt đã làm gì. Không đáp ứng được tiêu chí này thì hệ thống chưa đạt mức sẵn sàng triển khai.
+C. Sản phẩm nộp sau buổi học
+Tệp docs/EVALUATION.md gồm bảng số liệu đầy đủ năm nhóm chỉ số đo trên cấu hình chuẩn của lớp, bảng năng lực phục vụ của cả hai cấu hình, phân tích lỗi và đề xuất cải tiến. Mọi bảng phải ghi rõ cấu hình đã dùng.
+Hệ thống khởi động được bằng một lệnh duy nhất từ máy chưa cài đặt gì ngoài các yêu cầu cơ bản.
+Kết quả bộ 12 ca đối kháng.
+D. Tiêu chí đánh giá (thang 10)
+Tiêu chí
+Điểm
+Hệ thống bất đồng bộ đóng gói và khởi động được từ máy sạch
+2
+Đánh giá đầy đủ năm nhóm chỉ số, ghi được lần chạy vào MLflow
+3
+Phân tích lỗi có chiều sâu, chỉ ra được nguyên nhân chứ không chỉ liệt kê số
+2
+Guardrails vượt được toàn bộ 12 ca đối kháng
+2
+Nhật ký truy vết được một ticket bất kỳ, CI có cổng chất lượng, có số liệu năng lực phục vụ hai cấu hình
+1
+E. Lỗi thường gặp và cách xử lý
+Tình huống
+Hướng xử lý
+Docker gặp lỗi trên máy Windows
+Cho phép chạy trực tiếp các dịch vụ. Phần đóng gói được chấm qua tệp cấu hình đã viết
+Nhóm báo cáo số liệu mà không kèm cấu hình đã dùng
+Không chấp nhận. Không có manifest thì con số không có giá trị so sánh vì không biết thuộc về cấu hình nào
+Nhóm chạy đánh giá nhầm trên tập huấn luyện
+Yêu cầu chạy lại. Đây là lỗi làm sai lệch toàn bộ kết luận
+Một vài ca đối kháng chưa vượt qua
+Phân tích nguyên nhân và bổ sung luật. Đây là nội dung được ưu tiên hoàn thành, cao hơn phần trang theo dõi
+Kiểm thử tải cục bộ làm treo máy học viên
+Giảm mức đồng thời tối đa xuống 5. Mục tiêu là quan sát quy luật suy giảm, không phải tìm giới hạn tuyệt đối của máy
+Nhóm chạy kiểm thử tải trên server ngoài khung giờ được phân
+Số đo bị nhiễu bởi nhóm khác nên không dùng được. Yêu cầu đo lại đúng khung giờ, hoặc chỉ báo cáo số đo cục bộ kèm ghi chú
+Số liệu đánh giá bị lẫn giữa hai cấu hình
+Kiểm tra trường cấu hình trong nhật ký lần chạy. Xóa phần bộ nhớ đệm sinh từ cấu hình không phải chuẩn và chạy lại
+F. Nội dung mở rộng cho nhóm hoàn thành sớm
+Thực hiện so sánh A/B giữa hai phiên bản prompt trên cùng tập kiểm định, kiểm định ý nghĩa của chênh lệch thay vì chỉ so sánh con số trung bình.
+
+10. SESSION 6 — HOÀN THIỆN VÀ TRÌNH DIỄN ỨNG DỤNG AI
+Module 4 · Ngày 3, buổi chiều · 1 giờ lý thuyết + 3 giờ thực hành · Deliverable: Final AI Application
+Mục tiêu buổi học
+Cải tiến hệ thống dựa trên phân tích lỗi có số liệu, không cải tiến theo cảm tính.
+Viết được Model Card và kiểm tra được thiên lệch của hệ thống.
+Chuẩn bị được gói bàn giao đủ để đơn vị vận hành tiếp nhận.
+Trình bày được kiến trúc và bảo vệ được các quyết định thiết kế đã đưa ra.
+A. Nội dung lý thuyết (60 phút)
+Thời lượng
+Chủ đề
+Nội dung trọng tâm
+15 phút
+Hoàn thiện và bàn giao cho đơn vị vận hành
+Danh mục kiểm tra trước khi bàn giao. Gói bàn giao gồm những gì: tài liệu dựng lại hệ thống, sổ tay vận hành, quy trình xử lý sự cố thường gặp, phân định trách nhiệm giữa đơn vị phát triển và đơn vị vận hành. Vì sao bàn giao thiếu sổ tay vận hành là nguyên nhân phổ biến khiến sản phẩm chết sau nghiệm thu.
+10 phút
+Kiểm thử và cải tiến
+Quy tắc mỗi lần chỉ thay đổi một biến. Cách chọn việc cải tiến dựa trên phân tích lỗi thay vì theo cảm hứng. Cách trình bày kết quả trước và sau bằng dữ liệu đã ghi trên MLflow.
+15 phút
+Responsible AI và Model Card
+Kiểm soát thiên lệch trong ứng dụng ngôn ngữ: hệ thống có xử lý khác nhau giữa các nhóm khách hàng hay không, và cách đo bằng chính bộ dữ liệu kiểm định. Chỉ số công bằng áp dụng được cho bài toán phân loại ticket. Model Card: cấu trúc, mục đích sử dụng, giới hạn đã biết, dữ liệu huấn luyện và đánh giá, các rủi ro đã lường trước. Vì sao Model Card là một phần của hồ sơ nghiệm thu chứ không phải tài liệu trang trí.
+5 phút
+Chuẩn bị demo
+Cấu trúc một buổi trình diễn tám phút. Lựa chọn tình huống trình diễn. Phương án dự phòng khi hệ thống chạy chậm bất thường.
+10 phút
+Trình bày kiến trúc và các quyết định thiết kế
+Cách trình bày một quyết định thiết kế: bối cảnh, các phương án đã cân nhắc, tiêu chí lựa chọn, hệ quả chấp nhận. Cách trả lời câu hỏi phản biện.
+5 phút
+Sử dụng AI làm công cụ phát triển
+Điều gì thay đổi trong khâu rà soát mã và kiểm thử khi phần lớn mã do AI sinh ra, và vì sao cổng chất lượng tự động trở nên quan trọng hơn chứ không kém đi. Ranh giới: AI hỗ trợ hiện thực, quyết định thiết kế vẫn thuộc về kỹ sư.
+Nên nhắc lại rằng phần bảo vệ quyết định thiết kế chiếm tỉ trọng đáng kể trong điểm cuối khóa, và tài liệu dùng để bảo vệ chính là bảng quyết định đã lập từ Session 2.
+B. Nội dung thực hành (180 phút)
+Bước
+Thời lượng
+Hoạt động
+Sản phẩm của bước
+1
+55 phút
+Sprint cải tiến. Mỗi nhóm chọn đúng hai cải tiến dựa trên phân tích lỗi ở Session 5, thực hiện, và đo lại bằng đúng bộ chỉ số cũ. Lập bảng so sánh trước và sau kèm căn cứ lựa chọn.
+Bảng cải tiến có số liệu trước sau
+2
+25 phút
+Viết Model Card và hoàn thiện gói bàn giao. Model Card nêu mục đích sử dụng, phạm vi áp dụng, giới hạn đã biết, kết quả đánh giá và rủi ro đã lường trước. Kiểm tra thiên lệch bằng cách so sánh độ chính xác phân loại giữa các nhóm ticket khác nhau về văn phong. Gói bàn giao bổ sung sổ tay vận hành và quy trình xử lý ba sự cố thường gặp.
+Model Card và gói bàn giao
+3
+30 phút
+Chuẩn bị trình diễn. Xây dựng kịch bản tám phút, chuẩn bị sẵn bốn ticket trình diễn gồm một ca trơn tru, một ca gọi công cụ, một ca chuyển người và một ca đối kháng bị chặn. Quay sẵn video dự phòng.
+Kịch bản, slide và video dự phòng
+4
+60 phút
+Trình bày và phản biện. Mỗi nhóm 8 phút trình diễn và 5 phút hỏi đáp. Nhóm khác bắt buộc đặt tối thiểu một câu hỏi.
+Biên bản phản biện
+5
+10 phút
+Tổng kết. Giảng viên hệ thống lại các quyết định kiến trúc mà các nhóm đã đưa ra, chỉ ra điểm khác biệt giữa các nhóm và giải thích vì sao nhiều lựa chọn khác nhau vẫn có thể cùng đúng tùy bối cảnh.
+Kết luận toàn khóa
+Giới hạn đúng hai cải tiến là có chủ ý. Nó buộc học viên phải xếp thứ tự ưu tiên dựa trên dữ liệu thay vì làm theo cảm hứng, và bảo đảm có đủ thời gian đo lại kết quả.
+Cần yêu cầu video dự phòng một cách nghiêm túc. Khi cả lớp cùng chạy mô hình trên CPU vào giờ trình diễn, tốc độ có thể chậm bất thường.
+C. Sản phẩm nộp sau buổi học
+Hệ thống hoàn chỉnh trên nhánh của nhóm, nộp qua yêu cầu hợp nhất mã đã được nhóm khác duyệt.
+Bộ slide khoảng 10 trang gồm bài toán, kiến trúc, quyết định thiết kế, kết quả đánh giá và hướng phát triển.
+Gói bàn giao gồm README dựng lại hệ thống, sổ tay vận hành và quy trình xử lý sự cố.
+Model Card của hệ thống, kèm kết quả kiểm tra thiên lệch.
+Bảng so sánh trước và sau của hai cải tiến đã thực hiện.
+D. Tiêu chí đánh giá (thang 10)
+Tiêu chí
+Điểm
+Hai cải tiến được thực hiện và đo lại đúng phương pháp
+2
+Model Card đầy đủ, có kết quả kiểm tra thiên lệch
+2
+Trình diễn đủ bốn tình huống theo yêu cầu
+2
+Trình bày được kiến trúc và bảo vệ được quyết định thiết kế
+2
+Gói bàn giao đủ để đơn vị vận hành tiếp nhận và xử lý sự cố
+2
+E. Lỗi thường gặp và cách xử lý
+Tình huống
+Hướng xử lý
+Nhóm thay đổi nhiều thứ cùng lúc rồi báo kết quả tốt lên
+Không quy được kết quả cho nguyên nhân nào. Yêu cầu tách và đo lại từng thay đổi
+Nhóm trình bày tính năng thay vì trình bày quyết định thiết kế
+Chuyển hướng bằng câu hỏi phản biện, tập trung vào lý do lựa chọn
+Hệ thống chạy chậm hoặc lỗi trong lúc trình diễn
+Chuyển sang video dự phòng, phần hỏi đáp vẫn diễn ra bình thường
+Model Card viết chung chung, phần giới hạn để trống
+Không chấp nhận. Yêu cầu nêu tối thiểu ba giới hạn cụ thể rút ra từ phân tích lỗi ở Session 5
+
+11. NGÂN HÀNG CÂU HỎI PHẢN BIỆN
+Dành cho giảng viên sử dụng trong phần hỏi đáp ở Session 6, hoặc dùng rải rác cuối mỗi buổi để kiểm tra mức độ hiểu.
+
+Nhóm câu hỏi
+Câu hỏi
+Quyết định thiết kế
+Vì sao chọn kích thước đoạn tài liệu như vậy? Nhóm đã thử phương án nào khác và kết quả ra sao?
+Quyết định thiết kế
+Ngưỡng chuyển người của nhóm dựa trên căn cứ gì? Nếu hạ ngưỡng xuống thì đánh đổi là gì?
+Khả năng mở rộng
+Nếu lưu lượng tăng gấp mười lần thì nút thắt nằm ở đâu? Nhóm sẽ xử lý thế nào?
+Khả năng mở rộng
+Hệ thống của nhóm phục vụ được bao nhiêu ticket mỗi giờ? Con số đó có đủ cho khối lượng công việc đã giả định trong Canvas không?
+Trách nhiệm
+Hệ thống của nhóm có xử lý khác nhau giữa các nhóm khách hàng không? Nhóm kiểm chứng điều đó bằng cách nào?
+Bàn giao
+Đơn vị vận hành nhận sản phẩm này vào thứ Hai. Họ cần biết những gì mà tài liệu của nhóm chưa nói?
+Vận hành
+Hệ thống trả lời sai một khách hàng. Nhóm truy vết nguyên nhân bằng cách nào và mất bao lâu?
+An toàn
+Trường hợp nào hệ thống của nhóm có thể gây rủi ro nghiệp vụ? Đã có biện pháp gì?
+Đánh giá
+Con số nhóm báo cáo được đo trên tập nào, với cấu hình nào? Nếu chạy lại có ra kết quả tương tự không?
+Triển khai
+Nếu phải đưa hệ thống này lên môi trường thật vào tuần sau, ba việc nhóm làm trước tiên là gì?
+Giới hạn
+Đâu là điều hệ thống của nhóm chắc chắn không làm được? Nhóm biết điều đó bằng cách nào?
+
+12. ĐÁNH GIÁ KẾT QUẢ HỌC TẬP
+12.1. Cơ cấu điểm (thang 10)
+Thành phần
+Trọng số
+Bài tập thực hành nộp sau mỗi buổi (Session 1 đến 5, mỗi buổi 1,0 điểm)
+5,0
+Sản phẩm cuối khóa – mức độ hoàn thiện kỹ thuật
+2,0
+Sản phẩm cuối khóa – chất lượng đo bằng chỉ số
+1,5
+Trình bày và bảo vệ quyết định thiết kế
+1,5
+Nên công bố cơ cấu điểm ngay từ Session 1 và nhấn mạnh phần bảo vệ quyết định thiết kế. Khi biết mình sẽ bị hỏi vì sao chọn như vậy, học viên sẽ ghi chép lập luận ngay từ Session 2 thay vì cố nhớ lại vào ngày cuối.
+12.2. Điều kiện hoàn thành từng bài thực hành
+Bài
+Điều kiện hoàn thành
+Lab 0
+Môi trường dựng được bằng uv, công cụ kiểm tra báo PASS toàn bộ, pre-commit đã cài, đã nộp ảnh chụp màn hình
+Lab 1
+Canvas đủ bảy ô, có tối thiểu hai chỉ số định lượng kèm ước lượng hiệu quả kinh tế và điểm hòa vốn, phần phạm vi KHÔNG làm có tối thiểu bốn mục
+Lab 2
+Sơ đồ kiến trúc đủ năm tầng, tối thiểu năm ADR đúng mẫu, giao diện chạy được với dữ liệu giả lập, tích hợp liên tục giai đoạn kiểm tra mã chạy xanh
+Lab 3
+Bộ kiểm thử tự động chạy đạt trên hệ thống tích hợp liên tục, kho tri thức dựng được, tối thiểu hai thí nghiệm kèm số đo và một bảng so sánh hai phiên bản prompt, bài nộp qua yêu cầu hợp nhất mã đã được nhóm khác rà soát
+Lab 4
+Chạy thông suốt trên năm ticket, tối thiểu bốn điều kiện chuyển người hoạt động, màn hình duyệt ghi được nhật ký
+Lab 5
+API bất đồng bộ khởi động được từ máy sạch, đủ năm nhóm chỉ số ghi trên MLflow, vượt toàn bộ 12 ca đối kháng, cổng chất lượng tự động hoạt động, truy vết được một ticket bất kỳ, có bảng năng lực phục vụ theo mức đồng thời
+Lab 6
+Hai cải tiến có số đo trước sau, Model Card kèm kết quả kiểm tra thiên lệch, gói bàn giao có sổ tay vận hành, trình diễn đủ bốn kịch bản
+
+13. ĐIỀU KIỆN TỔ CHỨC LỚP HỌC
+13.1. Yêu cầu về thiết bị của học viên
+Hạng mục
+Tối thiểu
+Khuyến nghị
+Bộ nhớ RAM
+8 GB
+16 GB
+Dung lượng ổ đĩa trống
+10 GB
+15 GB
+Bộ xử lý
+4 nhân
+8 nhân
+Card đồ họa
+Không yêu cầu
+Không yêu cầu
+Kết nối tới server dùng chung
+Bắt buộc nếu lớp dùng cấu hình S làm chuẩn
+Đường truyền ổn định
+Hệ điều hành
+Windows 10 trở lên, macOS 12 trở lên, hoặc Ubuntu 20.04 trở lên
+Tương tự
+
+13.2. Chuẩn bị của đơn vị tổ chức
+Mốc thời gian
+Công việc
+Trước khóa 3 tuần
+Hoàn thiện bộ dữ liệu 120 ticket có nhãn và 28 tài liệu tri thức
+Chuẩn bị bộ 40 câu hỏi vàng và 12 ca đối kháng
+Hoàn thiện Development Starter Kit và sáu nhánh cứu hộ
+Viết bộ kiểm thử tự động cho từng bài thực hành
+Cấu hình các công cụ kỹ thuật: khóa phụ thuộc, kiểm tra mã tự động, quy trình tích hợp liên tục bốn giai đoạn
+Chuẩn bị năm ADR mẫu, tệp cấu hình so sánh prompt, mẫu Model Card và mẫu sổ tay vận hành
+Trước khóa 1 tuần
+Chạy thử toàn bộ sáu bài thực hành trên máy cấu hình tối thiểu để kiểm chứng thời lượng
+Đo năng lực server và chọn cấu hình chuẩn cho lớp theo bảng quyết định ở mục 1.5, ghi lại số liệu đo
+Dựng máy chủ suy luận với mô hình đã chọn
+Cấp khóa truy cập theo nhóm và đặt giới hạn tốc độ
+Kiểm chứng đường truyền từ phòng học tới server
+Chạy thử Session 3 và Session 5 trên cả hai cấu hình để kiểm chứng đường lùi
+Thông báo cho học viên cấu hình nào là chuẩn khi gửi hướng dẫn chuẩn bị
+Lập lịch khung giờ kiểm thử tải năm phút cho từng nhóm ở Session 5
+Dựng sẵn bản chỉ mục tri thức, chạy trước bộ đánh giá trên cấu hình chính và đưa tệp cache vào kho mã nguồn
+Kiểm chứng quy trình tích hợp liên tục chạy xanh trên máy không kết nối server
+Chuẩn bị hai USB chứa model
+Dựng máy chủ dùng chung trên mạng LAN và kiểm tra tải
+Gửi hướng dẫn chuẩn bị môi trường cho học viên
+Trước khóa 2 ngày
+Thu và rà soát kết quả kiểm tra môi trường của từng học viên
+Hỗ trợ riêng những học viên báo lỗi
+Lập danh sách ghép cặp học viên theo nguyên tắc kết hợp hai nhóm trình độ
+
+13.3. Xử lý sự cố trong giờ học
+Tình huống
+Hướng xử lý
+Cấu hình chuẩn của lớp gặp sự cố giữa buổi
+Cả lớp chuyển sang cấu hình còn lại bằng một biến môi trường. Nhắc học viên ghi rõ cấu hình vào mọi số liệu đo trong khoảng thời gian này, và không so sánh với số liệu đo trước đó
+Đường truyền tới server chập chờn
+Bật chế độ ưu tiên bộ nhớ đệm. Phần lớn thao tác lặp lại trong buổi đọc được từ cache nên vẫn tiếp tục được
+Cả lớp chạy chậm bất thường
+Kiểm tra số kết nối đồng thời tới server, giảm quy mô dữ liệu thí nghiệm xuống 10 mẫu
+Một nhóm tụt lại quá xa so với tiến độ
+Chuyển sang nhánh cứu hộ tương ứng và tiếp tục từ đó
+Docker gặp lỗi trên máy Windows
+Chạy trực tiếp các dịch vụ, chấm phần đóng gói qua tệp cấu hình đã viết
+Nhóm hoàn thành sớm
+Giao nội dung mở rộng ghi trong tệp CHALLENGE.md
+Dịch vụ mô hình treo giữa buổi
+Khởi động lại dịch vụ. Hệ thống có cơ chế ngắt mạch nên không sập toàn bộ ứng dụng
+Lớp học không có mạng để chạy tích hợp liên tục trên máy chủ
+Chạy quy trình tương đương bằng script tại chỗ. Nội dung giảng dạy không đổi vì lớp cache khiến kết quả đánh giá tất định
+
+14. ĐỐI CHIẾU VỚI ĐỀ CƯƠNG MÔN HỌC
+Chương này dùng để kiểm tra độ phủ. Mọi gạch đầu dòng thuộc cột Nội dung đào tạo và mọi yêu cầu đầu ra trong bảng nội dung chi tiết của đề cương đã phê duyệt đều phải xuất hiện tại đây, kèm vị trí triển khai tương ứng.
+Các dòng đánh dấu Bổ sung là nội dung về công cụ kỹ thuật không có trong đề cương gốc. Chúng được thêm vào mà không cắt bất kỳ mục nào của đề cương: thời lượng lấy từ việc rút gọn một số chủ đề dẫn nhập trong cùng buổi, nên tổng thời lượng lý thuyết và thực hành của từng buổi giữ nguyên, và tỉ lệ 46 phần trăm lý thuyết trên 54 phần trăm thực hành của toàn khóa không thay đổi.
+14.1. Đối chiếu nội dung đào tạo theo từng buổi
+Session 1
+Mục theo đề cương
+Loại
+Vị trí triển khai
+Tổng quan về AI Application và AI Engineering
+Nội dung
+Lý thuyết, 25 phút
+Xu hướng phát triển AI Application trong doanh nghiệp
+Nội dung
+Lý thuyết, 20 phút
+Xác định bài toán phù hợp để ứng dụng AI
+Nội dung
+Lý thuyết, 25 phút
+Phân tích quy trình nghiệp vụ và xác định AI Capability
+Nội dung
+Lý thuyết, 30 phút
+Phân biệt AI Application, AI Service và AI Agent
+Nội dung
+Lý thuyết, 20 phút
+Phân tích một bài toán doanh nghiệp
+Workshop
+Thực hành bước 1 – vẽ bản đồ quy trình xử lý ticket hiện trạng
+Xác định các điểm có thể ứng dụng AI
+Workshop
+Thực hành bước 2 – chấm điểm bốn tiêu chí cho từng bước nghiệp vụ
+Xây dựng AI Opportunity Canvas
+Workshop
+Thực hành bước 3, chốt phạm vi MVP ở bước 4
+
+Session 2
+Mục theo đề cương
+Loại
+Vị trí triển khai
+AI Application Architecture
+Nội dung
+Lý thuyết, 25 phút
+Thành phần của một AI Application
+Nội dung
+Lý thuyết, 20 phút
+Lựa chọn Foundation Model
+Nội dung
+Lý thuyết, 25 phút
+Thiết kế luồng xử lý tổng thể
+Nội dung
+Lý thuyết, 20 phút
+AI Design Pattern
+Nội dung
+Lý thuyết, 15 phút
+Bổ sung: Quy trình kỹ thuật cho dự án AI
+Bổ sung
+Lý thuyết, 15 phút — ADR, quản lý cấu hình, tích hợp liên tục
+Thiết kế kiến trúc hệ thống
+Workshop
+Thực hành bước 3 – vẽ Blueprint năm tầng
+Phân tích Development Starter Kit
+Workshop
+Thực hành bước 1 – giải phẫu repository, vẽ sơ đồ phụ thuộc
+Hoàn thiện AI Solution Blueprint
+Workshop
+Thực hành bước 3 và bước 4
+
+Session 3
+Mục theo đề cương
+Loại
+Vị trí triển khai
+Prompt Engineering
+Nội dung
+Lý thuyết, 25 phút
+Context Engineering
+Nội dung
+Lý thuyết, 20 phút
+Knowledge Engineering
+Nội dung
+Lý thuyết, 20 phút
+Retrieval-Augmented Generation
+Nội dung
+Lý thuyết, 30 phút
+Quản lý tri thức doanh nghiệp
+Nội dung
+Lý thuyết, 15 phút
+Bổ sung: Công cụ đánh giá và so sánh prompt
+Bổ sung
+Lý thuyết, 10 phút — promptfoo
+Thiết kế Prompt
+Workshop
+Thực hành bước 1 – prompt theo cấu trúc năm phần
+Thiết kế Context
+Workshop
+Thực hành bước 1 – bảng ngân sách ngữ cảnh và phân tách bằng thẻ; bước 3 – lắp ngữ cảnh truy hồi vào prompt
+Xây dựng Knowledge Base
+Workshop
+Thực hành bước 3, đo chất lượng ở bước 4
+
+Session 4
+Mục theo đề cương
+Loại
+Vị trí triển khai
+AI Workflow
+Nội dung
+Lý thuyết, 25 phút
+Tool Calling
+Nội dung
+Lý thuyết, 30 phút
+Agent Workflow (giới thiệu)
+Nội dung
+Lý thuyết, 20 phút
+Human-in-the-loop
+Nội dung
+Lý thuyết, 25 phút
+Thiết kế AI Pipeline
+Nội dung
+Lý thuyết, 20 phút
+Thiết kế AI Workflow
+Workshop
+Thực hành bước 1 – sơ đồ luồng đầy đủ nhánh rẽ
+Tích hợp AI Capability vào Starter Kit
+Workshop
+Thực hành bước 2 – gọi công cụ; bước 3 – sinh phản hồi và ghép đường ống
+Xây dựng Prototype
+Workshop
+Thực hành bước 3 và bước 4
+
+Session 5
+Mục theo đề cương
+Loại
+Vị trí triển khai
+Thiết kế API cho AI Application
+Nội dung
+Lý thuyết, 25 phút
+Đóng gói ứng dụng bằng Docker
+Nội dung
+Lý thuyết, 15 phút
+Đánh giá chất lượng AI Application
+Nội dung
+Lý thuyết, 20 phút
+Guardrails và Production Readiness
+Nội dung
+Lý thuyết, 20 phút
+Logging và Monitoring
+Nội dung
+Lý thuyết, 15 phút — mở rộng thêm nội dung phát hiện suy giảm chất lượng
+Bổ sung: Triển khai cho nhiều người dùng
+Bổ sung
+Lý thuyết, 15 phút — bất đồng bộ, hàng đợi, năng lực phục vụ
+Bổ sung: Theo dõi thí nghiệm và cổng chất lượng
+Bổ sung
+Lý thuyết, 10 phút — MLflow và ngưỡng chặn hợp nhất mã
+Docker hóa ứng dụng
+Workshop
+Thực hành bước 1
+Đánh giá Prototype
+Workshop
+Thực hành bước 2 – năm nhóm chỉ số trên tập kiểm định
+Hoàn thiện Production-ready Prototype
+Workshop
+Thực hành bước 3 – guardrails; bước 4 – nhật ký và tích hợp liên tục
+Bổ sung: Kiểm thử tải và năng lực phục vụ
+Bổ sung
+Thực hành bước 5, 15 phút
+
+Session 6
+Mục theo đề cương
+Loại
+Vị trí triển khai
+Hoàn thiện AI Application
+Nội dung
+Lý thuyết, 15 phút — mở rộng thêm nội dung bàn giao đơn vị vận hành
+Kiểm thử và cải tiến
+Nội dung
+Lý thuyết, 10 phút
+Chuẩn bị Demo
+Nội dung
+Lý thuyết, 5 phút
+Trình bày kiến trúc và các quyết định thiết kế
+Nội dung
+Lý thuyết, 10 phút
+Bổ sung: Responsible AI và Model Card
+Bổ sung
+Lý thuyết, 15 phút
+Bổ sung: Sử dụng AI làm công cụ phát triển
+Bổ sung
+Lý thuyết, 5 phút
+Hoàn thiện sản phẩm
+Workshop
+Thực hành bước 1 – sprint hai cải tiến có đo lường
+Demo
+Workshop
+Thực hành bước 2 chuẩn bị, bước 3 trình diễn
+Báo cáo
+Workshop
+Slide 10 trang, tệp README, bảng cải tiến trước sau
+Phản biện
+Workshop
+Thực hành bước 3, sử dụng ngân hàng câu hỏi ở chương 11
+
+14.2. Đối chiếu yêu cầu đầu ra theo từng module
+Các yêu cầu dưới đây trích từ cột Yêu cầu đầu ra trong bảng nội dung chi tiết của đề cương.
+
+Module 1 — Thiết kế giải pháp AI
+Yêu cầu đầu ra
+Hoạt động tương ứng
+Bằng chứng nghiệm thu
+Xác định được bài toán phù hợp để ứng dụng AI
+Session 1, thực hành bước 2: chấm điểm bốn tiêu chí cho từng bước nghiệp vụ
+Bảng chấm điểm có lý do cho mỗi điểm số
+Phân tích được giá trị và phạm vi của AI trong hệ thống
+Session 1, thực hành bước 3: ô chỉ số thành công và ô phạm vi MVP trong Canvas
+Tối thiểu hai chỉ số định lượng, phần phạm vi KHÔNG làm có tối thiểu bốn mục
+Thiết kế được kiến trúc tổng thể của AI Application
+Session 2, thực hành bước 3: vẽ Blueprint năm tầng
+Sơ đồ đủ năm tầng, mỗi thành phần có đầu vào, đầu ra và phương án dự phòng
+Lựa chọn được các thành phần AI phù hợp
+Session 2, thực hành bước 2 và bảng quyết định thiết kế
+Bảng so sánh cấu hình mô hình có số đo, bảng quyết định tối thiểu năm mục
+
+Module 2 — Phát triển ứng dụng AI
+Yêu cầu đầu ra
+Hoạt động tương ứng
+Bằng chứng nghiệm thu
+Thiết kế được ngữ cảnh và tri thức cho AI Application
+Session 3, thực hành bước 1 và bước 3
+Tài liệu context_spec có mẫu prompt năm phần, bảng ngân sách ngữ cảnh và chiến lược chia đoạn
+Xây dựng được chiến lược khai thác tri thức
+Session 3, thực hành bước 4: thí nghiệm cải tiến truy hồi
+Bảng tối thiểu hai thí nghiệm kèm chỉ số Recall trước và sau
+Thiết kế được quy trình xử lý AI
+Session 4, thực hành bước 1: vẽ sơ đồ luồng đủ nhánh rẽ
+Sơ đồ luồng và danh sách tối thiểu bốn điều kiện chuyển người
+Xây dựng được AI Prototype hoạt động
+Session 4, thực hành bước 2, 3 và 4
+Chạy thông suốt trên năm ticket, video trình diễn ba tình huống
+
+Module 3 — Triển khai và đánh giá ứng dụng AI
+Yêu cầu đầu ra
+Hoạt động tương ứng
+Bằng chứng nghiệm thu
+Triển khai được AI Application Prototype
+Session 5, thực hành bước 1: API bất đồng bộ và đóng gói Docker; bước 5: kiểm thử tải
+Hệ thống khởi động được bằng một lệnh từ máy sạch, có số liệu năng lực phục vụ theo mức đồng thời
+Đánh giá được chất lượng và mức độ sẵn sàng triển khai
+Session 5, thực hành bước 2, 3 và 4
+Tài liệu đánh giá đủ năm nhóm chỉ số, kết quả 12 ca đối kháng, truy vết được một ticket bất kỳ
+
+Module 4 — Dự án cuối khóa
+Yêu cầu đầu ra
+Hoạt động tương ứng
+Bằng chứng nghiệm thu
+Hoàn thiện một AI Application Prototype
+Session 6, thực hành bước 1 và bước 2
+Bảng hai cải tiến với chỉ số trước và sau, Model Card và gói bàn giao
+Trình bày được kiến trúc, quy trình xử lý và phương án triển khai của hệ thống
+Session 6, thực hành bước 3 và bước 4
+Trình diễn bốn kịch bản, bộ slide, và phần trả lời câu hỏi phản biện
+
+14.3. Đối chiếu yêu cầu đầu ra chung của môn học
+Yêu cầu đầu ra
+Buổi
+Sản phẩm chứng minh
+Phân tích bài toán và xác định cơ hội ứng dụng AI
+Session 1
+AI Opportunity Canvas
+Thiết kế AI Architecture cho bài toán doanh nghiệp
+Session 2
+AI Solution Blueprint và bảng quyết định thiết kế
+Thiết kế AI Workflow gồm Prompt, Context, Knowledge và Tool
+Session 3 và 4
+Context Specification và AI Prototype v1
+Phát triển AI Application dựa trên Development Starter Kit
+Session 3, 4 và 5
+Mã nguồn hoàn chỉnh trên nhánh của nhóm
+Đánh giá và triển khai AI Application Prototype
+Session 5 và 6
+Tài liệu đánh giá và sản phẩm cuối khóa
+
+15. PHỤ LỤC — BẢNG PHÂN BỔ THỜI LƯỢNG TOÀN KHÓA
+Buổi
+Module
+Lý thuyết
+Thực hành
+Tổng
+Deliverable
+Session 1
+Module 1
+2 giờ
+2 giờ
+4 giờ
+AI Opportunity Canvas
+Session 2
+Module 1
+2 giờ
+2 giờ
+4 giờ
+AI Solution Blueprint
+Session 3
+Module 2
+2 giờ
+2 giờ
+4 giờ
+Context Specification
+Session 4
+Module 2
+2 giờ
+2 giờ
+4 giờ
+AI Prototype v1
+Session 5
+Module 3
+2 giờ
+2 giờ
+4 giờ
+Production-ready Prototype
+Session 6
+Module 4
+1 giờ
+3 giờ
+4 giờ
+Final AI Application
+Tổng cộng
+
+11 giờ
+13 giờ
+24 giờ
+
+Tỉ lệ lý thuyết trên thực hành đạt khoảng 46% và 54%, đúng theo quy định của đề cương môn học.
+
+Ngoài 24 giờ trên lớp, học viên cần dành thêm khoảng 45 đến 60 phút chuẩn bị môi trường tại nhà trước ngày học đầu tiên.

@@ -1,0 +1,57 @@
+{
+  "0987000101": [
+    {"cycle": "2025-09", "amount": 149000, "base": 149000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2025-10", "amount": 149000, "base": 149000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2025-11", "amount": 164000, "base": 149000, "vas": 15000, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2025-12", "amount": 194000, "base": 149000, "vas": 45000, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-01", "amount": 194000, "base": 149000, "vas": 45000, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-02", "amount": 320000, "base": 149000, "vas": 45000, "overage": 126000, "roaming": 0, "adjustment": 0}
+  ],
+  "0987000102": [
+    {"cycle": "2025-09", "amount": 50000, "base": 50000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2025-10", "amount": 50000, "base": 50000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2025-11", "amount": 50000, "base": 50000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2025-12", "amount": 65000, "base": 50000, "vas": 15000, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-01", "amount": 65000, "base": 50000, "vas": 15000, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-02", "amount": 65000, "base": 50000, "vas": 15000, "overage": 0, "roaming": 0, "adjustment": 0}
+  ],
+  "0987000103": [
+    {"cycle": "2025-09", "amount": 299000, "base": 299000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2025-10", "amount": 299000, "base": 299000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2025-11", "amount": 299000, "base": 299000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2025-12", "amount": 4212000, "base": 299000, "vas": 0, "overage": 0, "roaming": 3913000, "adjustment": 0},
+    {"cycle": "2026-01", "amount": 1801000, "base": 299000, "vas": 0, "overage": 0, "roaming": 1502000, "adjustment": 0},
+    {"cycle": "2026-02", "amount": 299000, "base": 299000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0}
+  ],
+  "0987000104": [
+    {"cycle": "2025-11", "amount": 120000, "base": 120000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2025-12", "amount": 120000, "base": 120000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-01", "amount": 126000, "base": 120000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 6000},
+    {"cycle": "2026-02", "amount": 126000, "base": 120000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 6000}
+  ],
+  "0987000105": [
+    {"cycle": "2025-12", "amount": 500000, "base": 500000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-01", "amount": 500000, "base": 500000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-02", "amount": 500000, "base": 500000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0}
+  ],
+  "0987000106": [
+    {"cycle": "2025-12", "amount": 99000, "base": 99000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-01", "amount": 99000, "base": 99000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-02", "amount": 512000, "base": 99000, "vas": 60000, "overage": 353000, "roaming": 0, "adjustment": 0}
+  ],
+  "0987000107": [
+    {"cycle": "2025-12", "amount": 90000, "base": 90000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-01", "amount": 90000, "base": 90000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-02", "amount": 90000, "base": 90000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0}
+  ],
+  "0987000109": [
+    {"cycle": "2025-12", "amount": 149000, "base": 149000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-01", "amount": 149000, "base": 149000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-02", "amount": 149000, "base": 149000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": -49000}
+  ],
+  "0987000110": [
+    {"cycle": "2025-12", "amount": 299000, "base": 299000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-01", "amount": 299000, "base": 299000, "vas": 0, "overage": 0, "roaming": 0, "adjustment": 0},
+    {"cycle": "2026-02", "amount": 890000, "base": 299000, "vas": 0, "overage": 591000, "roaming": 0, "adjustment": 0}
+  ]
+}

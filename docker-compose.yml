@@ -1,0 +1,84 @@
+# Ba dịch vụ — Session 5.
+#
+# Dịch vụ model đặt NGOÀI container, truy cập qua host.docker.internal. Đó là
+# một quyết định kiến trúc có chủ ý, ghi trong docs/adr/0004:
+#
+#   - Cấu hình S dùng server GPU dùng chung, vốn đã nằm ngoài máy học viên.
+#   - Cấu hình L dùng Ollama trên chính máy học viên, cài sẵn từ Lab 0.
+#   - Nhờ vậy chuyển S↔L chỉ là đổi LLM_BASE_URL, không dựng lại ảnh.
+#
+# Khởi động: docker compose up --build
+# Dừng:      docker compose down
+
+services:
+  api:
+    build: .
+    container_name: csc-api
+    ports: ["8000:8000"]
+    environment:
+      CONFIG_PROFILE: ${CONFIG_PROFILE:-L}
+      LLM_BASE_URL: ${LLM_BASE_URL:-http://host.docker.internal:11434/v1}
+      LLM_MODEL: ${LLM_MODEL:-qwen3:8b}
+      LLM_API_KEY: ${LLM_API_KEY:-ollama}
+      EMBED_BASE_URL: ${EMBED_BASE_URL:-http://host.docker.internal:11434/v1}
+      EMBED_MODEL: ${EMBED_MODEL:-bge-m3}
+      CACHE_MODE: ${CACHE_MODE:-on}
+      DB_PATH: /app/state/app.db
+      LOG_PATH: /app/logs/app.jsonl
+      CHROMA_PATH: /app/state/index
+    volumes:
+      - state:/app/state
+      - logs:/app/logs
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  ui:
+    build: .
+    container_name: csc-ui
+    ports: ["8501:8501"]
+    command: >
+      uv run streamlit run src/ui/app.py
+      --server.port 8501 --server.address 0.0.0.0 --server.headless true
+    environment:
+      CONFIG_PROFILE: ${CONFIG_PROFILE:-L}
+      LLM_BASE_URL: ${LLM_BASE_URL:-http://host.docker.internal:11434/v1}
+      LLM_MODEL: ${LLM_MODEL:-qwen3:8b}
+      EMBED_BASE_URL: ${EMBED_BASE_URL:-http://host.docker.internal:11434/v1}
+      EMBED_MODEL: ${EMBED_MODEL:-bge-m3}
+      CACHE_MODE: ${CACHE_MODE:-on}
+      DB_PATH: /app/state/app.db
+      LOG_PATH: /app/logs/app.jsonl
+      CHROMA_PATH: /app/state/index
+    volumes:
+      - state:/app/state
+      - logs:/app/logs
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Theo dõi thí nghiệm, chạy hoàn toàn tại chỗ. Không cần tài khoản, không
+  # cần mạng — điều kiện bắt buộc để đưa được vào khóa học (mục 3.1).
+  mlflow:
+    build: .
+    container_name: csc-mlflow
+    ports: ["5000:5000"]
+    command: >
+      uv run mlflow server --host 0.0.0.0 --port 5000
+      --backend-store-uri file:///app/mlruns
+      --default-artifact-root file:///app/mlruns
+    volumes:
+      - mlruns:/app/mlruns
+    restart: unless-stopped
+
+volumes:
+  state:
+  logs:
+  mlruns:

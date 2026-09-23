@@ -1,0 +1,45 @@
+{"qa_id": "QA-001", "question": "Hóa đơn trả sau được phát hành vào ngày nào hàng tháng?", "expected_doc_ids": ["KB-001"], "answerable": true, "note": ""}
+{"qa_id": "QA-002", "question": "Phí chậm nộp cước được tính bao nhiêu phần trăm mỗi ngày và tối đa bao nhiêu?", "expected_doc_ids": ["KB-001"], "answerable": true, "note": ""}
+{"qa_id": "QA-003", "question": "Quá bao nhiêu ngày kể từ hạn thanh toán thì thuê bao bị khóa một chiều?", "expected_doc_ids": ["KB-001", "KB-024"], "answerable": true, "note": ""}
+{"qa_id": "QA-004", "question": "Thời hạn khiếu nại về cước là bao nhiêu ngày kể từ ngày phát hành hóa đơn?", "expected_doc_ids": ["KB-001"], "answerable": true, "note": ""}
+{"qa_id": "QA-005", "question": "Làm sao để kiểm tra danh sách dịch vụ giá trị gia tăng đang đăng ký?", "expected_doc_ids": ["KB-002"], "answerable": true, "note": ""}
+{"qa_id": "QA-006", "question": "Khách hàng bị đăng ký dịch vụ giá trị gia tăng mà không xác nhận thì được hoàn cước tối đa mấy chu kỳ?", "expected_doc_ids": ["KB-002"], "answerable": true, "note": ""}
+{"qa_id": "QA-007", "question": "Giao dịch viên được quyền điều chỉnh cước tối đa bao nhiêu tiền mà không cần phê duyệt?", "expected_doc_ids": ["KB-003"], "answerable": true, "note": ""}
+{"qa_id": "QA-008", "question": "Bốn nguyên nhân thường gặp nhất của khiếu nại sai cước là gì?", "expected_doc_ids": ["KB-003"], "answerable": true, "note": ""}
+{"qa_id": "QA-009", "question": "Nhà mạng cam kết tỉ lệ rớt cuộc gọi tối đa bao nhiêu phần trăm?", "expected_doc_ids": ["KB-004"], "answerable": true, "note": ""}
+{"qa_id": "QA-010", "question": "Giờ cao điểm mạng được xác định là khung giờ nào?", "expected_doc_ids": ["KB-004"], "answerable": true, "note": ""}
+{"qa_id": "QA-011", "question": "Một phiếu sự cố kết nối bắt buộc phải ghi những thông tin gì?", "expected_doc_ids": ["KB-005"], "answerable": true, "note": ""}
+{"qa_id": "QA-012", "question": "Thời hạn phản hồi của bộ phận kỹ thuật với phiếu yêu cầu kiểm tra vùng phủ là bao lâu?", "expected_doc_ids": ["KB-005"], "answerable": true, "note": ""}
+{"qa_id": "QA-013", "question": "Sự cố diện rộng được định nghĩa từ bao nhiêu thuê bao bị ảnh hưởng trở lên?", "expected_doc_ids": ["KB-006"], "answerable": true, "note": ""}
+{"qa_id": "QA-014", "question": "Khách hàng bị ảnh hưởng bởi sự cố diện rộng có phải làm thủ tục yêu cầu bồi thường không?", "expected_doc_ids": ["KB-006", "KB-012"], "answerable": true, "note": ""}
+{"qa_id": "QA-015", "question": "Gián đoạn dịch vụ từ bao nhiêu giờ trở lên thì được xét bồi thường?", "expected_doc_ids": ["KB-012"], "answerable": true, "note": "Bẫy tài liệu mâu thuẫn: KB-007 nói 24 giờ, KB-012 hiện hành nói 04 giờ. Chỉ KB-012 được tính đúng."}
+{"qa_id": "QA-016", "question": "Gói dữ liệu bổ sung D5 có bao nhiêu GB, cước bao nhiêu và dùng được mấy ngày?", "expected_doc_ids": ["KB-023"], "answerable": true, "note": ""}
+{"qa_id": "QA-017", "question": "Thời hạn gửi yêu cầu bồi thường với sự cố cá thể là bao nhiêu ngày?", "expected_doc_ids": ["KB-012"], "answerable": true, "note": "Bẫy: KB-007 cũ nói 15 ngày, KB-012 hiện hành nói 30 ngày."}
+{"qa_id": "QA-018", "question": "Gói TS149 có bao nhiêu GB dữ liệu tốc độ cao và cước bao nhiêu?", "expected_doc_ids": ["KB-008"], "answerable": true, "note": ""}
+{"qa_id": "QA-019", "question": "Gói B5G500 không giới hạn dung lượng nhưng có chính sách quản lý lưu lượng gì?", "expected_doc_ids": ["KB-008"], "answerable": true, "note": ""}
+{"qa_id": "QA-020", "question": "Hết dung lượng tốc độ cao thì gói trả sau bị giảm tốc độ xuống bao nhiêu?", "expected_doc_ids": ["KB-008"], "answerable": true, "note": ""}
+{"qa_id": "QA-021", "question": "Bốn trường hợp nào khiến thuê bao không được hưởng khuyến mãi dù đã nạp đúng?", "expected_doc_ids": ["KB-009"], "answerable": true, "note": ""}
+{"qa_id": "QA-022", "question": "Điều kiện để được hưởng khuyến mãi dành cho thuê bao trung thành là gì?", "expected_doc_ids": ["KB-009"], "answerable": true, "note": ""}
+{"qa_id": "QA-023", "question": "Chuyển đổi gói cước có mất phí không?", "expected_doc_ids": ["KB-013"], "answerable": true, "note": "Bẫy tài liệu mâu thuẫn: KB-010 cũ thu 20.000đ, KB-013 hiện hành đã bãi bỏ phí."}
+{"qa_id": "QA-024", "question": "Có được chuyển đổi gói cước vào giữa chu kỳ không, hay phải chờ đầu chu kỳ sau?", "expected_doc_ids": ["KB-013"], "answerable": true, "note": "Bẫy: KB-010 cũ bắt chờ đầu chu kỳ, KB-013 hiện hành cho đổi bất kỳ lúc nào."}
+{"qa_id": "QA-025", "question": "Khách hàng đã chuyển khoản nhưng hệ thống chưa ghi nhận thì xử lý theo các bước nào?", "expected_doc_ids": ["KB-020"], "answerable": true, "note": ""}
+{"qa_id": "QA-026", "question": "Đổi SIM do mất mất phí bao nhiêu tiền?", "expected_doc_ids": ["KB-011"], "answerable": true, "note": ""}
+{"qa_id": "QA-027", "question": "Sau khi đổi SIM, chức năng nhận mã xác thực ngân hàng bị tạm khóa bao lâu?", "expected_doc_ids": ["KB-011"], "answerable": true, "note": ""}
+{"qa_id": "QA-028", "question": "Khách hàng nghi bị chiếm đoạt SIM thì giao dịch viên phải xử lý thế nào?", "expected_doc_ids": ["KB-011", "KB-027"], "answerable": true, "note": ""}
+{"qa_id": "QA-029", "question": "Thiết bị vào nước có được bảo hành không?", "expected_doc_ids": ["KB-014"], "answerable": true, "note": ""}
+{"qa_id": "QA-030", "question": "Tiền trong tài khoản khuyến mãi có dùng để thanh toán cước thuê bao gói chính được không?", "expected_doc_ids": ["KB-023"], "answerable": true, "note": ""}
+{"qa_id": "QA-031", "question": "Mã QR kích hoạt eSIM có hiệu lực trong bao nhiêu ngày?", "expected_doc_ids": ["KB-015"], "answerable": true, "note": ""}
+{"qa_id": "QA-032", "question": "Thay đổi họ tên trên thuê bao có làm được qua tổng đài không?", "expected_doc_ids": ["KB-016"], "answerable": true, "note": ""}
+{"qa_id": "QA-033", "question": "Phí chuyển nhượng quyền sử dụng thuê bao là bao nhiêu?", "expected_doc_ids": ["KB-017"], "answerable": true, "note": ""}
+{"qa_id": "QA-034", "question": "Khách hàng doanh nghiệp lớn được cam kết thời gian phản hồi sự cố trong bao lâu?", "expected_doc_ids": ["KB-018"], "answerable": true, "note": ""}
+{"qa_id": "QA-035", "question": "Có được đọc bản kê chi tiết cuộc gọi cho khách hàng qua điện thoại không?", "expected_doc_ids": ["KB-019"], "answerable": true, "note": ""}
+{"qa_id": "QA-036", "question": "Cước chuyển vùng quốc tế có nằm trong dung lượng của gói cước trong nước không?", "expected_doc_ids": ["KB-021"], "answerable": true, "note": ""}
+{"qa_id": "QA-037", "question": "Yêu cầu khiếu nại cước được cam kết giải quyết trong bao nhiêu ngày làm việc?", "expected_doc_ids": ["KB-026"], "answerable": true, "note": ""}
+{"qa_id": "QA-038", "question": "Mỗi cá nhân được đăng ký tối đa bao nhiêu thuê bao trả trước trên một giấy tờ?", "expected_doc_ids": ["KB-025"], "answerable": true, "note": ""}
+{"qa_id": "QA-039", "question": "Bảy trường hợp nào giao dịch viên tuyến một bắt buộc phải chuyển tuyến?", "expected_doc_ids": ["KB-027"], "answerable": true, "note": ""}
+{"qa_id": "QA-040", "question": "Gián đoạn do bảo trì có thông báo trước có được bồi thường không?", "expected_doc_ids": ["KB-022", "KB-012"], "answerable": true, "note": ""}
+{"qa_id": "QA-041", "question": "Gói cước dành riêng cho học sinh sinh viên có những gói nào và cần giấy tờ gì?", "expected_doc_ids": [], "answerable": false, "note": "Bẫy không có đáp án 1/5. Kho tri thức không có tài liệu về gói sinh viên."}
+{"qa_id": "QA-042", "question": "Tổng đài có hỗ trợ tư vấn bằng tiếng Anh và tiếng Trung không?", "expected_doc_ids": [], "answerable": false, "note": "Bẫy không có đáp án 2/5."}
+{"qa_id": "QA-043", "question": "Chính sách hoàn tiền khi khách hàng chấm dứt hợp đồng trả sau trước hạn là gì?", "expected_doc_ids": [], "answerable": false, "note": "Bẫy không có đáp án 3/5."}
+{"qa_id": "QA-044", "question": "Nhà mạng có dịch vụ cho thuê thiết bị phát sóng di động theo tháng không?", "expected_doc_ids": [], "answerable": false, "note": "Bẫy không có đáp án 4/5."}
+{"qa_id": "QA-045", "question": "Điểm tích lũy của khách hàng thân thiết được quy đổi theo tỉ lệ nào?", "expected_doc_ids": [], "answerable": false, "note": "Bẫy không có đáp án 5/5. KB-017 có nhắc điểm tích lũy nhưng không nêu tỉ lệ quy đổi."}

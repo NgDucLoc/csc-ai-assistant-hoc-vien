@@ -1,0 +1,41 @@
+# SPEC-TOOLING-01 — ghim tham số model để cấu hình tái lập được giữa các máy.
+#
+# Dựng:  ollama create csc-classifier -f models/Modelfile
+# Dùng:  LLM_MODEL=csc-classifier
+#
+# Vì sao cần tệp này: Ollama áp tham số mặc định riêng cho từng model, và mặc
+# định đó thay đổi giữa các phiên bản Ollama. Nếu không ghim, hai máy học viên
+# cùng chạy qwen3:8b vẫn cho kết quả khác nhau — và cả buổi sẽ trôi vào việc
+# truy nguyên một khác biệt không nằm trong mã nguồn.
+#
+# ĐÃ KIỂM CHỨNG (2026-09-23, qwen3:1.7b qua Ollama 0.34.3, cùng họ Qwen3 nên
+# hành vi thinking-mode giống hệt qwen3:8b — chỉ khác quy mô tham số):
+# Ollama tự tách khối suy luận ra trường `message.reasoning` riêng trong response
+# JSON của endpoint /v1/chat/completions — `message.content` LUÔN sạch, không
+# dính thẻ <think>, dù không cần thêm chỉ dẫn gì trong SYSTEM. Đã test qua đúng
+# extract_json()/validate() thật của src/llm/schema.py trên nhiều ticket, ở cả
+# nhiệt độ 0 (classify) và 0.3 (generate) — không ca nào bị hỏng vì thinking-mode.
+#
+# Chỉ dẫn "/no_think" chèn vào SYSTEM ở bản trước KHÔNG có tác dụng (reasoning
+# vẫn xuất hiện đầy đủ, vẫn tốn ~50% completion token cho suy luận ẩn) và đã bị
+# gỡ bỏ — Ollama không đọc "/no_think" như một token điều khiển, chỉ Qwen3 dùng
+# qua template gốc của model. Model vẫn lỗi định dạng JSON một số ca do lỗi
+# thường gặp khác (sai enum, số ngoài khoảng) — bài học 4 lớp phòng vệ ở
+# Session 3 bước 2 vẫn còn nguyên giá trị giảng dạy, không bị Qwen3 làm mất tác dụng.
+#
+# CHƯA kiểm chứng trên vLLM (cấu hình S): việc tách reasoning phụ thuộc cờ
+# `--reasoning-parser` của vLLM, không tự động như Ollama. Nếu triển khai cấu
+# hình S thật, PHẢI bật đúng reasoning-parser cho Qwen3, nếu không <think> có
+# thể lọt thẳng vào content và phá lớp kiểm định JSON — xem CHALLENGE.md mục 5.4.
+
+FROM qwen3:8b
+
+# Tác vụ phân loại: SPEC-LLM-03 yêu cầu nhiệt độ 0.
+PARAMETER temperature 0
+PARAMETER top_p 1
+PARAMETER seed 42
+PARAMETER num_ctx 4096
+PARAMETER num_predict 512
+PARAMETER repeat_penalty 1.05
+
+SYSTEM """Bạn là bộ phân loại ticket chăm sóc khách hàng viễn thông. Bạn chỉ trả về JSON hợp lệ, không kèm lời dẫn, không kèm khối mã."""

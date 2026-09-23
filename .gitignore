@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.env
+.DS_Store
+
+# Chỉ mục sinh tại chỗ. Bản dùng chung nằm ở data/index_prebuilt/ và ĐƯỢC commit.
+data/index/
+data/app.db
+logs/
+eval/results/*.json
+eval/mlruns/
+
+# NGOẠI LỆ QUAN TRỌNG — SPEC-ARCH-03, SPEC-TOOLING-04
+# .cache/llm_cache.db BẮT BUỘC được commit. Không thêm .cache/ vào đây.
+# Toàn bộ khả năng chạy CI offline treo vào tệp này.
+!.cache/llm_cache.db
+
+# Bản kết xuất tùy chọn — nguồn sự thật là scripts/tickets_*_data.py
+data/tickets/*.jsonl

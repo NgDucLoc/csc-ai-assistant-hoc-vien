@@ -1,0 +1,12 @@
+{
+  "0987000101": {"subscriber_id": "0987000101", "package": "TS149", "package_name": "Trả sau 149K", "activated_at": "2021-03-14", "status": "active", "contract_type": "ca_nhan", "loyalty_months": 59},
+  "0987000102": {"subscriber_id": "0987000102", "package": "MI50", "package_name": "Trả trước 50K", "activated_at": "2024-11-02", "status": "active", "contract_type": "ca_nhan", "loyalty_months": 15},
+  "0987000103": {"subscriber_id": "0987000103", "package": "TS299", "package_name": "Trả sau 299K", "activated_at": "2019-07-20", "status": "active", "contract_type": "ca_nhan", "loyalty_months": 79},
+  "0987000104": {"subscriber_id": "0987000104", "package": "V120N", "package_name": "Trả trước 120K", "activated_at": "2023-01-09", "status": "locked_one_way", "contract_type": "ca_nhan", "loyalty_months": 37, "lock_reason": "no_cuoc_qua_han"},
+  "0987000105": {"subscriber_id": "0987000105", "package": "B5G500", "package_name": "5G không giới hạn", "activated_at": "2025-02-18", "status": "active", "contract_type": "doanh_nghiep", "org": "Công ty TNHH Minh Quang", "org_size": "vua", "loyalty_months": 12},
+  "0987000106": {"subscriber_id": "0987000106", "package": "TS99", "package_name": "Trả sau 99K", "activated_at": "2022-06-30", "status": "active", "contract_type": "ca_nhan", "loyalty_months": 44},
+  "0987000107": {"subscriber_id": "0987000107", "package": "MI90", "package_name": "Trả trước 90K", "activated_at": "2020-10-05", "status": "active", "contract_type": "ca_nhan", "loyalty_months": 64},
+  "0987000108": {"subscriber_id": "0987000108", "package": "MI30", "package_name": "Trả trước 30K", "activated_at": "2025-08-11", "status": "expired", "contract_type": "ca_nhan", "loyalty_months": 6, "lock_reason": "het_han_su_dung"},
+  "0987000109": {"subscriber_id": "0987000109", "package": "TS149", "package_name": "Trả sau 149K", "activated_at": "2024-04-22", "status": "active", "contract_type": "doanh_nghiep", "org": "Cửa hàng Ánh Dương", "org_size": "nho", "loyalty_months": 22},
+  "0987000110": {"subscriber_id": "0987000110", "package": "TS299", "package_name": "Trả sau 299K", "activated_at": "2018-12-01", "status": "active", "contract_type": "ca_nhan", "loyalty_months": 86}
+}

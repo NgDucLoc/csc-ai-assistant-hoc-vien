@@ -1,0 +1,37 @@
+# SPEC-TOOLING-03 — chặn commit vi phạm quy ước hoặc chứa dữ liệu nhạy cảm.
+# Cài đặt: uv run pre-commit install
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.5.7
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: [--maxkb=6000]   # .cache/llm_cache.db được phép lớn
+      - id: check-merge-conflict
+      - id: detect-private-key
+
+  # SPEC-DATA-01 — hàng rào cuối cùng chặn dữ liệu thật lọt vào repo.
+  # Hook này là lý do khóa học dám công khai repo cho học viên.
+  - repo: local
+    hooks:
+      - id: no-real-phone-numbers
+        name: Chặn số điện thoại VN có thật trong mã và dữ liệu
+        entry: python scripts/hook_no_real_pii.py
+        language: system
+        types: [text]
+        exclude: '^(data/|\.cache/|labs/|docs/)'
+      - id: no-api-keys
+        name: Chặn khóa truy cập bị commit nhầm
+        entry: python scripts/hook_no_secrets.py
+        language: system
+        types: [text]

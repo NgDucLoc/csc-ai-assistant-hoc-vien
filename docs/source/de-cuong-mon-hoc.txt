@@ -1,0 +1,223 @@
+
+HỌC VIỆN VIETTEL
+94459123495000HỘI ĐỒNG XÂY DỰNG  CHƯƠNG TRÌNH ĐÀO TẠO
+CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
+3994502146300Độc lập – Tự do – Hạnh phúc
+
+Hà Nội, ngày      tháng    năm 2026
+
+ĐỀ CƯƠNG MÔN HỌC
+
+MÔ TẢ TÓM LƯỢC MÔN HỌC
+Tên môn học 
+:
+AI-Native Application Engineering – Phát triển ứng dụng AI
+Thời lượng 
+:
+24 giờ (03 ngày × 8 giờ)
+Địa điểm đào tạo
+:
+Học viện Viettel, Yên Xuân, Hà Nội.
+Cỡ lớp
+:
+
+Đối tượng học viên
+:
+Ưu tiên: Nhân sự thuộc nhóm: Khoa học dữ liệu/Trí tuệ nhân tạo
+Mở rộng: Nhân sự thuộc nhóm CNTT nói chung, phát triển phần mềm.
+Giảng viên
+:
+TS. Bùi Thị Mai Anh là giảng viên tại Viện Công nghệ Thông tin và Truyền thông (SoICT), Đại học Bách khoa Hà Nội (HUST). Cô là Trưởng nhóm nghiên cứu Kỹ thuật phần mềm thông minh (Intelligent Software Engineering – ISE) tại BKAI.
+
+Yêu cầu đầu ra của môn học
+:
+Phân tích bài toán và xác định cơ hội ứng dụng AI.
+Thiết kế AI Architecture cho bài toán doanh nghiệp.
+Thiết kế AI Workflow (Prompt, Context, Knowledge, Tool).
+Phát triển AI Application dựa trên Development Starter Kit.
+Đánh giá và triển khai AI Application Prototype.
+Nội dung đào tạo
+:
+4 modules - 6 sessions (LT: 46%, TH: 54%)
+Module 1: Phân tích bài toán và thiết kế giải pháp AI (8h: 2 sessions)
+Module 2: Xây dựng ứng dụng AI (8h: 2 sessions)
+Module 3: Triển khai và đánh giá ứng dụng AI (4h: 1 session)
+Module 4: Dự án cuối khoá (4h: 1 session)
+Phương pháp 
+đào tạo
+:
+Action-oriented learning, guided workshop, project-based learning. Offline toàn bộ thời gian.
+Đánh giá kết quả học tập
+(thang điểm 10)
+:
+Trình bày sản phẩm cuối khoá. 
+Bài tập thực hành: nộp sau buổi học.
+Yêu cầu tham gia đối với học viên
+:
+Tham gia đầy đủ giờ học lý thuyết và thực hành
+Làm bài tập đầy đủ theo yêu cầu của giảng viên
+Case-study
+:
+Toàn bộ khoá học sử dụng 01 Starter Development Kit
+
+Các tài liệu cần tham khảo
+:
+1) Slide và tài liệu hướng dẫn học do giảng viên cung cấp trước mỗi buổi học. 
+
+NỘI DUNG CHI TIẾT
+STT
+Nội dung đào tạo
+Hình thức tổ chức (giờ)
+Yêu cầu
+đầu ra
+
+Lý thuyết
+Nhóm/ bài tập
+Tự học
+Tổng
+
+1
+Module 1: Thiết kế giải pháp AI
+1.1
+Session 1. Phân tích bài toán và cơ hội ứng dụng AI
+Nội dung
+Tổng quan về AI Application và AI Engineering
+Xu hướng phát triển AI Application trong doanh nghiệp
+Xác định bài toán phù hợp để ứng dụng AI
+Phân tích quy trình nghiệp vụ và xác định AI Capability
+Phân biệt AI Application, AI Service và AI Agent
+Workshop
+Phân tích một bài toán doanh nghiệp
+Xác định các điểm có thể ứng dụng AI
+Xây dựng AI Opportunity Canvas
+Deliverable
+AI Opportunity Canvas
+2
+2
+0
+4
+Xác định được bài toán phù hợp để ứng dụng AI.
+Phân tích được giá trị và phạm vi của AI trong hệ thống.
+Thiết kế được kiến trúc tổng thể của AI Application.
+Lựa chọn được các thành phần AI phù hợp.
+
+1.2
+Session 2. Thiết kế kiến trúc ứng dụng AI
+Nội dung
+AI Application Architecture
+Thành phần của một AI Application
+Lựa chọn Foundation Model
+Thiết kế luồng xử lý tổng thể
+AI Design Pattern
+Workshop
+Thiết kế kiến trúc hệ thống
+Phân tích Development Starter Kit
+Hoàn thiện AI Solution Blueprint
+Deliverable
+AI Solution Blueprint
+2
+2
+0
+4
+
+2
+Module 2: Phát triển ứng dụng AI
+2.1
+Session 3. Xây dựng trí tuệ cho ứng dụng AI
+Nội dung
+Prompt Engineering
+Context Engineering
+Knowledge Engineering
+Retrieval-Augmented Generation (RAG)
+Quản lý tri thức doanh nghiệp
+Workshop
+Thiết kế Prompt
+Thiết kế Context
+Xây dựng Knowledge Base
+Deliverable
+Context Specification
+2
+2
+0
+4
+Thiết kế được ngữ cảnh và tri thức cho AI Application.
+Xây dựng được chiến lược khai thác tri thức.
+Thiết kế được quy trình xử lý AI.
+Xây dựng được AI Prototype hoạt động.
+
+2.2
+Session 4. Xây dựng quy trình xử lý AI
+Nội dung
+AI Workflow
+Tool Calling
+Agent Workflow (giới thiệu)
+Human-in-the-loop
+Thiết kế AI Pipeline
+Workshop
+Thiết kế AI Workflow
+Tích hợp AI Capability vào Starter Kit
+Xây dựng Prototype
+Deliverable
+AI Prototype v1
+2
+2
+0
+4
+
+3
+Module 3: Triển khai và đánh giá ứng dụng AI
+3.1
+Session 5. Tích hợp, triển khai và đánh giá ứng dụng AI
+Nội dung
+Thiết kế API cho AI Application
+Đóng gói ứng dụng bằng Docker
+Đánh giá chất lượng AI Application
+Guardrails và Production Readiness
+Logging và Monitoring
+Workshop
+Docker hóa ứng dụng
+Đánh giá Prototype
+Hoàn thiện Production-ready Prototype
+Deliverable
+Production-ready Prototype
+2
+2
+0
+4
+Triển khai được AI Application Prototype.
+Đánh giá được chất lượng và mức độ sẵn sàng triển khai.
+4
+Module 4: Dự án cuối khoá
+
+Session 6. Hoàn thiện và trình diễn ứng dụng AI
+Nội dung
+Hoàn thiện AI Application
+Kiểm thử và cải tiến
+Chuẩn bị Demo
+Trình bày kiến trúc và các quyết định thiết kế
+Workshop
+Hoàn thiện sản phẩm
+Demo
+Báo cáo
+Phản biện
+Deliverable
+Final AI Application
+1
+3
+0
+4
+Hoàn thiện một AI Application Prototype.
+Trình bày được kiến trúc, quy trình xử lý và phương án triển khai của hệ thống.
+
+HỌC VIỆN VIETTEL
+
+NGƯỜI KIỂM DUYỆT 1
+NGƯỜI KIỂM DUYỆT 2
+NGƯỜI KIỂM DUYỆT 3
+
+NGƯỜI BIÊN SOẠN
+
+……………………
+
+     
+

@@ -1,0 +1,13 @@
+{
+  "HN": [
+    {"incident_id": "INC-2026-0114", "area_name": "Cầu Giấy, Hà Nội", "from": "2026-02-14", "to": "2026-02-14", "severity": "dien_rong", "cause": "Đứt cáp quang trục do thi công hạ tầng", "eta": "2026-02-14T18:00:00+07:00", "affected_subscribers": 4200, "status": "closed"},
+    {"incident_id": "INC-2026-0221", "area_name": "Hà Đông, Hà Nội", "from": "2026-02-21", "to": "2026-02-23", "severity": "dien_rong", "cause": "Mất điện lưới kéo dài tại 3 trạm phát sóng", "eta": "2026-02-23T12:00:00+07:00", "affected_subscribers": 11800, "status": "closed"},
+    {"incident_id": "INC-2026-0301", "area_name": "Long Biên, Hà Nội", "from": "2026-03-01", "to": "2026-03-05", "severity": "dien_rong", "cause": "Hỏng thiết bị truyền dẫn, đang chờ vật tư thay thế", "eta": "2026-03-05T20:00:00+07:00", "affected_subscribers": 6300, "status": "open"}
+  ],
+  "HCM": [
+    {"incident_id": "INC-2026-0208", "area_name": "Quận 7, TP Hồ Chí Minh", "from": "2026-02-08", "to": "2026-02-08", "severity": "cuc_bo", "cause": "Bảo trì khẩn cấp thiết bị trạm", "eta": "2026-02-08T09:30:00+07:00", "affected_subscribers": 380, "status": "closed"}
+  ],
+  "DN": [
+    {"incident_id": "INC-2026-0117", "area_name": "Hải Châu, Đà Nẵng", "from": "2026-01-17", "to": "2026-01-18", "severity": "cuc_bo", "cause": "Ảnh hưởng bão, gián đoạn nguồn điện", "eta": "2026-01-18T15:00:00+07:00", "affected_subscribers": 940, "status": "closed"}
+  ]
+}
