@@ -20,5 +20,6 @@ git checkout buoi-1
 | Nhánh | Nội dung |
 |---|---|
 | `buoi-1` | Buổi 1 — From Problem to AI Solution (Lab 0 + Lab 1: AI Opportunity Canvas) |
+| `buoi-2` | Buổi 2 — Thiết kế kiến trúc ứng dụng AI (Lab 2: Blueprint + ADR). Bao gồm toàn bộ buổi 1 |
 
 Các buổi tiếp theo sẽ được thêm dần vào bảng trên khi nhánh tương ứng được phát hành.
