@@ -1,8 +1,8 @@
-"""Thí nghiệm nhiệt độ — Session 2 bước 3.
+"""Thí nghiệm temperature — Session 2 bước 3.
 
 Chạy: uv run python scripts/temperature_demo.py
 
-Hỏi model CÙNG MỘT câu nhiều lần ở hai mức nhiệt độ, rồi đếm xem model đưa ra
+Hỏi model CÙNG MỘT câu nhiều lần ở hai mức temperature, rồi đếm xem model đưa ra
 bao nhiêu câu trả lời KHÁC NHAU. Hai tác vụ được thử trên cùng một ticket:
 
 1. Chọn nhóm cho ticket — cần một đáp án đúng, lặp lại được.
@@ -79,7 +79,7 @@ def ask(client: LLMClient, *, task: str, system: str, user: str, temperature: fl
 
 def main() -> int:
     """Chạy thí nghiệm và in bảng kết quả."""
-    ap = argparse.ArgumentParser(description="Thí nghiệm nhiệt độ")
+    ap = argparse.ArgumentParser(description="Thí nghiệm temperature")
     ap.add_argument("--tickets", type=int, default=2, help="Số ticket mơ hồ dùng để thử")
     ap.add_argument("--repeats", type=int, default=4, help="Số lần hỏi lại mỗi câu")
     args = ap.parse_args()
@@ -87,7 +87,7 @@ def main() -> int:
     tickets = [t for t in load_train() if t["meta"].get("is_ambiguous")][: args.tickets]
     client = LLMClient(budget=10_000)
     print(f"Cấu hình đang chạy: {settings.profile_banner()}")
-    print(f"{len(tickets)} ticket mơ hồ × {args.repeats} lần hỏi × {len(TEMPERATURES)} nhiệt độ × 2 tác vụ")
+    print(f"{len(tickets)} ticket × {args.repeats} lần hỏi × {len(TEMPERATURES)} mức temperature × 2 tác vụ")
     print("Mỗi lần hỏi mất vài giây; cả thí nghiệm mất vài phút. Đừng tắt giữa chừng.\n")
 
     rows: list[tuple[str, float, str, int, int, list[str]]] = []
@@ -118,16 +118,16 @@ def main() -> int:
             rows.append((ticket["id"], temp, "chọn nhóm", len({*labels}), args.repeats, labels))
             distinct_replies = len({normalize(r) for r in replies})
             rows.append((ticket["id"], temp, "soạn phản hồi", distinct_replies, args.repeats, replies))
-            print(f"    nhiệt độ {temp}: xong ({p50} ms/lần, giữa)")
+            print(f"    temperature {temp}: xong ({p50} ms/lần, giữa)")
 
     print("\nKẾT QUẢ — số câu trả lời KHÁC NHAU trên số lần hỏi")
-    print(f"{'ticket':<10} {'nhiệt độ':>9}  {'tác vụ':<14} {'khác nhau':>10}")
+    print(f"{'ticket':<10} {'temperature':>11}  {'tác vụ':<14} {'khác nhau':>10}")
     for ticket_id, temp, task, distinct, total, _ in rows:
-        print(f"{ticket_id:<10} {temp:>9}  {task:<14} {distinct:>4} / {total}")
+        print(f"{ticket_id:<10} {temp:>11}  {task:<14} {distinct:>4} / {total}")
 
     print("\nCHI TIẾT — đọc kỹ phần này, số liệu chưa đủ để kết luận")
     for ticket_id, temp, task, _, _, answers in rows:
-        print(f"\n[{ticket_id} · nhiệt độ {temp} · {task}]")
+        print(f"\n[{ticket_id} · temperature {temp} · {task}]")
         for i, a in enumerate(answers, 1):
             print(f"  {i}. {a[:200]}{'…' if len(a) > 200 else ''}")
     return 0

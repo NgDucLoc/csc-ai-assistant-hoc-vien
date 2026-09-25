@@ -30,7 +30,7 @@ Gợi ý: đây là kết quả Bước 1 của Workbook 2. Mỗi dòng một th
 
 ## 2. Use Case Contract — hệ thống nhận gì, trả gì, cho ai
 
-Gợi ý: lấy từ Canvas ô 1, 2, 7 của buổi sáng. Tối đa ba câu.
+Gợi ý: lấy từ Canvas ô 1, 2, 7 ở Workbook 1. Tối đa ba câu.
 
 
 
@@ -42,11 +42,11 @@ Gợi ý: AI cần những thông tin nào để làm đúng việc? Mỗi ngu�
 
 ## 4. Model / Intelligence — dùng model nào cho việc gì, vì sao
 
-Gợi ý: lấy từ Bước 3 của Workbook 2 (bốn tiêu chí, số model, tham số nhiệt độ theo tác vụ).
+Gợi ý: lấy từ Bước 3 của Workbook 2 (bốn tiêu chí, số model, tham số temperature theo tác vụ).
 
 
 
-## 5. Tool Contract — công cụ nào, hợp đồng ra sao
+## 5. Tool Contract — công cụ nào, contract ra sao
 
 Gợi ý: lấy từ Bước 2c. Mỗi công cụ một dòng: nhận gì, ai được gọi, luật nghiệp vụ, thực thi thế nào, trả gì.
 
