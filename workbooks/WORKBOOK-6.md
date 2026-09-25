@@ -116,7 +116,7 @@ Mỗi giới hạn rút ra từ phát hiện nào ở Session 5? Ghi rõ.
 
 | Tệp | Xong? | Nội dung nhóm bổ sung riêng |
 |---|---|---|
-| `docs/MODEL_CARD.md` | `[ ]` | `______________________` |
+| [`docs/MODEL_CARD.md`](../docs/MODEL_CARD.md) | `[ ]` | `______________________` |
 | `docs/handover/RUNBOOK.md` | `[ ]` | `______________________` |
 | `docs/handover/INCIDENTS.md` | `[ ]` | `______________________` |
 | `docs/handover/RESPONSIBILITIES.md` | `[ ]` | `______________________` |
@@ -251,7 +251,7 @@ Có dòng mã nào trong bài nộp mà nhóm **không giải thích được** 
 - [ ] Gói bàn giao: README dựng lại · sổ tay vận hành · quy trình xử lý sự cố
 - [ ] Model Card kèm kết quả kiểm tra thiên lệch
 - [ ] Bảng so sánh trước–sau của hai cải tiến
-- [ ] Toàn bộ 6 workbook đã điền, commit vào `docs/workbook/`
+- [ ] Toàn bộ 6 workbook đã điền, commit vào [`docs/workbook/`](../docs/workbook/)
 
 ```bash
 uv run pytest

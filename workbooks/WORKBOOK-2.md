@@ -19,7 +19,7 @@ Session 2 không viết code. Đọc tài liệu hoặc mã có sẵn để hi�
 
 Mỗi câu hỏi chỉ ra hai nơi tìm câu trả lời, chỉ cần đi một trong hai:
 
-- **Đường T (tài liệu):** đọc `PROJECT-SPEC.md` (tìm theo mã, ví dụ `SPEC-FLOW-01`), các ADR trong `docs/adr/`, `SETUP.md`.
+- **Đường T (tài liệu):** đọc [`PROJECT-SPEC.md`](../PROJECT-SPEC.md) (tìm theo mã, ví dụ [`SPEC-FLOW-01`](../PROJECT-SPEC.md#spec-flow-01)), các ADR trong [`docs/adr/`](../docs/adr/), [`SETUP.md`](../SETUP.md).
 - **Đường C (code):** mở một tệp Python và đọc đoạn mô tả tiếng Việt nằm giữa hai bộ ba dấu nháy kép ở đầu tệp và đầu mỗi hàm. Mô tả đó nói tệp hoặc hàm làm gì, không cần hiểu từng dòng lệnh. Cách đọc nằm ở Phụ lục A, thuật ngữ lạ tra ở Phụ lục B.
 
 Có thể chia nhóm đi hai đường rồi đối chiếu: hai đường cho cùng kết luận là dấu hiệu đọc đúng.
@@ -36,7 +36,7 @@ Các câu phân tích đều có ba dòng trả lời. Không bỏ dòng nào, v
 
 Câu không đánh dấu là bắt buộc. Câu ghi [Mở rộng] làm khi còn thời gian hoặc mang về nhà. Kẹt thì hỏi giảng viên. Khi làm nhóm, nên đổi vai sau mỗi bước: tìm tài liệu, đọc code, ghi chép, và hỏi "vì sao", "dẫn chứng đâu" trước khi chốt.
 
-Nên mở sẵn: `PROJECT-SPEC.md`, `docs/adr/0001` đến `0005`, `docs/blueprint-template.md`, `SETUP.md`, `.env.example` và slide Session 2 (mỗi bước ghi số slide cần xem).
+Nên mở sẵn: [`PROJECT-SPEC.md`](../PROJECT-SPEC.md), `docs/adr/0001` đến `0005`, [`docs/blueprint-template.md`](../docs/blueprint-template.md), [`SETUP.md`](../SETUP.md), [`.env.example`](../.env.example) và slide Session 2 (mỗi bước ghi số slide cần xem).
 
 ---
 
@@ -50,8 +50,8 @@ Slide 10 chia ứng dụng AI thành năm tầng (Experience, Orchestration, Int
 
 Đọc:
 
-- Đường T: `PROJECT-SPEC.md`, mục SPEC-FLOW-01, sơ đồ "Luồng chuẩn". Mỗi mũi tên là một bước.
-- Đường C: `src/agent/workflow.py`. Đọc mô tả đầu tệp, mô tả hàm `process_ticket` (có dòng "Luồng: …") và các dòng `from src… import …` ở đầu tệp, mỗi dòng cho biết tệp này nhờ tệp nào làm việc gì. Thân hàm `process_ticket` còn để trống, đọc mô tả là đủ.
+- Đường T: [`PROJECT-SPEC.md`](../PROJECT-SPEC.md), mục [SPEC-FLOW-01](../PROJECT-SPEC.md#spec-flow-01), sơ đồ "Luồng chuẩn". Mỗi mũi tên là một bước.
+- Đường C: [`src/agent/workflow.py`](../src/agent/workflow.py). Đọc mô tả đầu tệp, mô tả hàm `process_ticket` (có dòng "Luồng: …") và các dòng `from src… import …` ở đầu tệp, mỗi dòng cho biết tệp này nhờ tệp nào làm việc gì. Thân hàm `process_ticket` còn để trống, đọc mô tả là đủ.
 
 Liệt kê các bước theo đúng thứ tự. Cột cuối quan trọng nhất: nếu bước lỗi hoặc không chắc, ticket đi đâu.
 
@@ -80,12 +80,12 @@ Liệt kê các bước theo đúng thứ tự. Cột cuối quan trọng nhất
 
 ### 1b — Ghép sơ đồ của slide với thư mục của dự án
 
-Slide 10 chia theo chức năng AI. `PROJECT-SPEC.md` mục SPEC-ARCH-01 chia theo lớp phần mềm (Giao diện, API, Điều phối, Năng lực AI, Dữ liệu & Công cụ). Đây là hai cách nhìn cùng một hệ thống, cần chỉ ra chúng khớp nhau ở đâu.
+Slide 10 chia theo chức năng AI. [`PROJECT-SPEC.md`](../PROJECT-SPEC.md) mục [SPEC-ARCH-01](../PROJECT-SPEC.md#spec-arch-01) chia theo lớp phần mềm (Giao diện, API, Điều phối, Năng lực AI, Dữ liệu & Công cụ). Đây là hai cách nhìn cùng một hệ thống, cần chỉ ra chúng khớp nhau ở đâu.
 
 Đọc:
 
-- Đường T: SPEC-ARCH-01 (sơ đồ năm tầng) và SPEC-ARCH-02 (sáu nguyên tắc ràng buộc).
-- Đường C: mô tả đầu tệp của `src/ui/app.py`, `src/api/main.py`, `src/agent/workflow.py`, `src/agent/classifier.py`, `src/agent/generator.py`, `src/agent/tools.py`, `src/knowledge/retriever.py`, `src/store.py`, `src/guardrails/input_rules.py`, `src/llm/client.py`, `src/llm/cache.py`.
+- Đường T: [SPEC-ARCH-01](../PROJECT-SPEC.md#spec-arch-01) (sơ đồ năm tầng) và [SPEC-ARCH-02](../PROJECT-SPEC.md#spec-arch-02) (sáu nguyên tắc ràng buộc).
+- Đường C: mô tả đầu tệp của [`src/ui/app.py`](../src/ui/app.py), [`src/api/main.py`](../src/api/main.py), [`src/agent/workflow.py`](../src/agent/workflow.py), [`src/agent/classifier.py`](../src/agent/classifier.py), [`src/agent/generator.py`](../src/agent/generator.py), [`src/agent/tools.py`](../src/agent/tools.py), [`src/knowledge/retriever.py`](../src/knowledge/retriever.py), [`src/store.py`](../src/store.py), [`src/guardrails/input_rules.py`](../src/guardrails/input_rules.py), [`src/llm/client.py`](../src/llm/client.py), [`src/llm/cache.py`](../src/llm/cache.py).
 
 **Bảng 1.** Với mỗi thành phần của slide, tìm tệp đảm nhận và ghi hậu quả nếu bỏ nó đi (viết hậu quả, không viết lại tên tệp).
 
@@ -99,9 +99,9 @@ Slide 10 chia theo chức năng AI. `PROJECT-SPEC.md` mục SPEC-ARCH-01 chia th
 | Security & Guardrails (26) | `____________` | `______________________` |
 | AI Platform & Operations (24–25) | `____________` | `______________________` |
 
-**Bảng 2.** Nối năm tầng của SPEC-ARCH-01 với năm thành phần của slide 10. Có tầng nào gộp nhiều thành phần, hoặc ngược lại không?
+**Bảng 2.** Nối năm tầng của [SPEC-ARCH-01](../PROJECT-SPEC.md#spec-arch-01) với năm thành phần của slide 10. Có tầng nào gộp nhiều thành phần, hoặc ngược lại không?
 
-| Tầng theo SPEC-ARCH-01 | Tương ứng thành phần nào của slide 10 |
+| Tầng theo [SPEC-ARCH-01](../PROJECT-SPEC.md#spec-arch-01) | Tương ứng thành phần nào của slide 10 |
 |---|---|
 | Tầng 1 — Giao diện | `______________________` |
 | Tầng 2 — API | `______________________` |
@@ -109,7 +109,7 @@ Slide 10 chia theo chức năng AI. `PROJECT-SPEC.md` mục SPEC-ARCH-01 chia th
 | Tầng 4 — Năng lực AI | `______________________` |
 | Tầng 5 — Dữ liệu & Công cụ | `______________________` |
 
-**Câu 3.** Nguyên tắc số 1 của SPEC-ARCH-02 là "tầng trên không gọi vượt cấp": tầng API không được gọi thẳng tầng Năng lực AI, mọi việc phải qua tầng Điều phối. Vì sao? Nêu một ví dụ cụ thể về thứ bị bỏ sót nếu có đường tắt.
+**Câu 3.** Nguyên tắc số 1 của [SPEC-ARCH-02](../PROJECT-SPEC.md#spec-arch-02) là "tầng trên không gọi vượt cấp": tầng API không được gọi thẳng tầng Năng lực AI, mọi việc phải qua tầng Điều phối. Vì sao? Nêu một ví dụ cụ thể về thứ bị bỏ sót nếu có đường tắt.
 
 `Dẫn chứng: ___________________________________________________`
 `Vì sao: ______________________________________________________`
@@ -121,8 +121,8 @@ Cache giống một cuốn sổ ghi câu trả lời: hỏi lại y hệt thì l
 
 Đọc:
 
-- Đường T: SPEC-LLM-02 và `docs/adr/0002-cache-la-ha-tang.md`.
-- Đường C: đầu tệp `src/llm/cache.py` và hàm `make_key` (phần "Args").
+- Đường T: [SPEC-LLM-02](../PROJECT-SPEC.md#spec-llm-02) và [`docs/adr/0002-cache-la-ha-tang.md`](../docs/adr/0002-cache-la-ha-tang.md).
+- Đường C: đầu tệp [`src/llm/cache.py`](../src/llm/cache.py) và hàm `make_key` (phần "Args").
 
 Liệt kê các thứ tạo nên cache key:
 
@@ -150,12 +150,12 @@ Sáu manh mối dưới đây là trích dẫn có thật. Mở đúng nơi đ�
 
 | # | Manh mối | Tìm ở đâu |
 |---|---|---|
-| 1 | "Không có đường dẫn nào trong hệ thống cho phép phản hồi tới khách hàng mà chưa qua thao tác duyệt của con người." | `PROJECT-SPEC.md`, SPEC-FLOW-03 |
-| 2 | "Trạng thái cuối mà quy trình này sinh ra luôn là PENDING_REVIEW hoặc ESCALATED. Không có nhánh nào đi tới SENT." | `src/agent/workflow.py`, đầu tệp |
-| 3 | "Đây là điểm DUY NHẤT trong hệ thống mà một dự thảo chuyển sang trạng thái được chấp thuận." | `src/api/main.py`, hàm `submit_review` |
-| 4 | "Tất cả công cụ là chỉ đọc." | `PROJECT-SPEC.md`, SPEC-TOOL-02, dòng 1 |
-| 5 | Người duyệt thấy ticket gốc và đoạn tri thức trước khi thấy dự thảo. | `src/ui/app.py`, đầu tệp |
-| 6 | Bảng các điều kiện bắt buộc chuyển người. | `PROJECT-SPEC.md`, SPEC-FLOW-02 |
+| 1 | "Không có đường dẫn nào trong hệ thống cho phép phản hồi tới khách hàng mà chưa qua thao tác duyệt của con người." | [`PROJECT-SPEC.md`](../PROJECT-SPEC.md), [SPEC-FLOW-03](../PROJECT-SPEC.md#spec-flow-03) |
+| 2 | "Trạng thái cuối mà quy trình này sinh ra luôn là PENDING_REVIEW hoặc ESCALATED. Không có nhánh nào đi tới SENT." | [`src/agent/workflow.py`](../src/agent/workflow.py), đầu tệp |
+| 3 | "Đây là điểm DUY NHẤT trong hệ thống mà một dự thảo chuyển sang trạng thái được chấp thuận." | [`src/api/main.py`](../src/api/main.py), hàm `submit_review` |
+| 4 | "Tất cả công cụ là chỉ đọc." | [`PROJECT-SPEC.md`](../PROJECT-SPEC.md), [SPEC-TOOL-02](../PROJECT-SPEC.md#spec-tool-02), dòng 1 |
+| 5 | Người duyệt thấy ticket gốc và đoạn tri thức trước khi thấy dự thảo. | [`src/ui/app.py`](../src/ui/app.py), đầu tệp |
+| 6 | Bảng các điều kiện bắt buộc chuyển người. | [`PROJECT-SPEC.md`](../PROJECT-SPEC.md), [SPEC-FLOW-02](../PROJECT-SPEC.md#spec-flow-02) |
 
 Với mỗi vai trò, ghi số các manh mối liên quan, việc vai trò đó được làm và việc không được làm.
 
@@ -182,10 +182,10 @@ Có hai kiểu nhân viên. Kiểu thứ nhất làm theo quy trình in sẵn: m
 
 | Câu hỏi quyết định (slide 16) | Có / Không | Đường T | Đường C |
 |---|---|---|---|
-| Đường đi đã rõ ràng? → Workflow | `____` | Sơ đồ SPEC-FLOW-01 | Dòng "Luồng: …" ở mô tả `process_ticket` |
-| AI chỉ làm các tác vụ cụ thể trong đường đi đó? → Workflow có AI | `____` | SPEC-PROMPT-01 ("một prompt chỉ làm một nhiệm vụ") | Mô tả đầu tệp `classifier.py`, `generator.py` |
-| Chỉ một phần bài toán còn mở? → Workflow + Agent | `____` | SPEC-TOOL-03 (vì sao cần đường lùi theo luật) | Mô tả hàm `rule_based_plan` trong `tools.py` |
-| Toàn bộ đường đi phải linh hoạt? → Agent | `____` | SPEC-INFRA-04 (ngân sách tính toán) | `.env.example`, khối "Ngân sách tính toán": `MAX_LLM_CALLS_PER_TICKET`, `MAX_TOOL_CALLS_PER_TICKET` |
+| Đường đi đã rõ ràng? → Workflow | `____` | Sơ đồ [SPEC-FLOW-01](../PROJECT-SPEC.md#spec-flow-01) | Dòng "Luồng: …" ở mô tả `process_ticket` |
+| AI chỉ làm các tác vụ cụ thể trong đường đi đó? → Workflow có AI | `____` | [SPEC-PROMPT-01](../PROJECT-SPEC.md#spec-prompt-01) ("một prompt chỉ làm một nhiệm vụ") | Mô tả đầu tệp `classifier.py`, `generator.py` |
+| Chỉ một phần bài toán còn mở? → Workflow + Agent | `____` | [SPEC-TOOL-03](../PROJECT-SPEC.md#spec-tool-03) (vì sao cần đường lùi theo luật) | Mô tả hàm `rule_based_plan` trong `tools.py` |
+| Toàn bộ đường đi phải linh hoạt? → Agent | `____` | [SPEC-INFRA-04](../PROJECT-SPEC.md#spec-infra-04) (ngân sách tính toán) | [`.env.example`](../.env.example), khối "Ngân sách tính toán": `MAX_LLM_CALLS_PER_TICKET`, `MAX_TOOL_CALLS_PER_TICKET` |
 
 Ghi dẫn chứng bạn dùng cho từng dòng: `___________________________________________________`
 
@@ -203,15 +203,15 @@ Khi AI cần làm một việc, không chỉ biết, nó gọi một công cụ.
 
 Đọc:
 
-- Đường T: SPEC-TOOL-01 (danh mục công cụ) và SPEC-TOOL-02 (năm quy định thực thi).
-- Đường C: `src/agent/tools.py`, ba nơi: `TOOL_SCHEMAS` (danh sách công cụ và tham số), các hàm `get_…` / `check_…` (phần ruột từng công cụ) và `ToolRunner.run` (cách công cụ được chạy). Hàm `validate_args` còn để trống, đọc mô tả của nó.
+- Đường T: [SPEC-TOOL-01](../PROJECT-SPEC.md#spec-tool-01) (danh mục công cụ) và [SPEC-TOOL-02](../PROJECT-SPEC.md#spec-tool-02) (năm quy định thực thi).
+- Đường C: [`src/agent/tools.py`](../src/agent/tools.py), ba nơi: `TOOL_SCHEMAS` (danh sách công cụ và tham số), các hàm `get_…` / `check_…` (phần ruột từng công cụ) và `ToolRunner.run` (cách công cụ được chạy). Hàm `validate_args` còn để trống, đọc mô tả của nó.
 
 Chọn một công cụ: `______________________`. Phần nào không có trong tài liệu hoặc code thì ghi "chưa có" thay vì đoán.
 
 | Phần của Tool Contract | Câu hỏi | Gợi ý tìm ở đâu | Trong công cụ này |
 |---|---|---|---|
 | 1. Input Contract | AI được đưa những gì vào? Định dạng ra sao? | `TOOL_SCHEMAS`: tham số, `required`, `pattern` | `______________` |
-| 2. Permission | Ai được gọi? Có kiểm tra quyền không? | SPEC-TOOL-02 dòng 1; `ToolRunner.run` | `______________` |
+| 2. Permission | Ai được gọi? Có kiểm tra quyền không? | [SPEC-TOOL-02](../PROJECT-SPEC.md#spec-tool-02) dòng 1; `ToolRunner.run` | `______________` |
 | 3. Business Rules | Có luật nghiệp vụ nào giới hạn? | Hàm của công cụ; số lần gọi tối đa | `______________` |
 | 4. Execution | Thực thi thế nào? Chậm hoặc lỗi thì sao? | `ToolRunner.run`: thời gian chờ, bắt lỗi | `______________` |
 | 5. Output Contract | Trả về gì? Định dạng ra sao? | Lớp `ToolCall` | `______________` |
@@ -266,7 +266,7 @@ Mất vài phút, đừng tắt giữa chừng. Script tự tắt cache để th
 `Vì sao: ______________________________________________________`
 `Nếu khác đi: _________________________________________________`
 
-**Câu 10.** Mở `src/config.py`, kéo xuống cuối tệp, tìm `TASK_PARAMS` (bảng temperature theo từng tác vụ). Vì sao phân loại đặt 0.0, còn soạn phản hồi đặt 0.3 mà không phải 0.0 hay 0.7?
+**Câu 10.** Mở [`src/config.py`](../src/config.py), kéo xuống cuối tệp, tìm `TASK_PARAMS` (bảng temperature theo từng tác vụ). Vì sao phân loại đặt 0.0, còn soạn phản hồi đặt 0.3 mà không phải 0.0 hay 0.7?
 
 `Dẫn chứng: ___________________________________________________`
 `Vì sao: ______________________________________________________`
@@ -276,7 +276,7 @@ Kết luận cần chốt: ứng dụng AI không dùng chung một cấu hình 
 
 ### 3b — Chọn model bằng bốn tiêu chí
 
-Đọc: Đường T: `SETUP.md` (mục "Yêu cầu về máy", "Chọn cấu hình") và `docs/adr/0001-hai-cau-hinh-ngang-hang.md`. Đường C: `.env.example` (hai khối cấu hình L và S) và `src/config.py` (khối "Hạ tầng").
+Đọc: Đường T: [`SETUP.md`](../SETUP.md) (mục "Yêu cầu về máy", "Chọn cấu hình") và [`docs/adr/0001-hai-cau-hinh-ngang-hang.md`](../docs/adr/0001-hai-cau-hinh-ngang-hang.md). Đường C: [`.env.example`](../.env.example) (hai khối cấu hình L và S) và [`src/config.py`](../src/config.py) (khối "Hạ tầng").
 
 Đi qua bốn câu hỏi của slide 31 với model của khóa (Qwen3-8B). Điền bằng chứng: con số, tên tệp hoặc kết quả 3a.
 
@@ -297,13 +297,13 @@ Kết luận cần chốt: ứng dụng AI không dùng chung một cấu hình 
 
 ### 3c — Một model hay nhiều model
 
-Đếm cả model không viết chữ. Slide 18 cho thấy tầng Intelligence gồm nhiều loại model cho nhiều loại việc. Mở `.env.example` và đếm các dòng đặt tên model.
+Đếm cả model không viết chữ. Slide 18 cho thấy tầng Intelligence gồm nhiều loại model cho nhiều loại việc. Mở [`.env.example`](../.env.example) và đếm các dòng đặt tên model.
 
 Hệ thống dùng bao nhiêu model? Liệt kê từng model và việc nó làm:
 
 `___________________________________________________________________`
 
-**Câu 12.** Model embedding (dùng để tìm tài liệu) bắt buộc giống nhau ở cả cấu hình S và L. Đọc ghi chú trong `SETUP.md` và mục "Hệ quả chấp nhận" của ADR-0001. Nếu nhóm S dùng model embedding khác nhóm L, chuyện gì xảy ra với kho tri thức đã dựng sẵn?
+**Câu 12.** Model embedding (dùng để tìm tài liệu) bắt buộc giống nhau ở cả cấu hình S và L. Đọc ghi chú trong [`SETUP.md`](../SETUP.md) và mục "Hệ quả chấp nhận" của [ADR-0001](../docs/adr/0001-hai-cau-hinh-ngang-hang.md). Nếu nhóm S dùng model embedding khác nhóm L, chuyện gì xảy ra với kho tri thức đã dựng sẵn?
 
 `Dẫn chứng: ___________________________________________________`
 `Vì sao: ______________________________________________________`
@@ -327,7 +327,7 @@ Pattern là cách giải quyết đã được kiểm chứng cho một loại v
 | Bounded Agent | Nhân viên tự quyết trong phạm vi đã vạch: AI chọn bước tiếp theo nhưng có rào |
 | Human-in-the-Loop | Quyết định rủi ro cao phải qua người duyệt |
 
-Đi qua năm câu hỏi dưới đây. Câu nào trả lời "Có" thì hệ thống dùng pattern đó, và bạn phải chỉ ra dấu hiệu trong tài liệu hoặc code. Nơi nên xem: dòng đầu mô tả `retriever.py`; `tools.py`; mô tả `process_ticket`; hai biến ngân sách ở `.env.example`; hàm `submit_review` ở `api/main.py` và `record_review` ở `store.py`.
+Đi qua năm câu hỏi dưới đây. Câu nào trả lời "Có" thì hệ thống dùng pattern đó, và bạn phải chỉ ra dấu hiệu trong tài liệu hoặc code. Nơi nên xem: dòng đầu mô tả `retriever.py`; `tools.py`; mô tả `process_ticket`; hai biến ngân sách ở [`.env.example`](../.env.example); hàm `submit_review` ở `api/main.py` và `record_review` ở `store.py`.
 
 | Câu hỏi chọn pattern (slide 41) | Có / Không | Dấu hiệu tìm thấy (tệp / mục) | Nếu thiếu pattern này, rủi ro là gì |
 |---|---|---|---|
@@ -349,8 +349,8 @@ Hệ thống AI đáng tin là hệ thống biết khi nào mình không chắc 
 
 Đọc:
 
-- Đường T: SPEC-FLOW-02, bảng điều kiện bắt buộc chuyển người.
-- Đường C: `src/agent/workflow.py`, ba khối đọc được ngay: lớp `EscalationReason` (các lý do chuyển người), hằng số `CONFIDENCE_THRESHOLD` và hàm `_money_dispute`.
+- Đường T: [SPEC-FLOW-02](../PROJECT-SPEC.md#spec-flow-02), bảng điều kiện bắt buộc chuyển người.
+- Đường C: [`src/agent/workflow.py`](../src/agent/workflow.py), ba khối đọc được ngay: lớp `EscalationReason` (các lý do chuyển người), hằng số `CONFIDENCE_THRESHOLD` và hàm `_money_dispute`.
 
 Chọn bốn trong bảy lý do chuyển người. Cột cuối hỏi quy tắc hoặc ngưỡng đó đã hợp lý chưa: quá chặt thì giao dịch viên quá tải, quá lỏng thì bỏ sót.
 
@@ -367,7 +367,7 @@ Chọn bốn trong bảy lý do chuyển người. Cột cuối hỏi quy tắc 
 `Vì sao: ______________________________________________________`
 `Nếu khác đi: _________________________________________________`
 
-**Câu 15 [Mở rộng].** SPEC-FLOW-02 liệt kê tám điều kiện chuyển người, còn `EscalationReason` có bảy lý do. Điều kiện nào có trong tài liệu mà chưa có trong code? Tài liệu và code lệch nhau gây rủi ro gì cho dự án nhiều người?
+**Câu 15 [Mở rộng].** [SPEC-FLOW-02](../PROJECT-SPEC.md#spec-flow-02) liệt kê tám điều kiện chuyển người, còn `EscalationReason` có bảy lý do. Điều kiện nào có trong tài liệu mà chưa có trong code? Tài liệu và code lệch nhau gây rủi ro gì cho dự án nhiều người?
 
 `___________________________________________________________________`
 
@@ -407,7 +407,7 @@ Kiểm tra trước khi qua bước sau:
 
 ADR (Architecture Decision Record) là biên bản ghi vì sao chọn A mà không chọn B. Một ADR chỉ ghi đã chọn gì mà không ghi phương án đã loại và lý do loại thì chưa phải ADR.
 
-Đọc `docs/adr/0003-mot-cua-goi-model.md` theo bốn câu hỏi:
+Đọc [`docs/adr/0003-mot-cua-goi-model.md`](../docs/adr/0003-mot-cua-goi-model.md) theo bốn câu hỏi:
 
 1. Bối cảnh: điều gì buộc phải ra quyết định?
 2. Các phương án đã cân nhắc: có mấy phương án, mỗi phương án có ưu và nhược thật không?
@@ -416,7 +416,7 @@ ADR (Architecture Decision Record) là biên bản ghi vì sao chọn A mà khô
 
 Chọn năm quyết định từ những gì nhóm vừa phân tích. Nơi dễ tìm quyết định có phương án thay thế thật: mức Workflow/Agent (2b), ranh giới quyền của AI (2a), phạm vi công cụ (2c), chọn model (3b), số model (3c), temperature (3a), pattern (4a), ngưỡng chuyển người (4b).
 
-| # | Quyết định (từ bước nào) | Phương án đã loại | Lý do loại | Tệp `docs/adr/` |
+| # | Quyết định (từ bước nào) | Phương án đã loại | Lý do loại | Tệp [`docs/adr/`](../docs/adr/) |
 |---|---|---|---|---|
 | 1 | `______________` | `______________` | `______________` | `0006-___` |
 | 2 | `______________` | `______________` | `______________` | `0007-___` |
@@ -424,7 +424,7 @@ Chọn năm quyết định từ những gì nhóm vừa phân tích. Nơi dễ 
 | 4 | `______________` | `______________` | `______________` | `0009-___` |
 | 5 | `______________` | `______________` | `______________` | `0010-___` |
 
-Sao chép `docs/adr/0000-template.md` thành `docs/adr/0006-<tên-ngắn>.md` và điền bốn phần. Đánh số từ 0006 vì 0001–0005 là ADR mẫu. Không sửa ADR cũ.
+Sao chép [`docs/adr/0000-template.md`](../docs/adr/0000-template.md) thành `docs/adr/0006-<tên-ngắn>.md` và điền bốn phần. Đánh số từ 0006 vì 0001–0005 là ADR mẫu. Không sửa ADR cũ.
 
 Phương án đã loại phải là lựa chọn nhóm cân nhắc thật. Ví dụ tồi: "Không dùng model sai vì model sai không tốt." Ví dụ tốt: nêu một phương án nghe hợp lý, có ưu điểm thật, rồi giải thích vì sao trong hoàn cảnh này nó thua.
 
@@ -449,7 +449,7 @@ CONFIG_PROFILE=S uv run python scripts/check_env.py --skip-llm
 
 Mỗi dòng kết quả bắt đầu bằng `[PASS]` (đạt) hoặc `[FAIL]` (chưa đạt) kèm lý do. Ở Session 2, dòng "Truy hồi tri thức" báo `FAIL` với nội dung "LAB-3: …" là bình thường, vì phần chunking tài liệu để trống đến Lab 3. Các dòng `FAIL` khác có hướng dẫn khắc phục in ngay bên dưới.
 
-**Câu 16.** So hai kết quả L và S: dòng nào khác nhau? Để thật sự chuyển sang máy chủ S, ngoài đổi `CONFIG_PROFILE` còn phải làm gì (xem khối "Cấu hình S" trong `.env.example` và mô tả đầu tệp `src/config.py`)? Việc mọi thứ đọc từ một nơi duy nhất là `src/config.py` giúp gì cho việc chuyển cấu hình?
+**Câu 16.** So hai kết quả L và S: dòng nào khác nhau? Để thật sự chuyển sang máy chủ S, ngoài đổi `CONFIG_PROFILE` còn phải làm gì (xem khối "Cấu hình S" trong [`.env.example`](../.env.example) và mô tả đầu tệp [`src/config.py`](../src/config.py))? Việc mọi thứ đọc từ một nơi duy nhất là [`src/config.py`](../src/config.py) giúp gì cho việc chuyển cấu hình?
 
 `Dẫn chứng: ___________________________________________________`
 `Vì sao: ______________________________________________________`
@@ -461,7 +461,7 @@ Mỗi dòng kết quả bắt đầu bằng `[PASS]` (đạt) hoặc `[FAIL]` (c
 uv run streamlit run src/ui/app.py
 ```
 
-Trình duyệt mở tại `http://localhost:8501`. Đầu trang có dòng chữ nhỏ với biểu tượng bánh răng cho biết cấu hình đang chạy (SPEC-INFRA-03 buộc giao diện phải hiện điều này). Vào màn hình "Gửi ticket", gõ một câu bất kỳ, bấm "Xử lý".
+Trình duyệt mở tại `http://localhost:8501`. Đầu trang có dòng chữ nhỏ với biểu tượng bánh răng cho biết cấu hình đang chạy ([SPEC-INFRA-03](../PROJECT-SPEC.md#spec-infra-03) buộc giao diện phải hiện điều này). Vào màn hình "Gửi ticket", gõ một câu bất kỳ, bấm "Xử lý".
 
 Bạn sẽ thấy khung đỏ báo `NotImplementedError`. Đây là kết quả đúng ở Session 2 vì hàm `process_ticket` chưa được viết. Chụp màn hình và đọc thông báo:
 
@@ -471,7 +471,7 @@ Bạn sẽ thấy khung đỏ báo `NotImplementedError`. Đây là kết quả 
 | Phần bị thiếu thuộc Lab nào? | `______________________` |
 | Lỗi xuất hiện ở tầng nào của kiến trúc (dùng bảng 1b)? | `______________________` |
 
-**Câu 17.** Trang "Gửi ticket" (tầng Giao diện) gọi thẳng `process_ticket` (tầng Điều phối), không qua tầng API (đọc hàm `page_submit` trong `src/ui/app.py`). So với nguyên tắc "tầng trên không gọi vượt cấp" và nguyên tắc "API xử lý ticket là bất đồng bộ" của SPEC-ARCH-02, thiết kế này có vấn đề không? Khi nào chấp nhận được, khi nào không?
+**Câu 17.** Trang "Gửi ticket" (tầng Giao diện) gọi thẳng `process_ticket` (tầng Điều phối), không qua tầng API (đọc hàm `page_submit` trong [`src/ui/app.py`](../src/ui/app.py)). So với nguyên tắc "tầng trên không gọi vượt cấp" và nguyên tắc "API xử lý ticket là bất đồng bộ" của [SPEC-ARCH-02](../PROJECT-SPEC.md#spec-arch-02), thiết kế này có vấn đề không? Khi nào chấp nhận được, khi nào không?
 
 `Dẫn chứng: ___________________________________________________`
 `Vì sao: ______________________________________________________`
@@ -510,7 +510,7 @@ Công cụ này chỉ xác nhận các tệp có tồn tại và các bài kiể
 - ☐ Có ít nhất 5 ADR mới (từ 0006), mỗi ADR nêu được phương án đã loại
 - ☐ Có kết quả 6a và ảnh chụp giao diện 6b
 
-Nộp: `docs/blueprint.md`, ít nhất 5 ADR mới trong `docs/adr/`, workbook này đã điền, ảnh chụp giao diện và thông báo lỗi ở 6b.
+Nộp: `docs/blueprint.md`, ít nhất 5 ADR mới trong [`docs/adr/`](../docs/adr/), workbook này đã điền, ảnh chụp giao diện và thông báo lỗi ở 6b.
 
 ---
 
@@ -571,7 +571,7 @@ Khi tìm trong một tệp dài, dùng tìm kiếm (Ctrl+F hoặc Cmd+F) với m
 | Asynchronous (bất đồng bộ) | Nhận việc và trả mã phiếu ngay, kết quả tra sau. Dùng khi việc mất nhiều giây |
 | Worker | Tiến trình chạy nền, lấy việc từ hàng đợi để xử lý |
 | Cấu hình S / L | S: máy chủ dùng chung chạy vLLM. L: máy của mình chạy Ollama. Cùng model, khác nơi chạy |
-| SPEC-XXX-NN | Mã một mục trong `PROJECT-SPEC.md`, dùng để trích dẫn |
+| SPEC-XXX-NN | Mã một mục trong [`PROJECT-SPEC.md`](../PROJECT-SPEC.md), dùng để trích dẫn |
 | ADR | Biên bản ghi một quyết định kiến trúc, gồm phương án đã loại và lý do |
 | Blueprint | Bản thiết kế hệ thống: thành phần, contract, ranh giới và dự phòng |
 | CI | Bước kiểm tra tự động chạy mỗi khi đẩy mã lên |
@@ -580,31 +580,31 @@ Khi tìm trong một tệp dài, dùng tìm kiếm (Ctrl+F hoặc Cmd+F) với m
 
 | Thư mục / tệp | Chứa gì |
 |---|---|
-| `src/ui/`, `src/api/` | Giao diện Streamlit và API |
-| `src/agent/` | Các bước xử lý ticket và prompt |
-| `src/knowledge/` | Nạp, chunking và tìm trong kho tri thức |
-| `src/guardrails/` | Kiểm tra đầu vào, đầu ra và ghi nhật ký |
-| `src/llm/` | Điểm gọi model, cache, kiểm định đầu ra |
-| `data/` | Ticket mẫu, các tài liệu chính sách, dữ liệu giả lập cho công cụ |
-| `docs/` | ADR, khung Blueprint, các mẫu tài liệu |
-| `PROJECT-SPEC.md` | Đặc tả toàn hệ thống, nơi tra cứu chính |
+| [`src/ui/`](../src/ui/), [`src/api/`](../src/api/) | Giao diện Streamlit và API |
+| [`src/agent/`](../src/agent/) | Các bước xử lý ticket và prompt |
+| [`src/knowledge/`](../src/knowledge/) | Nạp, chunking và tìm trong kho tri thức |
+| [`src/guardrails/`](../src/guardrails/) | Kiểm tra đầu vào, đầu ra và ghi nhật ký |
+| [`src/llm/`](../src/llm/) | Điểm gọi model, cache, kiểm định đầu ra |
+| [`data/`](../data/) | Ticket mẫu, các tài liệu chính sách, dữ liệu giả lập cho công cụ |
+| [`docs/`](../docs/) | ADR, khung Blueprint, các mẫu tài liệu |
+| [`PROJECT-SPEC.md`](../PROJECT-SPEC.md) | Đặc tả toàn hệ thống, nơi tra cứu chính |
 
 Các hàm hiện để trống (mỗi hàm chỉ có dòng `raise NotImplementedError`):
 
 | Hàm | Tệp | Nhiệm vụ (theo mô tả trong code) | Làm ở |
 |---|---|---|---|
-| `extract_json`, `validate`, `parse_with_retry` | `src/llm/schema.py` | Ba lớp trong bốn lớp phòng vệ đầu ra có cấu trúc | Lab 3 |
-| `classify` | `src/agent/classifier.py` | Phân loại ticket qua bốn lớp phòng vệ, không ném lỗi ra ngoài | Lab 3 |
-| `chunk_document` | `src/knowledge/indexer.py` | Chia tài liệu theo mục, gắn tiêu đề vào đầu mỗi chunk | Lab 3 |
-| `retrieve` (phần ngưỡng) | `src/knowledge/retriever.py` | Điểm dưới ngưỡng thì không đủ căn cứ, chuyển người | Lab 3 |
-| `validate_args`, `rule_based_plan` | `src/agent/tools.py` | Xác thực tham số trước khi chạy công cụ; đường lùi theo luật | Lab 4 |
-| `generate_reply` | `src/agent/generator.py` | Không đủ căn cứ thì không gọi model | Lab 4 |
-| `check_input` | `src/guardrails/input_rules.py` | Ba kiểm tra đầu vào: chèn lệnh, thông tin cá nhân, ticket rác | Lab 4 |
-| `process_ticket` | `src/agent/workflow.py` | Ghép quy trình, đặt tối thiểu 4 điều kiện chuyển người | Lab 4 |
-| `record_review` | `src/store.py` | Ghi thao tác duyệt; từ chối bắt buộc kèm lý do | Lab 4 |
-| `check_output` | `src/guardrails/output_rules.py` | Chặn cam kết tiền vô căn cứ, trích dẫn bịa, rò rỉ thông tin cá nhân | Lab 5 |
-| `TraceLogger.step` | `src/guardrails/runtime.py` | Ghi nhật ký có cấu trúc, che thông tin cá nhân | Lab 5 |
-| Các hàm chỉ số | `eval/metrics.py` | Độ chính xác, recall của retrieval, tỉ lệ chuyển người đúng | Lab 5 |
+| `extract_json`, `validate`, `parse_with_retry` | [`src/llm/schema.py`](../src/llm/schema.py) | Ba lớp trong bốn lớp phòng vệ đầu ra có cấu trúc | Lab 3 |
+| `classify` | [`src/agent/classifier.py`](../src/agent/classifier.py) | Phân loại ticket qua bốn lớp phòng vệ, không ném lỗi ra ngoài | Lab 3 |
+| `chunk_document` | [`src/knowledge/indexer.py`](../src/knowledge/indexer.py) | Chia tài liệu theo mục, gắn tiêu đề vào đầu mỗi chunk | Lab 3 |
+| `retrieve` (phần ngưỡng) | [`src/knowledge/retriever.py`](../src/knowledge/retriever.py) | Điểm dưới ngưỡng thì không đủ căn cứ, chuyển người | Lab 3 |
+| `validate_args`, `rule_based_plan` | [`src/agent/tools.py`](../src/agent/tools.py) | Xác thực tham số trước khi chạy công cụ; đường lùi theo luật | Lab 4 |
+| `generate_reply` | [`src/agent/generator.py`](../src/agent/generator.py) | Không đủ căn cứ thì không gọi model | Lab 4 |
+| `check_input` | [`src/guardrails/input_rules.py`](../src/guardrails/input_rules.py) | Ba kiểm tra đầu vào: chèn lệnh, thông tin cá nhân, ticket rác | Lab 4 |
+| `process_ticket` | [`src/agent/workflow.py`](../src/agent/workflow.py) | Ghép quy trình, đặt tối thiểu 4 điều kiện chuyển người | Lab 4 |
+| `record_review` | [`src/store.py`](../src/store.py) | Ghi thao tác duyệt; từ chối bắt buộc kèm lý do | Lab 4 |
+| `check_output` | [`src/guardrails/output_rules.py`](../src/guardrails/output_rules.py) | Chặn cam kết tiền vô căn cứ, trích dẫn bịa, rò rỉ thông tin cá nhân | Lab 5 |
+| `TraceLogger.step` | [`src/guardrails/runtime.py`](../src/guardrails/runtime.py) | Ghi nhật ký có cấu trúc, che thông tin cá nhân | Lab 5 |
+| Các hàm chỉ số | [`eval/metrics.py`](../eval/metrics.py) | Độ chính xác, recall của retrieval, tỉ lệ chuyển người đúng | Lab 5 |
 
 ## Phụ lục D — Sổ tay lệnh
 

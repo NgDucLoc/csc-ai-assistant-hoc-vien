@@ -1,6 +1,6 @@
 # WORKBOOK 5 — Tích hợp, triển khai và đánh giá
 
-**Ngày 3, buổi sáng · 120 phút thực hành · Deliverable: `docs/EVALUATION.md` + hệ thống đóng gói**
+**Ngày 3, buổi sáng · 120 phút thực hành · Deliverable: [`docs/EVALUATION.md`](../docs/EVALUATION.md) + hệ thống đóng gói**
 
 | | |
 |---|---|
@@ -35,11 +35,11 @@ Giờ khởi động: `___:___`   ·   Xong lúc: `___:___`
 
 | # | Hàm | Tệp | Xong? |
 |---|---|---|---|
-| 1 | `check_output` | `src/guardrails/output_rules.py` | `[ ]` |
-| 2 | `TraceLogger.step` | `src/guardrails/runtime.py` | `[ ]` |
-| 3 | `classification_metrics` | `eval/metrics.py` | `[ ]` |
-| 4 | `retrieval_metrics` | `eval/metrics.py` | `[ ]` |
-| 5 | `safety_metrics` | `eval/metrics.py` | `[ ]` |
+| 1 | `check_output` | [`src/guardrails/output_rules.py`](../src/guardrails/output_rules.py) | `[ ]` |
+| 2 | `TraceLogger.step` | [`src/guardrails/runtime.py`](../src/guardrails/runtime.py) | `[ ]` |
+| 3 | `classification_metrics` | [`eval/metrics.py`](../eval/metrics.py) | `[ ]` |
+| 4 | `retrieval_metrics` | [`eval/metrics.py`](../eval/metrics.py) | `[ ]` |
+| 5 | `safety_metrics` | [`eval/metrics.py`](../eval/metrics.py) | `[ ]` |
 
 ---
 
@@ -77,7 +77,7 @@ docker compose up --build
 
 `[ ]` Ba dịch vụ lên  ·  `[ ]` Docker lỗi → chạy trực tiếp (vẫn được chấm qua tệp cấu hình)
 
-**Vì sao dịch vụ model đặt NGOÀI container?** (đọc ADR-0004)
+**Vì sao dịch vụ model đặt NGOÀI container?** (đọc [ADR-0004](../docs/adr/0004-dich-vu-model-ngoai-container.md))
 `___________________________________________________________________`
 
 ---
@@ -129,7 +129,7 @@ Liệt kê số **không phải** là phân tích. Trả lời ba câu:
 **1. Hai nhóm này chồng lấn về ngữ nghĩa ở đâu?**
 `___________________________________________________________________`
 
-**2. Mở `data/LABEL_GUIDE.md`. Ranh giới giữa hai nhóm đã được định nghĩa rõ chưa, hay chính định nghĩa nhãn mới là vấn đề?**
+**2. Mở [`data/LABEL_GUIDE.md`](../data/LABEL_GUIDE.md). Ranh giới giữa hai nhóm đã được định nghĩa rõ chưa, hay chính định nghĩa nhãn mới là vấn đề?**
 `___________________________________________________________________`
 `___________________________________________________________________`
 
@@ -271,7 +271,7 @@ uv run python scripts/checkpoint.py 5 --team ______
 Kết quả: `[ ] ĐỦ ĐIỀU KIỆN`  ·  `[ ] THIẾU ____/____`
 
 ### Nộp
-- [ ] `docs/EVALUATION.md` đủ 5 nhóm chỉ số, **mọi bảng ghi cấu hình**
+- [ ] [`docs/EVALUATION.md`](../docs/EVALUATION.md) đủ 5 nhóm chỉ số, **mọi bảng ghi cấu hình**
 - [ ] Bảng năng lực phục vụ **cả hai** cấu hình
 - [ ] Phân tích lỗi chỉ ra **nguyên nhân**, không chỉ liệt kê số
 - [ ] Kết quả 12 ca đối kháng

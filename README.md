@@ -74,9 +74,9 @@ Cả hai là công dân hạng nhất. Chuyển đổi **chỉ bằng biến mô
 
 Model embedding giống nhau ở cả hai cấu hình là **ràng buộc bắt buộc**: nhờ đó chỉ mục dựng ở cấu hình nào cũng đọc được ở cấu hình kia, và quyết định hạ tầng không ảnh hưởng tới kho tri thức.
 
-Cấu hình nào làm chuẩn của lớp được quyết bằng phép đo (`scripts/bench_server.py`) trước khóa một tuần, không quyết trước bằng phỏng đoán.
+Cấu hình nào làm chuẩn của lớp được quyết bằng phép đo ([`scripts/bench_server.py`](scripts/bench_server.py)) trước khóa một tuần, không quyết trước bằng phỏng đoán.
 
-> **Hạ tầng phòng Lab đang dùng:** 8 AI Workstation độc lập, mỗi máy 1× RTX 5080 16GB — **1 nhóm 1 workstation**, không cluster hóa. Mặc định vẫn chạy cấu hình L (Ollama) trên chính GPU đó, không đổi mặc định lớp. Muốn thử triển khai vLLM thật tận dụng VRAM dư, xem `CHALLENGE.md` mục 5.4 (nội dung nâng cao, tùy chọn). Chi tiết quyết định ở `PROJECT-SPEC.md` Mục 17, mục v1.5.
+> **Hạ tầng phòng Lab đang dùng:** 8 AI Workstation độc lập, mỗi máy 1× RTX 5080 16GB — **1 nhóm 1 workstation**, không cluster hóa. Mặc định vẫn chạy cấu hình L (Ollama) trên chính GPU đó, không đổi mặc định lớp. Muốn thử triển khai vLLM thật tận dụng VRAM dư, xem [`CHALLENGE.md`](CHALLENGE.md) mục 5.4 (nội dung nâng cao, tùy chọn). Chi tiết quyết định ở [`PROJECT-SPEC.md`](PROJECT-SPEC.md) [Mục 17](PROJECT-SPEC.md#muc-17), mục v1.5.
 
 ## Kiểm thử và đánh giá
 
@@ -101,14 +101,14 @@ uv run python scripts/checkpoint.py 3    # 5 phút cuối buổi: đủ điều 
 uv run python scripts/grade.py 3 --team nhom-a           # chấm phần định lượng
 ```
 
-`rescue.sh` đồng bộ `src/`, `data/` và `.cache/` từ `solution/session-N`, **không đụng vào `docs/`** — canvas, blueprint và ADR là deliverable của nhóm.
+`rescue.sh` đồng bộ [`src/`](src/), [`data/`](data/) và `.cache/` từ `solution/session-N`, **không đụng vào [`docs/`](docs/)** — canvas, blueprint và ADR là deliverable của nhóm.
 
 ## Tài liệu ràng buộc
 
-Mọi quyết định kỹ thuật tra cứu `PROJECT-SPEC.md` trước. Mã spec (ví dụ `SPEC-RAG-03`) được trích dẫn trong mã nguồn, commit và báo lỗi để truy vết.
+Mọi quyết định kỹ thuật tra cứu [`PROJECT-SPEC.md`](PROJECT-SPEC.md) trước. Mã spec (ví dụ [`SPEC-RAG-03`](PROJECT-SPEC.md#spec-rag-03)) được trích dẫn trong mã nguồn, commit và báo lỗi để truy vết.
 
 ## Ba ranh giới không được vượt
 
-1. **Không có đường dẫn nào tới khách hàng mà chưa qua người duyệt** (`SPEC-FLOW-03`). Ép bằng `test_no_path_reaches_customer_without_human_approval`.
-2. **Không lời gọi model nào ngoài `src/llm/client.py`** (`SPEC-ARCH-02`). Ép bằng `test_no_llm_call_outside_client`.
-3. **Toàn bộ dữ liệu là dữ liệu sinh tổng hợp** (`SPEC-DATA-01`). Ép bằng hook `pre-commit`.
+1. **Không có đường dẫn nào tới khách hàng mà chưa qua người duyệt** ([`SPEC-FLOW-03`](PROJECT-SPEC.md#spec-flow-03)). Ép bằng `test_no_path_reaches_customer_without_human_approval`.
+2. **Không lời gọi model nào ngoài [`src/llm/client.py`](src/llm/client.py)** ([`SPEC-ARCH-02`](PROJECT-SPEC.md#spec-arch-02)). Ép bằng `test_no_llm_call_outside_client`.
+3. **Toàn bộ dữ liệu là dữ liệu sinh tổng hợp** ([`SPEC-DATA-01`](PROJECT-SPEC.md#spec-data-01)). Ép bằng hook `pre-commit`.

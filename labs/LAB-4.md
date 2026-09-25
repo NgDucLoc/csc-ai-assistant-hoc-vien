@@ -12,11 +12,11 @@
 - [ ] Bốn lớp phòng vệ có đủ, đặc biệt lớp 3 có đưa lỗi vào prompt không?
 - [ ] Truy hồi có lọc `status: superseded` không?
 - [ ] Bảng số liệu có cột cấu hình không?
-- [ ] Có chỗ nào gọi model ngoài `src/llm/client.py` không?
+- [ ] Có chỗ nào gọi model ngoài [`src/llm/client.py`](../src/llm/client.py) không?
 
 Approve rồi merge. Bấm approve cho xong là bỏ mất giá trị của bước này.
 
-> **Chỗ ghi chép:** sao chép `workbooks/WORKBOOK-4.md` vào `docs/workbook/<tên-nhóm>-session-4.md` và điền trong giờ học. Đề bài này nói *phải làm gì*; workbook là chỗ ghi *đã đo được gì và vì sao chọn như vậy* — phần phản biện ở Session 6 hỏi đúng phần đó.
+> **Chỗ ghi chép:** sao chép [`workbooks/WORKBOOK-4.md`](../workbooks/WORKBOOK-4.md) vào `docs/workbook/<tên-nhóm>-session-4.md` và điền trong giờ học. Đề bài này nói *phải làm gì*; workbook là chỗ ghi *đã đo được gì và vì sao chọn như vậy* — phần phản biện ở Session 6 hỏi đúng phần đó.
 
 ---
 

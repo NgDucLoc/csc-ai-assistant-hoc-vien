@@ -1,6 +1,6 @@
 # WORKBOOK 3 — Xây dựng trí tuệ cho ứng dụng AI
 
-**Ngày 2, buổi sáng · 120 phút thực hành · Deliverable: `docs/context_spec.md`**
+**Ngày 2, buổi sáng · 120 phút thực hành · Deliverable: [`docs/context_spec.md`](../docs/context_spec.md)**
 
 | | |
 |---|---|
@@ -18,12 +18,12 @@
 
 | # | Hàm | Tệp | Xong? |
 |---|---|---|---|
-| 1 | `extract_json` | `src/llm/schema.py` | `[ ]` |
-| 2 | `validate` | `src/llm/schema.py` | `[ ]` |
-| 3 | `parse_with_retry` | `src/llm/schema.py` | `[ ]` |
-| 4 | `chunk_document` | `src/knowledge/indexer.py` | `[ ]` |
-| 5 | `Retriever.retrieve` | `src/knowledge/retriever.py` | `[ ]` |
-| 6 | `classify` | `src/agent/classifier.py` | `[ ]` |
+| 1 | `extract_json` | [`src/llm/schema.py`](../src/llm/schema.py) | `[ ]` |
+| 2 | `validate` | [`src/llm/schema.py`](../src/llm/schema.py) | `[ ]` |
+| 3 | `parse_with_retry` | [`src/llm/schema.py`](../src/llm/schema.py) | `[ ]` |
+| 4 | `chunk_document` | [`src/knowledge/indexer.py`](../src/knowledge/indexer.py) | `[ ]` |
+| 5 | `Retriever.retrieve` | [`src/knowledge/retriever.py`](../src/knowledge/retriever.py) | `[ ]` |
+| 6 | `classify` | [`src/agent/classifier.py`](../src/agent/classifier.py) | `[ ]` |
 
 Xem còn khối nào chưa làm:
 ```bash
@@ -38,7 +38,7 @@ grep -rn 'NotImplementedError("LAB-3' --include='*.py' src/
 
 ### 1a. Cấu trúc năm phần
 
-Mở `src/agent/prompts/classify.v2.md`. Đánh dấu phần nào có:
+Mở [`src/agent/prompts/classify.v2.md`](../src/agent/prompts/classify.v2.md). Đánh dấu phần nào có:
 
 `[ ] VAI TRÒ`  `[ ] NHIỆM VỤ`  `[ ] RÀNG BUỘC`  `[ ] NGỮ CẢNH`  `[ ] ĐỊNH DẠNG ĐẦU RA`
 
@@ -57,7 +57,7 @@ Nhóm sửa gì trong prompt so với bản v2 có sẵn? Vì sao?
 | Chừa cho đầu ra | `______ token` | — |
 | **Tổng** | `______` | `______` |
 
-Trần cứng: **3000 token** (`SPEC-INFRA-04`), ép bằng `pytest`.
+Trần cứng: **3000 token** ([`SPEC-INFRA-04`](../PROJECT-SPEC.md#spec-infra-04)), ép bằng `pytest`.
 
 > **Vì sao ép bằng kiểm thử chứ không để tốc độ phần cứng tự ép?**
 > `_______________________________________________________________`
@@ -151,7 +151,7 @@ uv run python scripts/build_index.py
 
 Số đoạn: `______` · Thời gian: `______` · Model nhúng: `______`
 
-`[ ]` Nhóm tự dựng được  ·  `[ ]` Dùng bản dựng sẵn `data/index_prebuilt/`
+`[ ]` Nhóm tự dựng được  ·  `[ ]` Dùng bản dựng sẵn [`data/index_prebuilt/`](../data/index_prebuilt/)
 
 > Dùng bản dựng sẵn **không mất điểm**. Ngồi chờ 4 phút mới mất điểm.
 
@@ -225,12 +225,12 @@ Kết quả: `[ ] ĐỦ ĐIỀU KIỆN`  ·  `[ ] THIẾU ____/____`
 ```bash
 ./scripts/rescue.sh 3
 ```
-Lệnh này **không đụng vào `docs/`** — canvas, blueprint và ADR của nhóm giữ nguyên.
+Lệnh này **không đụng vào [`docs/`](../docs/)** — canvas, blueprint và ADR của nhóm giữ nguyên.
 
 Nhóm có dùng cứu hộ không? `[ ] Không`  ·  `[ ] Có — đã đọc bản khác biệt: [ ]`
 
 ### Nộp
-- [ ] `docs/context_spec.md` đầy đủ, **có giải thích lý do lựa chọn**, không chỉ mô tả đã làm gì
+- [ ] [`docs/context_spec.md`](../docs/context_spec.md) đầy đủ, **có giải thích lý do lựa chọn**, không chỉ mô tả đã làm gì
 - [ ] `uv run pytest -m lab3` xanh
 - [ ] Pull request, chờ nhóm khác rà soát **đầu Session 4** (không qua đêm — không có đêm)
 

@@ -10,7 +10,14 @@
 | Chủ sở hữu | Học viện Viettel — Hội đồng xây dựng chương trình đào tạo |
 | Trạng thái | Draft — chờ phê duyệt trước khi triển khai |
 
+
+<!-- toc:begin -->
+**Mục lục:** [0. Cách sử dụng tài liệu này](#muc-0) · [1. Phạm vi và bối cảnh](#muc-1) · [2. Ràng buộc hạ tầng](#muc-2) · [3. Kiến trúc hệ thống](#muc-3) · [4. Công cụ và quy trình kỹ thuật](#muc-4) · [5. Hợp đồng dữ liệu (data contract)](#muc-5) · [6. Chính sách lớp LLM](#muc-6) · [7. Chính sách prompt](#muc-7) · [8. Chính sách tri thức và truy hồi (RAG)](#muc-8) · [9. Chính sách công cụ (tool)](#muc-9) · [10. Chính sách quy trình và chuyển người](#muc-10) · [11. Chính sách guardrails](#muc-11) · [12. Giao thức đánh giá](#muc-12) · [13. Logging và truy vết](#muc-13) · [14. Ma trận truy vết](#muc-14) · [15. Trách nhiệm và bàn giao](#muc-15) · [16. Rủi ro và phương án dự phòng](#muc-16) · [17. Nhật ký thay đổi](#muc-17) · [Phụ lục A](#phu-luc-a) · [Phụ lục B](#phu-luc-b)
+<!-- toc:end -->
+
 ---
+
+<a id="muc-0"></a>
 
 ## 0. CÁCH SỬ DỤNG TÀI LIỆU NÀY
 
@@ -19,8 +26,8 @@
 **Nguyên tắc sử dụng:**
 
 1. Mọi quyết định kỹ thuật trong quá trình xây dựng Starter Kit, dữ liệu, và bài lab **phải tra cứu tài liệu này trước**. Nếu tài liệu chưa quy định, hãy bổ sung vào đây trước khi triển khai.
-2. Mỗi mục có mã định danh (ví dụ `SPEC-DATA-01`). Khi viết code, commit, hoặc báo lỗi, **trích dẫn mã này** để truy vết.
-3. Mọi thay đổi phải ghi vào Mục 17 — Nhật ký thay đổi, kèm lý do.
+2. Mỗi mục có mã định danh (ví dụ [`SPEC-DATA-01`](#spec-data-01)). Khi viết code, commit, hoặc báo lỗi, **trích dẫn mã này** để truy vết.
+3. Mọi thay đổi phải ghi vào [Mục 17](#muc-17) — Nhật ký thay đổi, kèm lý do.
 4. File này đặt tại gốc repo (`/PROJECT-SPEC.md`) và được version cùng code.
 
 **Quy ước mức độ ràng buộc:**
@@ -33,13 +40,19 @@
 
 ---
 
+<a id="muc-1"></a>
+
 ## 1. PHẠM VI VÀ BỐI CẢNH
+
+<a id="spec-scope-01"></a>
 
 ### SPEC-SCOPE-01 — Bài toán
 
 Trung tâm CSKH viễn thông tiếp nhận ticket từ nhiều kênh (tổng đài, ứng dụng di động, email). Quy trình thủ công hiện tại: đọc hiểu → phân loại → tra cứu chính sách → soạn phản hồi → xử lý hoặc chuyển tuyến.
 
 Hệ thống xây dựng trong khóa học hỗ trợ giao dịch viên ở các bước phân loại, tra cứu và soạn thảo — **không thay thế giao dịch viên**.
+
+<a id="spec-scope-02"></a>
 
 ### SPEC-SCOPE-02 — Phạm vi MVP
 
@@ -62,11 +75,13 @@ Hệ thống xây dựng trong khóa học hỗ trợ giao dịch viên ở các
 - Xử lý giọng nói, hình ảnh, hoặc đa ngôn ngữ ngoài tiếng Việt
 - Xác thực người dùng, phân quyền, multi-tenant
 
+<a id="spec-scope-03"></a>
+
 ### SPEC-SCOPE-03 — Chỉ số thành công của sản phẩm
 
 Ngưỡng phụ thuộc cấu hình tham chiếu đã chọn. **BẮT BUỘC** dùng đúng cột tương ứng.
 
-> **CHƯA HIỆU CHUẨN LẠI kể từ Mục 17 v1.6.** Từ khi cả hai cấu hình cùng chạy `Qwen3-8B`, bảng dưới vẫn là số đo cũ trên `qwen2.5:3b-instruct` (L) / `Qwen2.5-7B-Instruct` (S). Năm chỉ số chất lượng có thể không còn khác nhau giữa hai cột — chỉ độ trễ chắc chắn còn khác vì lý do hạ tầng. **BẮT BUỘC đo lại bằng `eval/run_eval.py` trên model thật trước khi dùng bảng này để chấm điểm hoặc chặn CI.**
+> **CHƯA HIỆU CHUẨN LẠI kể từ [Mục 17](#muc-17) v1.6.** Từ khi cả hai cấu hình cùng chạy `Qwen3-8B`, bảng dưới vẫn là số đo cũ trên `qwen2.5:3b-instruct` (L) / `Qwen2.5-7B-Instruct` (S). Năm chỉ số chất lượng có thể không còn khác nhau giữa hai cột — chỉ độ trễ chắc chắn còn khác vì lý do hạ tầng. **BẮT BUỘC đo lại bằng [`eval/run_eval.py`](eval/run_eval.py) trên model thật trước khi dùng bảng này để chấm điểm hoặc chặn CI.**
 
 | Chỉ số | Đạt (cấu hình S, Qwen3-8B) | Tốt (S) | Đạt (cấu hình L, Qwen3-8B) | Tốt (L) |
 |---|---|---|---|---|
@@ -83,11 +98,15 @@ Ngưỡng phụ thuộc cấu hình tham chiếu đã chọn. **BẮT BUỘC** d
 
 ---
 
+<a id="muc-2"></a>
+
 ## 2. RÀNG BUỘC HẠ TẦNG
+
+<a id="spec-infra-01"></a>
 
 ### SPEC-INFRA-01 — Hai cấu hình chạy, ngang hàng
 
-Hệ thống hỗ trợ hai cấu hình. **Cả hai đều là công dân hạng nhất**: cùng một đường code, chuyển đổi chỉ bằng biến môi trường, cùng được kiểm thử trong CI. Việc cấu hình nào là chuẩn của khóa học được quyết định bằng phép đo tại `SPEC-INFRA-02`, không quyết định trước.
+Hệ thống hỗ trợ hai cấu hình. **Cả hai đều là công dân hạng nhất**: cùng một đường code, chuyển đổi chỉ bằng biến môi trường, cùng được kiểm thử trong CI. Việc cấu hình nào là chuẩn của khóa học được quyết định bằng phép đo tại [`SPEC-INFRA-02`](#spec-infra-02), không quyết định trước.
 
 | | Cấu hình S — server dùng chung | Cấu hình L — cục bộ |
 |---|---|---|
@@ -104,11 +123,13 @@ Hệ thống hỗ trợ hai cấu hình. **Cả hai đều là công dân hạng
 
 **Vì sao cả hai đều phơi API tương thích OpenAI:** `LLMClient` chỉ cần một đường code, chuyển đổi bằng `LLM_BASE_URL` và `LLM_MODEL`. Nếu hai đầu dùng hai giao thức khác nhau, lớp trừu tượng sẽ phình ra và đường ít dùng sẽ không được kiểm thử — tức là hỏng đúng lúc cần đến.
 
+<a id="spec-infra-02"></a>
+
 ### SPEC-INFRA-02 — Quy trình chọn cấu hình tham chiếu
 
 > **BẮT BUỘC** thực hiện trước khóa học tối thiểu 1 tuần. Không được chọn cấu hình tham chiếu bằng phỏng đoán về năng lực phần cứng.
 
-**Bước 1 — Đo năng lực server.** Chạy `scripts/bench_server.py`, đo thông lượng và độ trễ p95 ở các mức đồng thời 1, 5, 10, 20, 30 với chính prompt phân loại của khóa học.
+**Bước 1 — Đo năng lực server.** Chạy [`scripts/bench_server.py`](scripts/bench_server.py), đo thông lượng và độ trễ p95 ở các mức đồng thời 1, 5, 10, 20, 30 với chính prompt phân loại của khóa học.
 
 **Bước 2 — Đối chiếu bảng quyết định.**
 
@@ -120,24 +141,28 @@ Hệ thống hỗ trợ hai cấu hình. **Cả hai đều là công dân hạng
 | Bất kỳ | p95 > 25 giây, hoặc GPU dùng chung với tải khác | **Cấu hình L làm tham chiếu**; cấu hình S chỉ dùng cho phần trình diễn cuối khóa |
 | Không xác định được trước khóa | — | **Cấu hình L làm tham chiếu**. An toàn hơn là hạ chuẩn giữa chừng |
 
-**Bước 3 — Ghi nhận.** Cấu hình được chọn **BẮT BUỘC** ghi vào Mục 17 kèm số liệu đo, và ghi vào `.env.example` làm mặc định của lớp.
+**Bước 3 — Ghi nhận.** Cấu hình được chọn **BẮT BUỘC** ghi vào [Mục 17](#muc-17) kèm số liệu đo, và ghi vào [`.env.example`](.env.example) làm mặc định của lớp.
 
 **Bước 4 — Kiểm chứng đường lùi.** Dù chọn cấu hình nào, phải chạy thử toàn bộ Lab 3 và Lab 5 trên cấu hình còn lại để bảo đảm đường lùi hoạt động.
 
 **Nguyên tắc chọn khi phân vân:** ưu tiên cấu hình L. Hạ chuẩn giữa khóa vì server không tải nổi gây thiệt hại lớn hơn nhiều so với việc bỏ lỡ một chút chất lượng đầu ra. Cấu hình S vẫn dùng được cho phần trình diễn cuối khóa để sản phẩm trông thuyết phục, miễn là ghi rõ đó là cấu hình khác.
 
+<a id="spec-infra-03"></a>
+
 ### SPEC-INFRA-03 — Cấu hình tham chiếu và tính so sánh được của số liệu
 
-> **BẮT BUỘC:** Mọi chỉ số, ngưỡng đạt, cổng chất lượng CI và kết luận trong `EVALUATION.md` chỉ có giá trị khi đo trên **cấu hình tham chiếu đã chọn ở `SPEC-INFRA-02`**. Số liệu đo trên cấu hình còn lại **KHÔNG** được so sánh trực tiếp, và mọi bảng kết quả phải ghi rõ cấu hình.
+> **BẮT BUỘC:** Mọi chỉ số, ngưỡng đạt, cổng chất lượng CI và kết luận trong `EVALUATION.md` chỉ có giá trị khi đo trên **cấu hình tham chiếu đã chọn ở [`SPEC-INFRA-02`](#spec-infra-02)**. Số liệu đo trên cấu hình còn lại **KHÔNG** được so sánh trực tiếp, và mọi bảng kết quả phải ghi rõ cấu hình.
 
 | Yêu cầu | Quy định |
 |---|---|
 | Trường bắt buộc trong log và manifest | `config_profile` nhận giá trị `S` hoặc `L` |
-| Khóa cache | **BẮT BUỘC** bao gồm `base_url` và tên model, xem `SPEC-LLM-02` |
+| Khóa cache | **BẮT BUỘC** bao gồm `base_url` và tên model, xem [`SPEC-LLM-02`](#spec-llm-02) |
 | Cổng chất lượng CI | Chỉ chạy trên cache sinh từ cấu hình tham chiếu |
 | Hiển thị trên giao diện | Hiện rõ đang chạy ở cấu hình nào |
 
 Đây đồng thời là nội dung giảng dạy về tính tái lập: **một con số không kèm cấu hình sinh ra nó là một con số vô nghĩa.** Học viên gặp bài học này lần đầu ở Lab 2 khi so sánh hai cấu hình, và gặp lại ở Lab 5 khi ghi manifest.
+
+<a id="spec-infra-04"></a>
 
 ### SPEC-INFRA-04 — Ngân sách tính toán
 
@@ -148,18 +173,20 @@ Ngân sách tính toán **BẮT BUỘC được ép bằng kiểm thử tự đ�
 | Số lần gọi LLM trên mỗi ticket | ≤ 5 | `pytest`, chạy trong CI |
 | Token của prompt hệ thống | ≤ 800 | `pytest` |
 | Tổng context mỗi lần gọi | ≤ 3000 token | `pytest` |
-| Số lần gọi công cụ mỗi ticket | ≤ 3 | `SPEC-TOOL-02` |
+| Số lần gọi công cụ mỗi ticket | ≤ 3 | [`SPEC-TOOL-02`](#spec-tool-02) |
 
 > **Vì sao phải ép bằng kiểm thử thay vì để phần cứng tự ép.** Ở cấu hình L, máy chậm nên học viên tự thấy đau và tự tối ưu ngữ cảnh. Ở cấu hình S với GPU trả lời trong vài giây, kỷ luật đó biến mất và học viên sẽ nhồi cả kho tài liệu vào prompt. Đặt cổng kiểm thử ngay từ đầu khiến bài học không phụ thuộc vào việc lớp chạy trên hạ tầng nào.
 
 Ngoài ra vẫn giữ nguyên: mọi lời gọi LLM đi qua lớp cache; tác vụ chạy trên toàn tập dữ liệu phải chạy nền hoặc có bản dựng sẵn.
+
+<a id="spec-infra-05"></a>
 
 ### SPEC-INFRA-05 — Năng lực phục vụ và đồng thời
 
 | Tham số | Cấu hình S | Cấu hình L |
 |---|---|---|
 | Cơ chế phục vụ đồng thời | Continuous batching | Gần như tuần tự |
-| Số worker trong ứng dụng | 8, hoặc theo kết quả đo ở `SPEC-INFRA-02` | 2 |
+| Số worker trong ứng dụng | 8, hoặc theo kết quả đo ở [`SPEC-INFRA-02`](#spec-infra-02) | 2 |
 | Độ sâu hàng đợi tối đa | 200 | 100 |
 | Thời gian chờ tối đa trong hàng đợi | 10 phút | 15 phút |
 | Mức đồng thời đo ở Lab 5 | 1, 5, 10, 20 | 1, 3, 5, 10 |
@@ -169,6 +196,8 @@ Ngoài ra vẫn giữ nguyên: mọi lời gọi LLM đi qua lớp cache; tác v
 **Yêu cầu tổ chức:** phép đo trên cấu hình S **BẮT BUỘC** thực hiện trong khung giờ riêng của từng nhóm, mỗi nhóm 5 phút. Nếu cả lớp cùng bắn yêu cầu, số đo mất ý nghĩa và không tái lập được. Phép đo trên cấu hình L chạy tự do vì mỗi máy độc lập.
 
 **BẮT BUỘC** báo cáo năng lực phục vụ dưới dạng số ticket xử lý được mỗi giờ và đối chiếu với khối lượng đã giả định trong Canvas ở Lab 1.
+
+<a id="spec-infra-06"></a>
 
 ### SPEC-INFRA-06 — Cấu hình tối thiểu máy học viên
 
@@ -181,11 +210,13 @@ Ngoài ra vẫn giữ nguyên: mọi lời gọi LLM đi qua lớp cache; tác v
 | Kết nối tới server dùng chung | Bắt buộc nếu chọn cấu hình S làm tham chiếu | — |
 | Hệ điều hành | Windows 10+ / macOS 12+ / Ubuntu 20.04+ | — |
 
+<a id="spec-infra-07"></a>
+
 ### SPEC-INFRA-07 — Phương án dự phòng hạ tầng
 
 | Lớp | Phương án | Kích hoạt khi |
 |---|---|---|
-| 1 | Cấu hình tham chiếu đã chọn ở `SPEC-INFRA-02` | Mặc định |
+| 1 | Cấu hình tham chiếu đã chọn ở [`SPEC-INFRA-02`](#spec-infra-02) | Mặc định |
 | 2 | Cấu hình còn lại | Cấu hình chính sự cố, hoặc bước kiểm thử tải ở Lab 5 |
 | 3 | Chế độ chỉ dùng cache, kèm index dựng sẵn | Mất cả hai đường trên, hoặc khi trình diễn |
 
@@ -195,8 +226,12 @@ Chuyển đổi giữa các lớp **BẮT BUỘC** chỉ bằng biến môi trư
 
 ---
 
+<a id="muc-3"></a>
+
 ## 3. KIẾN TRÚC HỆ THỐNG
 
+
+<a id="spec-arch-01"></a>
 
 ### SPEC-ARCH-01 — Phân tầng
 
@@ -220,14 +255,18 @@ Chuyển đổi giữa các lớp **BẮT BUỘC** chỉ bằng biến môi trư
         ↕ Xuyên suốt: Guardrails · Logging · Cache
 ```
 
+<a id="spec-arch-02"></a>
+
 ### SPEC-ARCH-02 — Nguyên tắc ràng buộc kiến trúc
 
 1. **BẮT BUỘC — Tầng trên không gọi vượt cấp.** Tầng 2 không được gọi thẳng tầng 4. Mọi lời gọi năng lực AI đi qua tầng điều phối.
-2. **BẮT BUỘC — Không có lời gọi LLM nào nằm ngoài `src/llm/client.py`.** Đây là điều kiện để cache, logging và ngắt mạch hoạt động đồng nhất.
+2. **BẮT BUỘC — Không có lời gọi LLM nào nằm ngoài [`src/llm/client.py`](src/llm/client.py).** Đây là điều kiện để cache, logging và ngắt mạch hoạt động đồng nhất.
 3. **BẮT BUỘC — Mọi thành phần AI phải có đường dự phòng phi-AI.** Nếu LLM không phản hồi, hệ thống trả kết quả suy giảm có kiểm soát (chuyển người), không văng lỗi.
 4. **NÊN — Prompt là dữ liệu, không phải code.** Đặt trong `src/agent/prompts/*.md`, nạp bằng loader, có phiên bản.
 5. **BẮT BUỘC — API xử lý ticket là bất đồng bộ.** Điểm cuối tiếp nhận trả về `job_id` ngay; xử lý diễn ra ở worker nền. Mô hình đồng bộ không hợp lệ khi độ trễ mỗi yêu cầu là hàng chục giây.
 6. **BẮT BUỘC — Trạng thái nằm ngoài tiến trình.** Hàng đợi, kết quả và nhật ký lưu ở SQLite hoặc Chroma, không giữ trong bộ nhớ tiến trình, để mở rộng ngang được và không mất việc khi worker khởi động lại.
+
+<a id="spec-arch-03"></a>
 
 ### SPEC-ARCH-03 — Cấu trúc repo chuẩn
 
@@ -273,6 +312,8 @@ csc-ai-assistant/
     └── handover/{RUNBOOK.md, INCIDENTS.md, RESPONSIBILITIES.md}
 ```
 
+<a id="spec-arch-04"></a>
+
 ### SPEC-ARCH-04 — Quy ước Git
 
 | Hạng mục | Quy ước |
@@ -285,7 +326,11 @@ csc-ai-assistant/
 
 ---
 
+<a id="muc-4"></a>
+
 ## 4. CÔNG CỤ VÀ QUY TRÌNH KỸ THUẬT
+
+<a id="spec-tooling-01"></a>
 
 ### SPEC-TOOLING-01 — Danh mục công cụ bắt buộc
 
@@ -307,6 +352,8 @@ csc-ai-assistant/
 
 **Nguyên tắc lựa chọn:** chỉ đưa vào những công cụ (a) chạy được offline trên laptop không GPU, (b) không cần dựng thêm dịch vụ nền, và (c) dạy được trong dưới 15 phút. Công cụ nào vi phạm một trong ba điều kiện thì chuyển sang mục demo.
 
+<a id="spec-tooling-02"></a>
+
 ### SPEC-TOOLING-02 — Quản lý môi trường
 
 **BẮT BUỘC** dùng `uv` thay cho `pip` và `venv`:
@@ -318,11 +365,13 @@ uv run python scripts/check_env.py
 
 | Yêu cầu | Quy định |
 |---|---|
-| Tệp khóa phụ thuộc | `uv.lock` **BẮT BUỘC** commit vào repo |
-| Phiên bản Python | Ghim trong `.python-version` |
+| Tệp khóa phụ thuộc | [`uv.lock`](uv.lock) **BẮT BUỘC** commit vào repo |
+| Phiên bản Python | Ghim trong [`.python-version`](.python-version) |
 | Cài thêm gói ngoài lock | **BẮT BUỘC** cập nhật lock và commit kèm |
 
-**Lý do:** `uv` dựng môi trường nhanh hơn `pip` nhiều lần, và `uv.lock` bảo đảm 30 máy học viên có cùng phiên bản thư viện. Sự khác biệt phiên bản giữa các máy là nguồn gây lỗi khó truy nhất trong lớp học thực hành.
+**Lý do:** `uv` dựng môi trường nhanh hơn `pip` nhiều lần, và [`uv.lock`](uv.lock) bảo đảm 30 máy học viên có cùng phiên bản thư viện. Sự khác biệt phiên bản giữa các máy là nguồn gây lỗi khó truy nhất trong lớp học thực hành.
+
+<a id="spec-tooling-03"></a>
 
 ### SPEC-TOOLING-03 — Chất lượng mã nguồn
 
@@ -336,7 +385,9 @@ uv run python scripts/check_env.py
 | Khóa bí mật hoặc token lọt vào mã | `detect-secrets` | Chặn commit |
 | Dữ liệu cá nhân thật trong tệp dữ liệu | Script tự viết, kiểm mẫu số CMND/CCCD/thẻ | Chặn commit |
 
-Kiểm tra cuối cùng là biện pháp kỹ thuật cho `SPEC-DATA-01` và rủi ro R8: nhắc miệng học viên không đưa dữ liệu thật vào repo là chưa đủ.
+Kiểm tra cuối cùng là biện pháp kỹ thuật cho [`SPEC-DATA-01`](#spec-data-01) và rủi ro R8: nhắc miệng học viên không đưa dữ liệu thật vào repo là chưa đủ.
+
+<a id="spec-tooling-04"></a>
 
 ### SPEC-TOOLING-04 — Tích hợp liên tục
 
@@ -349,7 +400,7 @@ Kiểm tra cuối cùng là biện pháp kỹ thuật cho `SPEC-DATA-01` và r�
 | 3. Eval rút gọn | Chạy đánh giá trên 15 ticket, đối chiếu ngưỡng tối thiểu | Lab 5 |
 | 4. Build | Dựng image Docker | Lab 5 |
 
-**Điểm mấu chốt khiến CI khả thi trong khóa học này:** lớp cache LLM ở `SPEC-LLM-02` khiến kết quả trở nên tất định. Cache được commit vào repo, nên CI **chạy được mà không cần Ollama và không cần GPU** — chỉ đọc lại kết quả đã lưu. Không có cache thì CI cho AI application là bất khả thi trên hạ tầng lớp học.
+**Điểm mấu chốt khiến CI khả thi trong khóa học này:** lớp cache LLM ở [`SPEC-LLM-02`](#spec-llm-02) khiến kết quả trở nên tất định. Cache được commit vào repo, nên CI **chạy được mà không cần Ollama và không cần GPU** — chỉ đọc lại kết quả đã lưu. Không có cache thì CI cho AI application là bất khả thi trên hạ tầng lớp học.
 
 **Cổng chất lượng (quality gate)** bật từ Lab 5:
 
@@ -360,6 +411,8 @@ Kiểm tra cuối cùng là biện pháp kỹ thuật cho `SPEC-DATA-01` và r�
 | Ca đối kháng không đạt | ≥ 1 |
 
 > Đây là thực hành phân biệt AI engineering với phát triển phần mềm truyền thống: **chất lượng mô hình được kiểm soát tự động như kiểm soát lỗi biên dịch.** Không có cổng này, học viên giữ nguyên thói quen sửa prompt rồi chạy tay xem có ổn không — đúng thói quen mà môn học cần phá bỏ.
+
+<a id="spec-tooling-05"></a>
 
 ### SPEC-TOOLING-05 — Ghi nhận quyết định kiến trúc (ADR)
 
@@ -389,16 +442,20 @@ Một số mục dài vượt ngân sách ngữ cảnh, cần cắt phụ...
 
 **BẮT BUỘC:** tối thiểu 5 ADR khi kết thúc Lab 2, và mọi thay đổi ngược lại một ADR cũ phải tạo ADR mới đánh dấu thay thế, không sửa ADR cũ. Bộ ADR chính là tài liệu dùng để bảo vệ ở Session 6.
 
+<a id="spec-tooling-06"></a>
+
 ### SPEC-TOOLING-06 — Quản lý phiên bản prompt và thí nghiệm
 
 | Hạng mục | Công cụ | Quy định |
 |---|---|---|
-| Lưu trữ prompt | Tệp `.md` có đánh số phiên bản | `SPEC-PROMPT-02` |
-| So sánh phiên bản prompt | `promptfoo` với provider Ollama | Cấu hình tại `promptfooconfig.yaml`, chạy offline |
+| Lưu trữ prompt | Tệp `.md` có đánh số phiên bản | [`SPEC-PROMPT-02`](#spec-prompt-02) |
+| So sánh phiên bản prompt | `promptfoo` với provider Ollama | Cấu hình tại [`promptfooconfig.yaml`](promptfooconfig.yaml), chạy offline |
 | Theo dõi lần chạy đánh giá | MLflow local, backend SQLite | Thay cho `run_manifest.json` thủ công |
-| Nội dung ghi vào MLflow | Tham số, chỉ số, artifact | Xem `SPEC-EVAL-03` |
+| Nội dung ghi vào MLflow | Tham số, chỉ số, artifact | Xem [`SPEC-EVAL-03`](#spec-eval-03) |
 
 `promptfoo` được chọn vì hỗ trợ Ollama sẵn, chạy hoàn toàn offline, và biến việc so sánh prompt từ thao tác cảm tính thành một bảng kết quả có số. MLflow chạy local với backend SQLite không cần dựng máy chủ, khởi động bằng một lệnh.
+
+<a id="spec-tooling-07"></a>
 
 ### SPEC-TOOLING-07 — Sử dụng AI làm công cụ phát triển
 
@@ -411,13 +468,19 @@ Session 6 dành 10 phút thảo luận: điều gì thay đổi trong quy trình
 
 ---
 
+<a id="muc-5"></a>
+
 ## 5. HỢP ĐỒNG DỮ LIỆU (DATA CONTRACT)
+
+<a id="spec-data-01"></a>
 
 ### SPEC-DATA-01 — Nguyên tắc tối thượng
 
 > **BẮT BUỘC:** Toàn bộ dữ liệu sử dụng trong khóa học là **dữ liệu sinh tổng hợp**. Nghiêm cấm đưa dữ liệu khách hàng thật, dữ liệu nội bộ chưa được phê duyệt công bố, hoặc bất kỳ thông tin định danh cá nhân thật nào vào repo, kể cả trong file test hoặc ảnh chụp màn hình.
 
 Số thuê bao trong dữ liệu mẫu **BẮT BUỘC** dùng dải không tồn tại thực tế và được che một phần trong mọi hiển thị.
+
+<a id="spec-data-02"></a>
 
 ### SPEC-DATA-02 — Lược đồ ticket
 
@@ -442,6 +505,8 @@ Số thuê bao trong dữ liệu mẫu **BẮT BUỘC** dùng dải không tồn
 }
 ```
 
+<a id="spec-data-03"></a>
+
 ### SPEC-DATA-03 — Bảng phân loại (taxonomy)
 
 | Mã nhóm | Tên | Phạm vi |
@@ -461,6 +526,8 @@ Số thuê bao trong dữ liệu mẫu **BẮT BUỘC** dùng dải không tồn
 | `P2` | Ảnh hưởng trải nghiệm rõ rệt hoặc có tranh chấp tiền |
 | `P3` | Yêu cầu thông tin, thao tác thông thường |
 
+<a id="spec-data-04"></a>
+
 ### SPEC-DATA-04 — Cơ cấu tập dữ liệu
 
 | Tập | Số lượng | Mục đích | Ràng buộc |
@@ -469,9 +536,11 @@ Số thuê bao trong dữ liệu mẫu **BẮT BUỘC** dùng dải không tồn
 | `gold_test.jsonl` | 40 ticket | Đánh giá cuối | **BẮT BUỘC giữ kín tới Lab 5** |
 | `knowledge/` | 28 tài liệu | Kho tri thức | 1–3 trang mỗi tài liệu |
 | `gold_qa.jsonl` | 40 cặp hỏi–đáp | Đánh giá truy hồi | Có `expected_doc_ids` |
-| `tests/adversarial/` | 12 ca | Kiểm thử guardrails | Xem `SPEC-GUARD-04` |
+| [`tests/adversarial/`](tests/adversarial/) | 12 ca | Kiểm thử guardrails | Xem [`SPEC-GUARD-04`](#spec-guard-04) |
 
 **Lý do giữ kín `gold_test.jsonl`:** nếu học viên nhìn thấy tập test khi tinh chỉnh prompt, con số đánh giá ở Lab 5 mất hoàn toàn ý nghĩa.
+
+<a id="spec-data-05"></a>
 
 ### SPEC-DATA-05 — Bẫy sư phạm bắt buộc cài trong dữ liệu
 
@@ -483,9 +552,11 @@ Số thuê bao trong dữ liệu mẫu **BẮT BUỘC** dùng dải không tồn
 | Ticket chứa thông tin cá nhân nhạy cảm | 3 | Guardrail PII |
 | Ticket rác / vô nghĩa | 2 | Xử lý lỗi có kiểm soát |
 
+<a id="spec-data-06"></a>
+
 ### SPEC-DATA-06 — Lược đồ tài liệu tri thức
 
-Mỗi file `.md` trong `data/knowledge/` **BẮT BUỘC** có front-matter:
+Mỗi file `.md` trong [`data/knowledge/`](data/knowledge/) **BẮT BUỘC** có front-matter:
 
 ```yaml
 ---
@@ -499,11 +570,15 @@ status: active | superseded
 ---
 ```
 
-Trường `supersedes` và `status` là công cụ để giải quyết bẫy tài liệu mâu thuẫn ở `SPEC-DATA-05`.
+Trường `supersedes` và `status` là công cụ để giải quyết bẫy tài liệu mâu thuẫn ở [`SPEC-DATA-05`](#spec-data-05).
 
 ---
 
+<a id="muc-6"></a>
+
 ## 6. CHÍNH SÁCH LỚP LLM
+
+<a id="spec-llm-01"></a>
 
 ### SPEC-LLM-01 — Giao diện thống nhất
 
@@ -523,6 +598,8 @@ client.generate(
 
 `LLMResponse` **BẮT BUỘC** chứa: `content`, `parsed`, `model`, `config_profile`, `latency_ms`, `cache_hit`, `attempts`, `finish_reason`.
 
+<a id="spec-llm-02"></a>
+
 ### SPEC-LLM-02 — Cache
 
 | Hạng mục | Quy định |
@@ -534,6 +611,8 @@ client.generate(
 
 **Lý do đưa `base_url`, `model` và `temperature` vào khóa:** thiếu chúng sẽ khiến thí nghiệm so sánh cấu hình ở Lab 2 trả về kết quả giống hệt nhau, và tệ hơn, cache sinh từ cấu hình suy giảm sẽ lẫn vào cấu hình tham chiếu làm hỏng toàn bộ số liệu đánh giá — một lỗi rất khó phát hiện.
 
+<a id="spec-llm-03"></a>
+
 ### SPEC-LLM-03 — Cấu hình tham số theo tác vụ
 
 | Tác vụ | temperature | max_tokens | Ghi chú |
@@ -542,6 +621,8 @@ client.generate(
 | Viết lại truy vấn | `0.0` | 100 | |
 | Sinh phản hồi khách hàng | `0.3` | 800 | **NÊN** không vượt quá 0.5 |
 | Tóm tắt | `0.2` | 400 | |
+
+<a id="spec-llm-04"></a>
 
 ### SPEC-LLM-04 — Đầu ra có cấu trúc
 
@@ -554,6 +635,8 @@ Bốn lớp phòng vệ, **BẮT BUỘC** cài đủ:
 
 **BẮT BUỘC:** mọi lần fallback được ghi log với `trace_id` để đo tỉ lệ ở Lab 5.
 
+<a id="spec-llm-05"></a>
+
 ### SPEC-LLM-05 — Ngắt mạch (circuit breaker)
 
 | Tham số | Giá trị |
@@ -565,7 +648,11 @@ Bốn lớp phòng vệ, **BẮT BUỘC** cài đủ:
 
 ---
 
+<a id="muc-7"></a>
+
 ## 7. CHÍNH SÁCH PROMPT
+
+<a id="spec-prompt-01"></a>
 
 ### SPEC-PROMPT-01 — Cấu trúc bắt buộc
 
@@ -578,6 +665,8 @@ Mọi prompt hệ thống **BẮT BUỘC** có đủ 5 phần, theo đúng thứ
 4. NGỮ CẢNH     — dữ liệu đầu vào, phân tách rõ bằng thẻ
 5. ĐỊNH DẠNG    — mô tả schema đầu ra, kèm 1–2 ví dụ
 ```
+
+<a id="spec-prompt-02"></a>
 
 ### SPEC-PROMPT-02 — Quy định kỹ thuật
 
@@ -592,6 +681,8 @@ Mọi prompt hệ thống **BẮT BUỘC** có đủ 5 phần, theo đúng thứ
 
 **Lý do quy định #4:** gộp nhiều nhiệm vụ khiến model 3B suy giảm chất lượng rõ rệt, và làm mất khả năng đo riêng từng bước ở Lab 5.
 
+<a id="spec-prompt-03"></a>
+
 ### SPEC-PROMPT-03 — Ràng buộc bắt buộc trong prompt sinh phản hồi
 
 Prompt sinh phản hồi khách hàng **BẮT BUỘC** chứa đủ các ràng buộc sau:
@@ -605,7 +696,11 @@ Prompt sinh phản hồi khách hàng **BẮT BUỘC** chứa đủ các ràng b
 
 ---
 
+<a id="muc-8"></a>
+
 ## 8. CHÍNH SÁCH TRI THỨC VÀ TRUY HỒI (RAG)
+
+<a id="spec-rag-01"></a>
 
 ### SPEC-RAG-01 — Chunking
 
@@ -619,6 +714,8 @@ Prompt sinh phản hồi khách hàng **BẮT BUỘC** chứa đủ các ràng b
 
 **Lý do prepend tiêu đề:** chunk cắt giữa tài liệu thường mất ngữ cảnh chủ đề; prepend tiêu đề cải thiện Recall@5 đáng kể với chi phí gần như bằng không. Đây là thí nghiệm bắt buộc ở Lab 3.
 
+<a id="spec-rag-02"></a>
+
 ### SPEC-RAG-02 — Truy hồi
 
 | Tham số | Giá trị |
@@ -629,11 +726,15 @@ Prompt sinh phản hồi khách hàng **BẮT BUỘC** chứa đủ các ràng b
 | Lọc theo trạng thái | **BẮT BUỘC** loại chunk có `status = superseded` |
 | Viết lại truy vấn | **NÊN** — rút gọn ticket dài thành câu truy vấn trước khi tìm |
 
+<a id="spec-rag-03"></a>
+
 ### SPEC-RAG-03 — Quy tắc "không đủ căn cứ"
 
 **BẮT BUỘC:** Nếu sau truy hồi mà không có chunk nào vượt ngưỡng điểm, hệ thống **không được sinh phản hồi**. Ticket chuyển thẳng sang hàng đợi người xử lý với lý do `NO_KNOWLEDGE_MATCH`.
 
 Đây là ranh giới quan trọng nhất của cả hệ thống: một trợ lý CSKH bịa ra chính sách là rủi ro nghiệp vụ nghiêm trọng hơn nhiều so với một trợ lý im lặng.
+
+<a id="spec-rag-04"></a>
 
 ### SPEC-RAG-04 — Trích dẫn
 
@@ -645,11 +746,15 @@ Mọi phản hồi sinh ra **BẮT BUỘC** kèm danh sách nguồn dạng cấu
 ]
 ```
 
-Phản hồi không có trích dẫn bị guardrail đầu ra chặn (xem `SPEC-GUARD-02`).
+Phản hồi không có trích dẫn bị guardrail đầu ra chặn (xem [`SPEC-GUARD-02`](#spec-guard-02)).
 
 ---
 
+<a id="muc-9"></a>
+
 ## 9. CHÍNH SÁCH CÔNG CỤ (TOOL)
+
+<a id="spec-tool-01"></a>
 
 ### SPEC-TOOL-01 — Danh mục công cụ
 
@@ -661,6 +766,8 @@ Phản hồi không có trích dẫn bị guardrail đầu ra chặn (xem `SPEC-
 
 **BẮT BUỘC:** không công cụ nào kết nối hệ thống thật.
 
+<a id="spec-tool-02"></a>
+
 ### SPEC-TOOL-02 — Ràng buộc thực thi
 
 | # | Quy định |
@@ -670,6 +777,8 @@ Phản hồi không có trích dẫn bị guardrail đầu ra chặn (xem `SPEC-
 | 3 | Tối đa 3 lần gọi công cụ trên một ticket. |
 | 4 | Tham số **BẮT BUỘC** được validate bằng schema trước khi thực thi. |
 | 5 | Công cụ lỗi → ghi log, tiếp tục workflow với ghi chú "thiếu dữ liệu", không dừng hệ thống. |
+
+<a id="spec-tool-03"></a>
 
 ### SPEC-TOOL-03 — Đường dự phòng theo luật
 
@@ -685,7 +794,11 @@ Việc phải xây dựng đường dự phòng cho quyết định của AI là
 
 ---
 
+<a id="muc-10"></a>
+
 ## 10. CHÍNH SÁCH QUY TRÌNH VÀ CHUYỂN NGƯỜI
+
+<a id="spec-flow-01"></a>
 
 ### SPEC-FLOW-01 — Luồng chuẩn
 
@@ -702,6 +815,8 @@ Ticket vào
                     └─ Đạt ──> HÀNG ĐỢI DUYỆT ──> Người duyệt ──> Gửi
 ```
 
+<a id="spec-flow-02"></a>
+
 ### SPEC-FLOW-02 — Điều kiện chuyển người bắt buộc
 
 **BẮT BUỘC** chuyển người trong mọi trường hợp sau, không có ngoại lệ:
@@ -717,9 +832,13 @@ Ticket vào
 | `LLM_UNAVAILABLE` | Ngắt mạch đang mở |
 | `SCHEMA_FALLBACK` | Đầu ra có cấu trúc thất bại sau retry |
 
+<a id="spec-flow-03"></a>
+
 ### SPEC-FLOW-03 — Nguyên tắc bất biến
 
 > **BẮT BUỘC:** Không có đường dẫn nào trong hệ thống cho phép phản hồi tới khách hàng mà chưa qua thao tác duyệt của con người. Điều này áp dụng cho cả bản demo cuối khóa.
+
+<a id="spec-flow-04"></a>
 
 ### SPEC-FLOW-04 — Ghi nhận thao tác duyệt
 
@@ -741,7 +860,11 @@ Mỗi thao tác duyệt **BẮT BUỘC** ghi vào SQLite:
 
 ---
 
+<a id="muc-11"></a>
+
 ## 11. CHÍNH SÁCH GUARDRAILS
+
+<a id="spec-guard-01"></a>
 
 ### SPEC-GUARD-01 — Guardrail đầu vào
 
@@ -751,6 +874,8 @@ Mỗi thao tác duyệt **BẮT BUỘC** ghi vào SQLite:
 | 2 | Phát hiện và che PII (số CMND/CCCD, số thẻ, địa chỉ đầy đủ) | Che trước khi đưa vào prompt |
 | 3 | Phát hiện mẫu prompt injection ("bỏ qua hướng dẫn", "system prompt", "in ra toàn bộ...") | Chặn, `GUARDRAIL_BLOCK` |
 | 4 | Yêu cầu truy vấn thông tin của thuê bao khác | Chặn, `GUARDRAIL_BLOCK` |
+
+<a id="spec-guard-02"></a>
 
 ### SPEC-GUARD-02 — Guardrail đầu ra
 
@@ -763,13 +888,17 @@ Mỗi thao tác duyệt **BẮT BUỘC** ghi vào SQLite:
 | 5 | Không chứa nội dung xúc phạm, phân biệt đối xử | Chặn |
 | 6 | Không lặp lại nguyên văn nội dung prompt hệ thống | Chặn |
 
+<a id="spec-guard-03"></a>
+
 ### SPEC-GUARD-03 — Guardrail vận hành
 
-Timeout, giới hạn số lần gọi, ngắt mạch — xem `SPEC-LLM-05` và `SPEC-TOOL-02`.
+Timeout, giới hạn số lần gọi, ngắt mạch — xem [`SPEC-LLM-05`](#spec-llm-05) và [`SPEC-TOOL-02`](#spec-tool-02).
+
+<a id="spec-guard-04"></a>
 
 ### SPEC-GUARD-04 — Bộ kiểm thử đối kháng
 
-`tests/adversarial/` **BẮT BUỘC** chứa tối thiểu 12 ca, phủ đủ các nhóm:
+[`tests/adversarial/`](tests/adversarial/) **BẮT BUỘC** chứa tối thiểu 12 ca, phủ đủ các nhóm:
 
 | Nhóm | Số ca | Ví dụ |
 |---|---|---|
@@ -784,7 +913,11 @@ Timeout, giới hạn số lần gọi, ngắt mạch — xem `SPEC-LLM-05` và 
 
 ---
 
+<a id="muc-12"></a>
+
 ## 12. GIAO THỨC ĐÁNH GIÁ
+
+<a id="spec-eval-01"></a>
 
 ### SPEC-EVAL-01 — Bộ chỉ số bắt buộc
 
@@ -796,12 +929,16 @@ Timeout, giới hạn số lần gọi, ngắt mạch — xem `SPEC-LLM-05` và 
 | Vận hành | Độ trễ trung bình, p95; số lần gọi LLM/ticket; tỉ lệ cache hit; thông lượng ở các mức đồng thời 1/3/5/10; số ticket mỗi giờ | Từ log và kiểm thử tải |
 | An toàn | Tỉ lệ chuyển người đúng; kết quả bộ đối kháng | So với `meta.expected_action` |
 
+<a id="spec-eval-02"></a>
+
 ### SPEC-EVAL-02 — Quy trình chạy
 
 1. **BẮT BUỘC** chạy trên `gold_test.jsonl`, không chạy trên `train.jsonl`
-2. **BẮT BUỘC** ghi lại `run_manifest.json` cùng kết quả (xem `SPEC-EVAL-03`)
+2. **BẮT BUỘC** ghi lại `run_manifest.json` cùng kết quả (xem [`SPEC-EVAL-03`](#spec-eval-03))
 3. **BẮT BUỘC** kết quả lưu vào `eval/results/<timestamp>/`, không ghi đè lần chạy trước
 4. **NÊN** chạy nền từ đầu buổi học, phân tích kết quả ở nửa sau
+
+<a id="spec-eval-03"></a>
 
 ### SPEC-EVAL-03 — Manifest lần chạy
 
@@ -831,6 +968,8 @@ Bản sao dạng tệp vẫn được ghi kèm tại `eval/results/<timestamp>/r
 
 **Không có manifest thì kết quả đánh giá không có giá trị so sánh** — vì không biết con số đó thuộc về cấu hình nào.
 
+<a id="spec-eval-04"></a>
+
 ### SPEC-EVAL-04 — Quy tắc cải tiến
 
 Ở Lab 6, mọi cải tiến **BẮT BUỘC** báo cáo theo bảng:
@@ -842,7 +981,11 @@ Chỉ được thay đổi **một biến tại một thời điểm**. Thay hai
 
 ---
 
+<a id="muc-13"></a>
+
 ## 13. LOGGING VÀ TRUY VẾT
+
+<a id="spec-log-01"></a>
 
 ### SPEC-LOG-01 — Lược đồ log
 
@@ -868,11 +1011,15 @@ Mỗi request sinh ra một `trace_id` (UUID), gắn xuyên suốt mọi bước
 }
 ```
 
+<a id="spec-log-02"></a>
+
 ### SPEC-LOG-02 — Yêu cầu truy vết
 
 > **Tiêu chí nghiệm thu:** cho một `ticket_id` bất kỳ, phải tái dựng được đầy đủ: đã dùng prompt phiên bản nào, truy hồi ra những chunk nào với điểm bao nhiêu, gọi công cụ gì với tham số gì, guardrail nào kích hoạt, và người duyệt đã làm gì.
 
 Nếu không đáp ứng tiêu chí này, hệ thống chưa đạt "production-ready" ở Lab 5.
+
+<a id="spec-log-03"></a>
 
 ### SPEC-LOG-03 — Quy định bảo mật log
 
@@ -880,17 +1027,23 @@ Nếu không đáp ứng tiêu chí này, hệ thống chưa đạt "production-
 
 ---
 
+<a id="muc-14"></a>
+
 ## 14. MA TRẬN TRUY VẾT
+
+<a id="spec-trace-01"></a>
 
 ### SPEC-TRACE-01 — Yêu cầu đầu ra của môn học ↔ Sản phẩm
 
 | # | Yêu cầu đầu ra (theo đề cương) | Session | Deliverable | Artifact trong repo | Bằng chứng nghiệm thu |
 |---|---|---|---|---|---|
 | YC1 | Phân tích bài toán và xác định cơ hội ứng dụng AI | 1 | AI Opportunity Canvas | `docs/canvas.md` | Canvas đủ 7 ô, chỉ số đo được bằng số |
-| YC2 | Thiết kế AI Architecture cho bài toán doanh nghiệp | 2 | AI Solution Blueprint | `docs/blueprint.md`, `docs/adr/` | Sơ đồ 5 tầng + bảng quyết định có lý do |
-| YC3 | Thiết kế AI Workflow (Prompt, Context, Knowledge, Tool) | 3, 4 | Context Specification, AI Prototype v1 | `docs/context_spec.md`, `src/agent/` | Bảng thí nghiệm RAG có số đo; workflow chạy end-to-end |
-| YC4 | Phát triển AI Application dựa trên Starter Kit | 3, 4, 5 | Prototype hoạt động | `src/` | `docker compose up` chạy được từ máy sạch |
-| YC5 | Đánh giá và triển khai AI Application Prototype | 5, 6 | Production-ready Prototype, Final Application | `docs/EVALUATION.md`, `eval/results/` | Đủ 5 nhóm chỉ số + phân tích lỗi + 12/12 ca đối kháng |
+| YC2 | Thiết kế AI Architecture cho bài toán doanh nghiệp | 2 | AI Solution Blueprint | `docs/blueprint.md`, [`docs/adr/`](docs/adr/) | Sơ đồ 5 tầng + bảng quyết định có lý do |
+| YC3 | Thiết kế AI Workflow (Prompt, Context, Knowledge, Tool) | 3, 4 | Context Specification, AI Prototype v1 | [`docs/context_spec.md`](docs/context_spec.md), [`src/agent/`](src/agent/) | Bảng thí nghiệm RAG có số đo; workflow chạy end-to-end |
+| YC4 | Phát triển AI Application dựa trên Starter Kit | 3, 4, 5 | Prototype hoạt động | [`src/`](src/) | `docker compose up` chạy được từ máy sạch |
+| YC5 | Đánh giá và triển khai AI Application Prototype | 5, 6 | Production-ready Prototype, Final Application | [`docs/EVALUATION.md`](docs/EVALUATION.md), `eval/results/` | Đủ 5 nhóm chỉ số + phân tích lỗi + 12/12 ca đối kháng |
+
+<a id="spec-trace-02"></a>
 
 ### SPEC-TRACE-02 — Yêu cầu đầu ra theo từng Module ↔ Hoạt động ↔ Bằng chứng
 
@@ -903,7 +1056,7 @@ Nếu không đáp ứng tiêu chí này, hệ thống chưa đạt "production-
 | M1-1 | Xác định được bài toán phù hợp để ứng dụng AI | Lab 1 bước 2: chấm điểm 4 tiêu chí cho từng bước nghiệp vụ | Bảng chấm điểm có lý do cho mỗi điểm số |
 | M1-2 | Phân tích được giá trị và phạm vi của AI trong hệ thống | Lab 1 bước 3: ô "Chỉ số thành công" và ô "Phạm vi MVP" trong Canvas | ≥ 2 chỉ số định lượng; phần "KHÔNG làm" ≥ 4 mục |
 | M1-3 | Thiết kế được kiến trúc tổng thể của AI Application | Lab 2 bước 3: vẽ Blueprint 5 tầng | Sơ đồ đủ 5 tầng, mỗi thành phần có đầu vào/đầu ra/phương án dự phòng |
-| M1-4 | Lựa chọn được các thành phần AI phù hợp | Lab 2 bước 2 (thí nghiệm so sánh model) + bảng quyết định thiết kế | Bảng so sánh cấu hình có số đo; `docs/adr/` có ≥ 5 ADR |
+| M1-4 | Lựa chọn được các thành phần AI phù hợp | Lab 2 bước 2 (thí nghiệm so sánh model) + bảng quyết định thiết kế | Bảng so sánh cấu hình có số đo; [`docs/adr/`](docs/adr/) có ≥ 5 ADR |
 
 **Module 2 — Phát triển ứng dụng AI (Session 3, 4)**
 
@@ -927,6 +1080,8 @@ Nếu không đáp ứng tiêu chí này, hệ thống chưa đạt "production-
 |---|---|---|---|
 | M4-1 | Hoàn thiện một AI Application Prototype | Lab 6 bước 1: sprint cải tiến có đo lường | Bảng 2 cải tiến với chỉ số trước–sau |
 | M4-2 | Trình bày được kiến trúc, quy trình xử lý và phương án triển khai | Lab 6 bước 2, 3 | Demo 4 kịch bản + slide + trả lời phản biện |
+
+<a id="spec-trace-03"></a>
 
 ### SPEC-TRACE-03 — Đối chiếu từng gạch đầu dòng của đề cương
 
@@ -1007,8 +1162,10 @@ Bảng này dùng để kiểm tra độ phủ. Mọi mục "Nội dung" và "Wo
 | Trình bày kiến trúc và các quyết định thiết kế | Nội dung | Lý thuyết, 15 phút |
 | Hoàn thiện sản phẩm | Workshop | Lab 6 bước 1 — sprint 2 cải tiến có đo lường |
 | Demo | Workshop | Lab 6 bước 2 (chuẩn bị) và bước 3 (trình diễn) |
-| Báo cáo | Workshop | Lab 6 — slide 10 trang, `README.md`, bảng cải tiến trước–sau |
+| Báo cáo | Workshop | Lab 6 — slide 10 trang, [`README.md`](README.md), bảng cải tiến trước–sau |
 | Phản biện | Workshop | Lab 6 bước 3, dùng ngân hàng câu hỏi phản biện |
+
+<a id="spec-trace-04"></a>
 
 ### SPEC-TRACE-04 — Điều kiện hoàn thành (Definition of Done) từng lab
 
@@ -1016,7 +1173,7 @@ Bảng này dùng để kiểm tra độ phủ. Mọi mục "Nội dung" và "Wo
 |---|---|
 | 0 | `uv sync` thành công; `check_env.py` trả PASS toàn bộ; `pre-commit` đã cài; nộp ảnh chụp màn hình |
 | 1 | `docs/canvas.md` đủ 7 ô; ≥ 2 chỉ số định lượng kèm ước lượng ROI và điểm hòa vốn; phần "KHÔNG làm" ≥ 4 mục |
-| 2 | Sơ đồ 5 tầng; ≥ 5 ADR trong `docs/adr/`; `Modelfile` ghim tham số; CI giai đoạn lint chạy xanh; UI chạy được với dữ liệu giả |
+| 2 | Sơ đồ 5 tầng; ≥ 5 ADR trong [`docs/adr/`](docs/adr/); `Modelfile` ghim tham số; CI giai đoạn lint chạy xanh; UI chạy được với dữ liệu giả |
 | 3 | `pytest tests/test_lab3.py` xanh trên CI; index dựng được; ≥ 2 thí nghiệm RAG có số đo; ≥ 2 phiên bản prompt so sánh bằng `promptfoo`; nộp qua pull request đã được nhóm khác duyệt |
 | 4 | Chạy end-to-end trên 5 ticket; ≥ 4 điều kiện escalate hoạt động; màn hình duyệt ghi được log; CI vẫn xanh |
 | 5 | `docker compose up` từ máy sạch; API bất đồng bộ hoạt động; đủ 5 nhóm chỉ số ghi vào MLflow; 12/12 ca đối kháng đạt; cổng chất lượng CI hoạt động; truy vết được 1 ticket bất kỳ; có bảng năng lực phục vụ ở 4 mức đồng thời |
@@ -1024,7 +1181,11 @@ Bảng này dùng để kiểm tra độ phủ. Mọi mục "Nội dung" và "Wo
 
 ---
 
+<a id="muc-15"></a>
+
 ## 15. TRÁCH NHIỆM VÀ BÀN GIAO
+
+<a id="spec-resp-01"></a>
 
 ### SPEC-RESP-01 — Kiểm tra thiên lệch
 
@@ -1041,9 +1202,11 @@ Bảng này dùng để kiểm tra độ phủ. Mọi mục "Nội dung" và "Wo
 
 > Với một trợ lý phục vụ khách hàng thật, đây không phải bài tập hình thức. Nếu hệ thống phục vụ kém hơn với khách hàng lớn tuổi viết sai chính tả, đó là một vấn đề nghiệp vụ chứ không phải một con số thống kê.
 
+<a id="spec-resp-02"></a>
+
 ### SPEC-RESP-02 — Model Card
 
-`docs/MODEL_CARD.md` **BẮT BUỘC** có đủ các phần:
+[`docs/MODEL_CARD.md`](docs/MODEL_CARD.md) **BẮT BUỘC** có đủ các phần:
 
 | Phần | Nội dung |
 |---|---|
@@ -1052,10 +1215,12 @@ Bảng này dùng để kiểm tra độ phủ. Mọi mục "Nội dung" và "Wo
 | Ngoài phạm vi | Những gì hệ thống không được dùng để làm |
 | Dữ liệu | Nguồn dữ liệu, quy mô, cách sinh, các hạn chế đã biết |
 | Kết quả đánh giá | Năm nhóm chỉ số, kèm cấu hình đã dùng |
-| Kiểm tra thiên lệch | Kết quả theo bốn lát cắt tại `SPEC-RESP-01` |
+| Kiểm tra thiên lệch | Kết quả theo bốn lát cắt tại [`SPEC-RESP-01`](#spec-resp-01) |
 | Giới hạn đã biết | Tối thiểu 3 giới hạn cụ thể rút từ phân tích lỗi |
 | Rủi ro và biện pháp | Rủi ro nghiệp vụ và guardrail tương ứng |
 | Điều kiện vận hành | Năng lực phục vụ, ngưỡng cảnh báo, khi nào cần đánh giá lại |
+
+<a id="spec-resp-03"></a>
 
 ### SPEC-RESP-03 — Phát hiện suy giảm chất lượng
 
@@ -1068,9 +1233,11 @@ Hệ thống không huấn luyện mô hình nên không có trôi dữ liệu t
 | Suy giảm chất lượng sinh | Phản hồi kém đi dù chỉ số tự động không đổi | **Tỉ lệ sửa và tỉ lệ từ chối của người duyệt** |
 | Thay đổi hạ tầng | Đổi phiên bản model hoặc tham số | Chạy lại bộ đánh giá, so sánh trên MLflow |
 
-**Tín hiệu quan trọng nhất là dòng thứ ba.** Tỉ lệ sửa của người duyệt là phép đo chất lượng đáng tin nhất mà hệ thống có, và nó được ghi sẵn từ `SPEC-FLOW-04` mà không tốn thêm hạ tầng gì.
+**Tín hiệu quan trọng nhất là dòng thứ ba.** Tỉ lệ sửa của người duyệt là phép đo chất lượng đáng tin nhất mà hệ thống có, và nó được ghi sẵn từ [`SPEC-FLOW-04`](#spec-flow-04) mà không tốn thêm hạ tầng gì.
 
 **Ngưỡng cảnh báo mặc định:** tỉ lệ từ chối vượt 15% hoặc tỉ lệ sửa vượt 40% trong một tuần thì cần rà soát prompt và kho tri thức.
+
+<a id="spec-resp-04"></a>
 
 ### SPEC-RESP-04 — Gói bàn giao
 
@@ -1078,15 +1245,17 @@ Hệ thống không huấn luyện mô hình nên không có trôi dữ liệu t
 
 | Tài liệu | Nội dung tối thiểu |
 |---|---|
-| `README.md` | Dựng lại hệ thống từ máy trắng |
+| [`README.md`](README.md) | Dựng lại hệ thống từ máy trắng |
 | `RUNBOOK.md` | Khởi động, dừng, kiểm tra sức khỏe, xem nhật ký, sao lưu |
 | `INCIDENTS.md` | Quy trình xử lý tối thiểu 3 sự cố: dịch vụ mô hình không phản hồi, hàng đợi ứ đọng, chất lượng phản hồi tụt |
-| `MODEL_CARD.md` | Theo `SPEC-RESP-02` |
+| `MODEL_CARD.md` | Theo [`SPEC-RESP-02`](#spec-resp-02) |
 | `RESPONSIBILITIES.md` | Phân định việc nào thuộc đơn vị phát triển, việc nào thuộc đơn vị vận hành |
 
 > Bàn giao thiếu sổ tay vận hành là nguyên nhân phổ biến nhất khiến sản phẩm chết sau nghiệm thu: đơn vị tiếp nhận không biết xử lý sự cố đầu tiên, và hệ thống bị bỏ.
 
 ---
+
+<a id="muc-16"></a>
 
 ## 16. RỦI RO VÀ PHƯƠNG ÁN DỰ PHÒNG
 
@@ -1096,71 +1265,77 @@ Hệ thống không huấn luyện mô hình nên không có trôi dữ liệu t
 | R2 | Mạng lớp học tới server chập chờn | Trung bình | Gián đoạn thực hành | Kiểm chứng đường truyền trước khóa; chế độ chỉ dùng cache cho phần lớn thao tác lặp lại |
 | R3 | Nhóm tụt lại, không làm được lab sau | Cao | Đứt chuỗi deliverable | Nhánh `solution/session-N` |
 | R4 | Docker lỗi trên Windows | Trung bình | Không hoàn thành Lab 5 | Chạy trực tiếp `uvicorn` + `streamlit`; chấm Docker qua cấu hình đã viết |
-| R5 | Chênh lệch trình độ quá lớn | Cao | Nhóm mạnh chán, nhóm yếu nản | Ghép cặp DS/AI + CNTT, luân phiên driver/navigator 30 phút; `CHALLENGE.md` cho nhóm xong sớm |
+| R5 | Chênh lệch trình độ quá lớn | Cao | Nhóm mạnh chán, nhóm yếu nản | Ghép cặp DS/AI + CNTT, luân phiên driver/navigator 30 phút; [`CHALLENGE.md`](CHALLENGE.md) cho nhóm xong sớm |
 | R6 | Demo cuối khóa chạy chậm bất thường | Trung bình | Hỏng buổi trình bày | Video dự phòng + cache dựng sẵn |
 | R7 | Model chất lượng thấp làm học viên mất niềm tin | Thấp (giảm từ Trung bình sau v1.6 — cả hai cấu hình nay cùng Qwen3-8B) | Kết luận sai về công nghệ | Nói rõ ngay Session 2: các bài Lab 3/4 cố ý ép model gặp ca khó để dạy lớp phòng vệ, không phải model kém |
-| R8 | Học viên đưa dữ liệu thật vào repo | Thấp | Rủi ro bảo mật | Chặn tự động bằng `pre-commit` (`detect-secrets` + luật quét PII), xem `SPEC-TOOLING-03` |
-| R17 | vLLM (cấu hình S) không tự tách thinking-mode của Qwen3 như Ollama — nếu thiếu cờ `--reasoning-parser qwen3`, `<think>` lọt vào content và phá lớp kiểm định JSON | Trung bình, đã có cách khắc phục cụ thể (xem `scripts/run_vllm_local.sh`) | Mọi ticket ở cấu hình S rơi vào fallback needs_human dù model trả lời đúng bên trong | **ĐÃ XÁC MINH một phần (2026-09-23, qua Ollama + qwen3:1.7b, xem Mục 17 v1.6):** Ollama tự tách sạch, không cần sửa gì. **CHƯA xác minh trên vLLM thật** (không có GPU khi kiểm tra) — nhóm nào triển khai `CHALLENGE.md` mục 5.4 BẮT BUỘC bật `--reasoning-parser qwen3` và kiểm tra lại bằng đúng `extract_json()`/`validate()` trước khi tin kết quả |
+| R8 | Học viên đưa dữ liệu thật vào repo | Thấp | Rủi ro bảo mật | Chặn tự động bằng `pre-commit` (`detect-secrets` + luật quét PII), xem [`SPEC-TOOLING-03`](#spec-tooling-03) |
+| R17 | vLLM (cấu hình S) không tự tách thinking-mode của Qwen3 như Ollama — nếu thiếu cờ `--reasoning-parser qwen3`, `<think>` lọt vào content và phá lớp kiểm định JSON | Trung bình, đã có cách khắc phục cụ thể (xem [`scripts/run_vllm_local.sh`](scripts/run_vllm_local.sh)) | Mọi ticket ở cấu hình S rơi vào fallback needs_human dù model trả lời đúng bên trong | **ĐÃ XÁC MINH một phần (2026-09-23, qua Ollama + qwen3:1.7b, xem [Mục 17](#muc-17) v1.6):** Ollama tự tách sạch, không cần sửa gì. **CHƯA xác minh trên vLLM thật** (không có GPU khi kiểm tra) — nhóm nào triển khai [`CHALLENGE.md`](CHALLENGE.md) mục 5.4 BẮT BUỘC bật `--reasoning-parser qwen3` và kiểm tra lại bằng đúng `extract_json()`/`validate()` trước khi tin kết quả |
 | R9 | Lớp học không có mạng để chạy CI trên GitHub | Trung bình | Không thực hành được cổng chất lượng | Chạy `act` hoặc script CI local; nội dung giảng dạy không đổi vì cache khiến eval tất định |
-| R10 | Học viên dùng trợ lý AI sinh mã mà không hiểu | Cao | Không đạt yêu cầu đầu ra về thiết kế | Phần phản biện Session 6 kiểm tra khả năng giải thích; ADR và quyết định thiết kế bắt buộc do học viên tự quyết, xem `SPEC-TOOLING-07` |
+| R10 | Học viên dùng trợ lý AI sinh mã mà không hiểu | Cao | Không đạt yêu cầu đầu ra về thiết kế | Phần phản biện Session 6 kiểm tra khả năng giải thích; ADR và quyết định thiết kế bắt buộc do học viên tự quyết, xem [`SPEC-TOOLING-07`](#spec-tooling-07) |
 | R11 | Kiểm thử tải làm treo máy học viên | Trung bình | Mất bước 5 của Lab 5 | Giới hạn mức đồng thời tối đa ở 5; mục tiêu là quan sát quy luật suy giảm, không phải tìm giới hạn tuyệt đối |
 | R12 | Năng lực phục vụ thực tế thấp hơn giả định trong Canvas | Cao | Học viên hụt hẫng | Đây là **kết quả học tập mong muốn**, không phải thất bại. Ghi vào Model Card như giới hạn đã biết và thảo luận phương án hạ tầng ở Session 6 |
 | R13 | Cache lẫn giữa hai cấu hình làm hỏng số liệu | Cao | Kết luận đánh giá sai | `base_url` và `model` nằm trong khóa cache; `config_profile` bắt buộc trong mọi manifest và log; CI chỉ chấp nhận cache tham chiếu |
 | R14 | 30 học viên cùng chạy kiểm thử tải làm nghẽn server | Cao | Số đo Lab 5 vô nghĩa | Chia khung giờ riêng 5 phút cho từng nhóm; phép đo đường nền chạy cục bộ nên không phụ thuộc server |
-| R15 | **Server GPU không đủ năng lực cho 30 người, phát hiện muộn** | Cao | Phải hạ chuẩn giữa khóa, mất uy tín và mất thời gian | `SPEC-INFRA-02` bắt buộc đo năng lực trước khóa 1 tuần và chọn cấu hình dựa trên số liệu; khi phân vân thì chọn cấu hình L |
+| R15 | **Server GPU không đủ năng lực cho 30 người, phát hiện muộn** | Cao | Phải hạ chuẩn giữa khóa, mất uy tín và mất thời gian | [`SPEC-INFRA-02`](#spec-infra-02) bắt buộc đo năng lực trước khóa 1 tuần và chọn cấu hình dựa trên số liệu; khi phân vân thì chọn cấu hình L |
 | R16 | GPU dùng chung với tải sản xuất khác, năng lực dao động | Trung bình | Số đo không ổn định giữa các buổi | Đặt hạn mức riêng qua LiteLLM proxy; nếu không đặt được thì chọn cấu hình L làm tham chiếu |
 
 ---
+
+<a id="muc-17"></a>
 
 ## 17. NHẬT KÝ THAY ĐỔI
 
 | Phiên bản | Ngày | Người thay đổi | Nội dung | Lý do |
 |---|---|---|---|---|
 | v1.0 | 2026-08-25 | — | Bản khởi tạo | Thiết lập ràng buộc ban đầu cho khóa học |
-| v1.7 | 2026-09-23 | — | **Kiểm chứng thật một phần rủi ro R17 (thinking-mode Qwen3).** Cài Ollama 0.34.3 + pull `qwen3:1.7b` (bản nhỏ cùng họ, dùng để kiểm chứng cơ chế — không đại diện accuracy của `qwen3:8b` thật) trên máy không có GPU rời, chạy `uv sync` đầy đủ, gọi thẳng endpoint `/v1/chat/completions` bằng đúng prompt thật (`classify.v1.md` + `schema_hint()` + `SYSTEM` của `classifier.py`), rồi xác nhận qua đúng `extract_json()`/`validate()`/`parse_with_retry()` của `src/llm/schema.py`. **Kết quả:** Ollama tự tách khối suy luận ra field `message.reasoning` riêng, `message.content` luôn sạch — không ca nào hỏng vì thinking-mode, ở cả nhiệt độ 0 (classify) và 0.3 (generate). Gỡ chỉ dẫn `/no_think` khỏi `models/Modelfile` (đã xác nhận vô tác dụng — Ollama không đọc nó như token điều khiển, chỉ tốn thêm ~50% completion token cho suy luận ẩn không hiển thị). Chạy thật `pytest -m lab2` (7/7 pass) và `compare_models.py --tickets 3` qua model cục bộ: 1/3 ca cần lớp 3 (retry) mới đúng, 2/3 rơi fallback đúng cách — xác nhận pipeline 4 lớp phòng vệ chạy trơn tru end-to-end, không lỗi hệ thống. Khởi động thử `streamlit run src/ui/app.py` — boot thành công (HTTP 200), tắt ngay sau khi xác nhận. **CHƯA kiểm chứng:** hành vi tương đương trên vLLM/cấu hình S (thêm cờ `--reasoning-parser qwen3` vào `scripts/run_vllm_local.sh` dựa trên suy luận kỹ thuật, chưa chạy thật vì không có GPU); accuracy thật của `qwen3:8b` đầy đủ (test dùng bản 1.7B nhỏ hơn nhiều); độ trễ trên phần cứng RTX 5080 thật (đo trên Apple M4 cho ra ~18-19 giây/ticket, không đại diện) | Trả lời trực tiếp yêu cầu kiểm chứng của người phụ trách khóa trước khi tin buổi học sẽ trôi chảy; máy có sẵn Homebrew nhưng bottle qua ghcr.io bị nghẽn mạng nặng trong môi trường này nên chuyển sang tải thẳng bản Ollama chính thức từ GitHub Releases |
-| v1.6 | 2026-09-19 | — | Đổi model sinh văn bản mặc định của **cả hai cấu hình** từ `qwen2.5:3b-instruct` (L) / `Qwen2.5-7B-Instruct` (S) sang **`Qwen3-8B`** dùng chung (khác nhau ở backend: Ollama cho L, vLLM cho S — không còn khác nhau ở kích cỡ model). Đã cập nhật: `.env.example`, `models/Modelfile` (kèm cảnh báo thinking-mode của Qwen3 cần kiểm chứng thật), `docker-compose.yml`, `src/config.py`, các script setup/so sánh, và nhãn "3B/7B" trong `README.md`, `SETUP.md`, `labs/LAB-0.md`, `CHALLENGE.md` mục 5.4, `tai-lieu-bien-soan/workbooks/WORKBOOK-2.md`. **CHƯA LÀM** (cần GPU thật, ngoài khả năng chỉnh sửa văn bản): sinh lại `.cache/llm_cache.db` bằng `warm_cache.py` trên Qwen3-8B thật; đo lại toàn bộ ngưỡng `SPEC-SCOPE-03` (Mục 1, bảng ở dòng ~69) và ngưỡng CI ở `.github/workflows/ci.yml`; xác nhận thinking-mode của Qwen3 tắt được sạch qua Ollama; pilot Lab 3/4 để xem model có còn tự nhiên tạo ra JSON sai định dạng / gọi công cụ sai tham số hay không — xem rủi ro mới R17 (xem thêm v1.7). Thêm R17 | Yêu cầu trực tiếp từ đơn vị tổ chức khóa học, sau khi đánh giá Qwen2.5 (3B lẫn 7B) có hỗ trợ tiếng Việt nhưng ở mức trung bình, đặc biệt ở tác vụ sinh văn bản tự do của model nhỏ. Chọn hợp nhất về một model cho cả hai cấu hình theo lựa chọn tường minh của đơn vị tổ chức, chấp nhận đánh đổi: bài so sánh 3B/7B ở Lab 2 bước 2 mất trục "kích cỡ model", chỉ còn trục "hạ tầng" |
-| v1.5 | 2026-09-19 | — | Xác nhận hạ tầng phòng Lab AI thật: 8 AI Workstation độc lập (i9-14900K, 64GB RAM, 1× RTX 5080 16GB, 2TB NVMe), mạng 10GbE nội bộ, 500Mbps Internet. **Quyết định: 1 nhóm = 1 workstation, không cluster hóa 8 GPU thành một server dùng chung.** Kiến trúc suy luận mặc định của mỗi workstation vẫn là cấu hình L (Ollama, `qwen2.5:3b-instruct`) theo ADR-0001 — mỗi máy phục vụ đúng một nhóm nên lợi ích gộp lô liên tục của vLLM không phát huy, trong khi tính cách ly lỗi (không điểm hỏng chung) vẫn quan trọng như cũ. **Không bổ sung fine-tuning** — giữ nguyên `SPEC-SCOPE-02`. Bổ sung nội dung nâng cao TÙY CHỌN ở Session 5 (`CHALLENGE.md` mục 5.4): triển khai vLLM thật trên GPU của nhóm, tận dụng phần VRAM dư (~13GB/16GB chưa dùng ở cấu hình mặc định) mà không đổi cấu hình mặc định của lớp | Đã có số liệu phần cứng thật của phòng Lab, không còn phải áp dụng `SPEC-INFRA-02` bằng phỏng đoán. GPU 16GB/máy dư sức chạy model lớn hơn 3B, nhưng vì mỗi máy chỉ phục vụ một nhóm (đồng thời ~1-2), giá trị chính của vLLM so với Ollama không phải continuous batching mà là tốc độ suy luận thô — đưa vào như bài tập nâng cao thay vì đổi mặc định, để không phải hiệu chuẩn lại toàn bộ `SPEC-SCOPE-03` và cache/index đã đóng băng |
-| v1.4 | 2026-08-25 | — | Hai cấu hình S và L trở thành ngang hàng thay vì một chính một dự phòng. Bổ sung `SPEC-INFRA-02` — quy trình đo năng lực server và bảng quyết định chọn cấu hình tham chiếu trước khóa. Ngưỡng thành công tách thành hai bộ theo cấu hình. Model embedding `bge-m3` dùng chung ở cả hai cấu hình để index luôn tương thích. Thêm R15, R16 | Chưa xác định được năng lực GPU của server dùng chung; thiết kế phải trung lập với hạ tầng và quyết định bằng phép đo thay vì phỏng đoán |
-| v1.3 | 2026-08-25 | — | Chuyển sang hạ tầng server dùng chung có GPU: vLLM làm mặc định, Ollama local thành cấu hình suy giảm. Viết lại toàn bộ Mục 2 (`SPEC-INFRA-01..07`). Bổ sung khái niệm cấu hình tham chiếu và trường `config_profile`. Khóa cứng model embedding `bge-m3`. Ngân sách tính toán chuyển từ ép bằng phần cứng sang ép bằng kiểm thử. Lab 5 đo trên cả hai cấu hình. Viết lại R1, R2; thêm R13, R14 | Đơn vị đã có server dùng chung có GPU; cấu hình cũ dựa trên CPU không còn phản ánh điều kiện triển khai thực tế |
-| v1.2 | 2026-08-25 | — | Bổ sung Mục 15 — Trách nhiệm và bàn giao (`SPEC-RESP-01..04`). Bổ sung `SPEC-INFRA-04` về năng lực phục vụ và đồng thời. API chuyển sang bất đồng bộ bắt buộc (`SPEC-ARCH-02` mục 5, 6). Nộp bài qua pull request có review. Chuẩn viết mã PEP 8 và type hints. Thêm rủi ro R11, R12 | Bổ sung theo rà soát đối chiếu với chương trình MLOps: thiếu nội dung triển khai đa người dùng, Responsible AI, phát hiện suy giảm chất lượng và bàn giao vận hành |
-| v1.1 | 2026-08-25 | — | Bổ sung Mục 4 — Công cụ và quy trình kỹ thuật (`SPEC-TOOLING-01..07`). Chuyển `DECISIONS.md` thành ADR có cấu trúc. Chuyển manifest đánh giá sang MLflow. Bổ sung CI có cổng chất lượng, `uv`, `pre-commit`, `promptfoo`. Thêm rủi ro R9, R10 | Chuỗi bài thực hành mới dừng ở mức công cụ nền tảng, chưa phản ánh thực hành kỹ thuật hiện đại trong quản lý dự án AI |
+| v1.7 | 2026-09-23 | — | **Kiểm chứng thật một phần rủi ro R17 (thinking-mode Qwen3).** Cài Ollama 0.34.3 + pull `qwen3:1.7b` (bản nhỏ cùng họ, dùng để kiểm chứng cơ chế — không đại diện accuracy của `qwen3:8b` thật) trên máy không có GPU rời, chạy `uv sync` đầy đủ, gọi thẳng endpoint `/v1/chat/completions` bằng đúng prompt thật (`classify.v1.md` + `schema_hint()` + `SYSTEM` của `classifier.py`), rồi xác nhận qua đúng `extract_json()`/`validate()`/`parse_with_retry()` của [`src/llm/schema.py`](src/llm/schema.py). **Kết quả:** Ollama tự tách khối suy luận ra field `message.reasoning` riêng, `message.content` luôn sạch — không ca nào hỏng vì thinking-mode, ở cả nhiệt độ 0 (classify) và 0.3 (generate). Gỡ chỉ dẫn `/no_think` khỏi `models/Modelfile` (đã xác nhận vô tác dụng — Ollama không đọc nó như token điều khiển, chỉ tốn thêm ~50% completion token cho suy luận ẩn không hiển thị). Chạy thật `pytest -m lab2` (7/7 pass) và `compare_models.py --tickets 3` qua model cục bộ: 1/3 ca cần lớp 3 (retry) mới đúng, 2/3 rơi fallback đúng cách — xác nhận pipeline 4 lớp phòng vệ chạy trơn tru end-to-end, không lỗi hệ thống. Khởi động thử `streamlit run src/ui/app.py` — boot thành công (HTTP 200), tắt ngay sau khi xác nhận. **CHƯA kiểm chứng:** hành vi tương đương trên vLLM/cấu hình S (thêm cờ `--reasoning-parser qwen3` vào [`scripts/run_vllm_local.sh`](scripts/run_vllm_local.sh) dựa trên suy luận kỹ thuật, chưa chạy thật vì không có GPU); accuracy thật của `qwen3:8b` đầy đủ (test dùng bản 1.7B nhỏ hơn nhiều); độ trễ trên phần cứng RTX 5080 thật (đo trên Apple M4 cho ra ~18-19 giây/ticket, không đại diện) | Trả lời trực tiếp yêu cầu kiểm chứng của người phụ trách khóa trước khi tin buổi học sẽ trôi chảy; máy có sẵn Homebrew nhưng bottle qua ghcr.io bị nghẽn mạng nặng trong môi trường này nên chuyển sang tải thẳng bản Ollama chính thức từ GitHub Releases |
+| v1.6 | 2026-09-19 | — | Đổi model sinh văn bản mặc định của **cả hai cấu hình** từ `qwen2.5:3b-instruct` (L) / `Qwen2.5-7B-Instruct` (S) sang **`Qwen3-8B`** dùng chung (khác nhau ở backend: Ollama cho L, vLLM cho S — không còn khác nhau ở kích cỡ model). Đã cập nhật: [`.env.example`](.env.example), `models/Modelfile` (kèm cảnh báo thinking-mode của Qwen3 cần kiểm chứng thật), [`docker-compose.yml`](docker-compose.yml), [`src/config.py`](src/config.py), các script setup/so sánh, và nhãn "3B/7B" trong [`README.md`](README.md), [`SETUP.md`](SETUP.md), [`labs/LAB-0.md`](labs/LAB-0.md), [`CHALLENGE.md`](CHALLENGE.md) mục 5.4, `tai-lieu-bien-soan/workbooks/WORKBOOK-2.md`. **CHƯA LÀM** (cần GPU thật, ngoài khả năng chỉnh sửa văn bản): sinh lại `.cache/llm_cache.db` bằng `warm_cache.py` trên Qwen3-8B thật; đo lại toàn bộ ngưỡng [`SPEC-SCOPE-03`](#spec-scope-03) ([Mục 1](#muc-1), bảng ở dòng ~69) và ngưỡng CI ở `.github/workflows/ci.yml`; xác nhận thinking-mode của Qwen3 tắt được sạch qua Ollama; pilot Lab 3/4 để xem model có còn tự nhiên tạo ra JSON sai định dạng / gọi công cụ sai tham số hay không — xem rủi ro mới R17 (xem thêm v1.7). Thêm R17 | Yêu cầu trực tiếp từ đơn vị tổ chức khóa học, sau khi đánh giá Qwen2.5 (3B lẫn 7B) có hỗ trợ tiếng Việt nhưng ở mức trung bình, đặc biệt ở tác vụ sinh văn bản tự do của model nhỏ. Chọn hợp nhất về một model cho cả hai cấu hình theo lựa chọn tường minh của đơn vị tổ chức, chấp nhận đánh đổi: bài so sánh 3B/7B ở Lab 2 bước 2 mất trục "kích cỡ model", chỉ còn trục "hạ tầng" |
+| v1.5 | 2026-09-19 | — | Xác nhận hạ tầng phòng Lab AI thật: 8 AI Workstation độc lập (i9-14900K, 64GB RAM, 1× RTX 5080 16GB, 2TB NVMe), mạng 10GbE nội bộ, 500Mbps Internet. **Quyết định: 1 nhóm = 1 workstation, không cluster hóa 8 GPU thành một server dùng chung.** Kiến trúc suy luận mặc định của mỗi workstation vẫn là cấu hình L (Ollama, `qwen2.5:3b-instruct`) theo [ADR-0001](docs/adr/0001-hai-cau-hinh-ngang-hang.md) — mỗi máy phục vụ đúng một nhóm nên lợi ích gộp lô liên tục của vLLM không phát huy, trong khi tính cách ly lỗi (không điểm hỏng chung) vẫn quan trọng như cũ. **Không bổ sung fine-tuning** — giữ nguyên [`SPEC-SCOPE-02`](#spec-scope-02). Bổ sung nội dung nâng cao TÙY CHỌN ở Session 5 ([`CHALLENGE.md`](CHALLENGE.md) mục 5.4): triển khai vLLM thật trên GPU của nhóm, tận dụng phần VRAM dư (~13GB/16GB chưa dùng ở cấu hình mặc định) mà không đổi cấu hình mặc định của lớp | Đã có số liệu phần cứng thật của phòng Lab, không còn phải áp dụng [`SPEC-INFRA-02`](#spec-infra-02) bằng phỏng đoán. GPU 16GB/máy dư sức chạy model lớn hơn 3B, nhưng vì mỗi máy chỉ phục vụ một nhóm (đồng thời ~1-2), giá trị chính của vLLM so với Ollama không phải continuous batching mà là tốc độ suy luận thô — đưa vào như bài tập nâng cao thay vì đổi mặc định, để không phải hiệu chuẩn lại toàn bộ [`SPEC-SCOPE-03`](#spec-scope-03) và cache/index đã đóng băng |
+| v1.4 | 2026-08-25 | — | Hai cấu hình S và L trở thành ngang hàng thay vì một chính một dự phòng. Bổ sung [`SPEC-INFRA-02`](#spec-infra-02) — quy trình đo năng lực server và bảng quyết định chọn cấu hình tham chiếu trước khóa. Ngưỡng thành công tách thành hai bộ theo cấu hình. Model embedding `bge-m3` dùng chung ở cả hai cấu hình để index luôn tương thích. Thêm R15, R16 | Chưa xác định được năng lực GPU của server dùng chung; thiết kế phải trung lập với hạ tầng và quyết định bằng phép đo thay vì phỏng đoán |
+| v1.3 | 2026-08-25 | — | Chuyển sang hạ tầng server dùng chung có GPU: vLLM làm mặc định, Ollama local thành cấu hình suy giảm. Viết lại toàn bộ [Mục 2](#muc-2) ([`SPEC-INFRA-01..07`](#spec-infra-01)). Bổ sung khái niệm cấu hình tham chiếu và trường `config_profile`. Khóa cứng model embedding `bge-m3`. Ngân sách tính toán chuyển từ ép bằng phần cứng sang ép bằng kiểm thử. Lab 5 đo trên cả hai cấu hình. Viết lại R1, R2; thêm R13, R14 | Đơn vị đã có server dùng chung có GPU; cấu hình cũ dựa trên CPU không còn phản ánh điều kiện triển khai thực tế |
+| v1.2 | 2026-08-25 | — | Bổ sung [Mục 15](#muc-15) — Trách nhiệm và bàn giao ([`SPEC-RESP-01..04`](#spec-resp-01)). Bổ sung [`SPEC-INFRA-04`](#spec-infra-04) về năng lực phục vụ và đồng thời. API chuyển sang bất đồng bộ bắt buộc ([`SPEC-ARCH-02`](#spec-arch-02) mục 5, 6). Nộp bài qua pull request có review. Chuẩn viết mã PEP 8 và type hints. Thêm rủi ro R11, R12 | Bổ sung theo rà soát đối chiếu với chương trình MLOps: thiếu nội dung triển khai đa người dùng, Responsible AI, phát hiện suy giảm chất lượng và bàn giao vận hành |
+| v1.1 | 2026-08-25 | — | Bổ sung [Mục 4](#muc-4) — Công cụ và quy trình kỹ thuật ([`SPEC-TOOLING-01..07`](#spec-tooling-01)). Chuyển `DECISIONS.md` thành ADR có cấu trúc. Chuyển manifest đánh giá sang MLflow. Bổ sung CI có cổng chất lượng, `uv`, `pre-commit`, `promptfoo`. Thêm rủi ro R9, R10 | Chuỗi bài thực hành mới dừng ở mức công cụ nền tảng, chưa phản ánh thực hành kỹ thuật hiện đại trong quản lý dự án AI |
 
 ---
+
+<a id="phu-luc-a"></a>
 
 ## PHỤ LỤC A — DANH MỤC MÃ SPEC
 
 | Nhóm | Mã | Nội dung |
 |---|---|---|
-| Phạm vi | `SPEC-SCOPE-01..03` | Bài toán, phạm vi MVP, chỉ số thành công |
-| Hạ tầng | `SPEC-INFRA-01..07` | Hai cấu hình chạy, cấu hình tham chiếu, khóa embedding, ngân sách tính toán, năng lực phục vụ, cấu hình máy học viên, dự phòng |
-| Kiến trúc | `SPEC-ARCH-01..04` | Phân tầng, nguyên tắc, cấu trúc repo, quy ước Git |
-| Công cụ kỹ thuật | `SPEC-TOOLING-01..07` | Danh mục công cụ, môi trường, chất lượng mã, CI, ADR, thí nghiệm, dùng AI hỗ trợ lập trình |
-| Dữ liệu | `SPEC-DATA-01..06` | Nguyên tắc, lược đồ, taxonomy, cơ cấu tập, bẫy, tri thức |
-| LLM | `SPEC-LLM-01..05` | Giao diện, cache, tham số, đầu ra cấu trúc, ngắt mạch |
-| Prompt | `SPEC-PROMPT-01..03` | Cấu trúc, quy định, ràng buộc sinh phản hồi |
-| RAG | `SPEC-RAG-01..04` | Chunking, truy hồi, không đủ căn cứ, trích dẫn |
-| Công cụ | `SPEC-TOOL-01..03` | Danh mục, ràng buộc, dự phòng theo luật |
-| Quy trình | `SPEC-FLOW-01..04` | Luồng chuẩn, escalate, bất biến, ghi nhận duyệt |
-| Guardrails | `SPEC-GUARD-01..04` | Đầu vào, đầu ra, vận hành, bộ đối kháng |
-| Đánh giá | `SPEC-EVAL-01..04` | Chỉ số, quy trình, manifest, quy tắc cải tiến |
-| Logging | `SPEC-LOG-01..03` | Lược đồ, truy vết, bảo mật |
-| Trách nhiệm & bàn giao | `SPEC-RESP-01..04` | Kiểm tra thiên lệch, Model Card, phát hiện suy giảm chất lượng, gói bàn giao |
-| Truy vết | `SPEC-TRACE-01..04` | Yêu cầu đầu ra môn học, yêu cầu đầu ra theo module, đối chiếu từng gạch đầu dòng đề cương, điều kiện hoàn thành |
+| Phạm vi | `SPEC-SCOPE-`[01](#spec-scope-01) · [02](#spec-scope-02) · [03](#spec-scope-03) | Bài toán, phạm vi MVP, chỉ số thành công |
+| Hạ tầng | `SPEC-INFRA-`[01](#spec-infra-01) · [02](#spec-infra-02) · [03](#spec-infra-03) · [04](#spec-infra-04) · [05](#spec-infra-05) · [06](#spec-infra-06) · [07](#spec-infra-07) | Hai cấu hình chạy, cấu hình tham chiếu, khóa embedding, ngân sách tính toán, năng lực phục vụ, cấu hình máy học viên, dự phòng |
+| Kiến trúc | `SPEC-ARCH-`[01](#spec-arch-01) · [02](#spec-arch-02) · [03](#spec-arch-03) · [04](#spec-arch-04) | Phân tầng, nguyên tắc, cấu trúc repo, quy ước Git |
+| Công cụ kỹ thuật | `SPEC-TOOLING-`[01](#spec-tooling-01) · [02](#spec-tooling-02) · [03](#spec-tooling-03) · [04](#spec-tooling-04) · [05](#spec-tooling-05) · [06](#spec-tooling-06) · [07](#spec-tooling-07) | Danh mục công cụ, môi trường, chất lượng mã, CI, ADR, thí nghiệm, dùng AI hỗ trợ lập trình |
+| Dữ liệu | `SPEC-DATA-`[01](#spec-data-01) · [02](#spec-data-02) · [03](#spec-data-03) · [04](#spec-data-04) · [05](#spec-data-05) · [06](#spec-data-06) | Nguyên tắc, lược đồ, taxonomy, cơ cấu tập, bẫy, tri thức |
+| LLM | `SPEC-LLM-`[01](#spec-llm-01) · [02](#spec-llm-02) · [03](#spec-llm-03) · [04](#spec-llm-04) · [05](#spec-llm-05) | Giao diện, cache, tham số, đầu ra cấu trúc, ngắt mạch |
+| Prompt | `SPEC-PROMPT-`[01](#spec-prompt-01) · [02](#spec-prompt-02) · [03](#spec-prompt-03) | Cấu trúc, quy định, ràng buộc sinh phản hồi |
+| RAG | `SPEC-RAG-`[01](#spec-rag-01) · [02](#spec-rag-02) · [03](#spec-rag-03) · [04](#spec-rag-04) | Chunking, truy hồi, không đủ căn cứ, trích dẫn |
+| Công cụ | `SPEC-TOOL-`[01](#spec-tool-01) · [02](#spec-tool-02) · [03](#spec-tool-03) | Danh mục, ràng buộc, dự phòng theo luật |
+| Quy trình | `SPEC-FLOW-`[01](#spec-flow-01) · [02](#spec-flow-02) · [03](#spec-flow-03) · [04](#spec-flow-04) | Luồng chuẩn, escalate, bất biến, ghi nhận duyệt |
+| Guardrails | `SPEC-GUARD-`[01](#spec-guard-01) · [02](#spec-guard-02) · [03](#spec-guard-03) · [04](#spec-guard-04) | Đầu vào, đầu ra, vận hành, bộ đối kháng |
+| Đánh giá | `SPEC-EVAL-`[01](#spec-eval-01) · [02](#spec-eval-02) · [03](#spec-eval-03) · [04](#spec-eval-04) | Chỉ số, quy trình, manifest, quy tắc cải tiến |
+| Logging | `SPEC-LOG-`[01](#spec-log-01) · [02](#spec-log-02) · [03](#spec-log-03) | Lược đồ, truy vết, bảo mật |
+| Trách nhiệm & bàn giao | `SPEC-RESP-`[01](#spec-resp-01) · [02](#spec-resp-02) · [03](#spec-resp-03) · [04](#spec-resp-04) | Kiểm tra thiên lệch, Model Card, phát hiện suy giảm chất lượng, gói bàn giao |
+| Truy vết | `SPEC-TRACE-`[01](#spec-trace-01) · [02](#spec-trace-02) · [03](#spec-trace-03) · [04](#spec-trace-04) | Yêu cầu đầu ra môn học, yêu cầu đầu ra theo module, đối chiếu từng gạch đầu dòng đề cương, điều kiện hoàn thành |
+
+<a id="phu-luc-b"></a>
 
 ## PHỤ LỤC B — CHECKLIST TRIỂN KHAI
 
 **Trước khóa 3 tuần**
-- [ ] Sinh 120 ticket, gán nhãn, rà chất lượng nhãn (`SPEC-DATA-02..04`)
-- [ ] Viết 28 tài liệu tri thức có front-matter (`SPEC-DATA-06`)
-- [ ] Cài đủ 5 loại bẫy sư phạm (`SPEC-DATA-05`)
+- [ ] Sinh 120 ticket, gán nhãn, rà chất lượng nhãn ([`SPEC-DATA-02..04`](#spec-data-02))
+- [ ] Viết 28 tài liệu tri thức có front-matter ([`SPEC-DATA-06`](#spec-data-06))
+- [ ] Cài đủ 5 loại bẫy sư phạm ([`SPEC-DATA-05`](#spec-data-05))
 - [ ] Tạo 40 cặp hỏi–đáp vàng
-- [ ] Viết 12 ca đối kháng (`SPEC-GUARD-04`)
+- [ ] Viết 12 ca đối kháng ([`SPEC-GUARD-04`](#spec-guard-04))
 - [ ] Dựng Starter Kit + 6 nhánh `solution/`
 - [ ] Viết `pytest` cho từng lab
 
 **Trước khóa 1 tuần**
 - [ ] Chạy thử toàn bộ 6 lab trên máy 8GB, đo thời lượng thực tế
-- [ ] Dựng `data/index_prebuilt/` và cache LLM dựng sẵn
+- [ ] Dựng [`data/index_prebuilt/`](data/index_prebuilt/) và cache LLM dựng sẵn
 - [ ] Chuẩn bị 2 USB chứa model Ollama
 - [ ] Dựng Ollama server LAN, kiểm tra tải 10 kết nối đồng thời
 - [ ] Gửi Lab 0 cho học viên

@@ -1,12 +1,12 @@
 # LAB 3 — Context Specification
 
-**Session 3 · Ngày 2, buổi sáng · 120 phút thực hành · Deliverable: `docs/context_spec.md`**
+**Session 3 · Ngày 2, buổi sáng · 120 phút thực hành · Deliverable: [`docs/context_spec.md`](../docs/context_spec.md)**
 
 Buổi đầu tiên viết code thật. Cũng là buổi đầu tiên nhìn thấy **con số** cho biết mình đang tốt lên hay xấu đi.
 
 > **Cảnh báo nhịp ba ngày:** Session 4 chiều nay dựa trực tiếp lên phần RAG làm sáng nay, và giữa hai buổi chỉ có giờ nghỉ trưa. Chạy `scripts/checkpoint.py 3` trong 5 phút cuối buổi. Nếu chưa đủ điều kiện, dùng `./scripts/rescue.sh 3` ngay — đừng để tới đầu giờ chiều.
 
-> **Chỗ ghi chép:** sao chép `workbooks/WORKBOOK-3.md` vào `docs/workbook/<tên-nhóm>-session-3.md` và điền trong giờ học. Đề bài này nói *phải làm gì*; workbook là chỗ ghi *đã đo được gì và vì sao chọn như vậy* — phần phản biện ở Session 6 hỏi đúng phần đó.
+> **Chỗ ghi chép:** sao chép [`workbooks/WORKBOOK-3.md`](../workbooks/WORKBOOK-3.md) vào `docs/workbook/<tên-nhóm>-session-3.md` và điền trong giờ học. Đề bài này nói *phải làm gì*; workbook là chỗ ghi *đã đo được gì và vì sao chọn như vậy* — phần phản biện ở Session 6 hỏi đúng phần đó.
 
 ---
 
@@ -22,7 +22,7 @@ Yêu cầu model trả về dữ liệu có cấu trúc: nhóm vấn đề, mứ
 
 ### 1b. Bảng ngân sách ngữ cảnh
 
-Lập bảng phân bổ cho từng thành phần, tổng không vượt 3.000 token. Điền vào mục 2 của `docs/context_spec.md`.
+Lập bảng phân bổ cho từng thành phần, tổng không vượt 3.000 token. Điền vào mục 2 của [`docs/context_spec.md`](../docs/context_spec.md).
 
 ### 1c. Chạy thử 20 ticket
 
@@ -38,7 +38,7 @@ uv run python eval/run_eval.py --set train --limit 20 --skip-adversarial
 
 Model 3 tỉ tham số **chắc chắn** trả về sai định dạng ở một số ca trong bước 1. Đó không phải sự cố — đó là nội dung giảng dạy chính của bước này.
 
-Cài đặt bốn lớp trong `src/llm/schema.py`:
+Cài đặt bốn lớp trong [`src/llm/schema.py`](../src/llm/schema.py):
 
 | Lớp | Cơ chế |
 |---|---|
@@ -69,7 +69,7 @@ Chạy lại 20 ticket và **so sánh tỉ lệ thành công trước sau**. Đi
 uv run python scripts/build_index.py
 ```
 
-> Dựng chỉ mục mất 2–4 phút trên CPU cho ~300 đoạn. **Nhóm nào chậm dùng ngay bản dựng sẵn ở `data/index_prebuilt/`** — không ngồi chờ. Việc tự dựng chỉ để xác minh mình dựng lại được.
+> Dựng chỉ mục mất 2–4 phút trên CPU cho ~300 đoạn. **Nhóm nào chậm dùng ngay bản dựng sẵn ở [`data/index_prebuilt/`](../data/index_prebuilt/)** — không ngồi chờ. Việc tự dựng chỉ để xác minh mình dựng lại được.
 
 Kiểm chứng bẫy tài liệu mâu thuẫn:
 ```bash
@@ -119,7 +119,7 @@ npx promptfoo@latest view
 
 ## Nộp sau buổi học
 
-- `docs/context_spec.md` đầy đủ: mẫu prompt kèm **lý do thiết kế**, bảng ngân sách, lược đồ đầu ra, chiến lược chia đoạn, bảng kết quả thí nghiệm
+- [`docs/context_spec.md`](../docs/context_spec.md) đầy đủ: mẫu prompt kèm **lý do thiết kế**, bảng ngân sách, lược đồ đầu ra, chiến lược chia đoạn, bảng kết quả thí nghiệm
 - Mã nguồn chạy được, **vượt `pytest -m lab3`**
 - Nộp qua pull request, **được một nhóm khác rà soát**
 
@@ -149,7 +149,7 @@ uv run python scripts/checkpoint.py 3
 | Gộp phân loại và soạn phản hồi vào một lời gọi | Tách ra. Gộp làm mất khả năng đo riêng từng bước ở Session 5 |
 | Prompt viết thẳng trong mã Python | Chuyển ra tệp có đánh số phiên bản — Session 6 cần so sánh giữa các phiên bản |
 | Thử cải tiến nhưng không đo lại | Không chấp nhận. Chạy lại, mỗi lần một biến |
-| Dựng chỉ mục quá chậm | Dùng `data/index_prebuilt/` |
+| Dựng chỉ mục quá chậm | Dùng [`data/index_prebuilt/`](../data/index_prebuilt/) |
 
 ## Nếu xong sớm
 

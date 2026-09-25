@@ -3,7 +3,7 @@
 - **Trạng thái:** đã chấp thuận
 - **Ngày:** 2026-01-18
 - **Người quyết định:** Hội đồng xây dựng chương trình
-- **Mã spec liên quan:** SPEC-ARCH-02, SPEC-INFRA-01
+- **Mã spec liên quan:** [SPEC-ARCH-02](../../PROJECT-SPEC.md#spec-arch-02), [SPEC-INFRA-01](../../PROJECT-SPEC.md#spec-infra-01)
 
 ## Bối cảnh
 
@@ -21,12 +21,12 @@ Ràng buộc thực tế: máy học viên tối thiểu 8 GB RAM, 10 GB đĩa t
 
 ## Quyết định
 
-Chọn phương án 3. `docker-compose.yml` gồm ba dịch vụ ứng dụng (api, ui, mlflow); dịch vụ model nằm ngoài, địa chỉ truyền qua biến môi trường.
+Chọn phương án 3. [`docker-compose.yml`](../../docker-compose.yml) gồm ba dịch vụ ứng dụng (api, ui, mlflow); dịch vụ model nằm ngoài, địa chỉ truyền qua biến môi trường.
 
 Tiêu chí quyết định: **thành phần nặng nhất, thay đổi ít nhất, và cần cấu hình phần cứng riêng thì tách ra.** Đây cũng chính là nguyên tắc tách tầng API khỏi tầng model để hai tầng mở rộng độc lập — nội dung được giảng ở Session 5.
 
 ## Hệ quả chấp nhận
 
-- Tiêu chí "khởi động từ máy sạch bằng một lệnh" phải phát biểu chính xác hơn: máy sạch **đã hoàn thành Lab 0**. `SETUP.md` nêu rõ điều kiện này.
+- Tiêu chí "khởi động từ máy sạch bằng một lệnh" phải phát biểu chính xác hơn: máy sạch **đã hoàn thành Lab 0**. [`SETUP.md`](../../SETUP.md) nêu rõ điều kiện này.
 - `extra_hosts: host.docker.internal:host-gateway` bắt buộc có mặt, nếu không container trên Linux không thấy được dịch vụ trên máy chủ.
 - Khi chấm Lab 5, nếu Docker lỗi trên máy Windows của học viên, phần đóng gói được chấm qua tệp cấu hình đã viết chứ không qua việc chạy được — vì nút thắt nằm ở Docker Desktop, không nằm ở thiết kế của nhóm.

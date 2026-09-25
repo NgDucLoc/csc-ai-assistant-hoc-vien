@@ -3,7 +3,7 @@
 - **Trạng thái:** đã chấp thuận
 - **Ngày:** 2026-01-19
 - **Người quyết định:** Hội đồng xây dựng chương trình
-- **Mã spec liên quan:** SPEC-RAG-03, SPEC-FLOW-02, SPEC-PROMPT-03
+- **Mã spec liên quan:** [SPEC-RAG-03](../../PROJECT-SPEC.md#spec-rag-03), [SPEC-FLOW-02](../../PROJECT-SPEC.md#spec-flow-02), [SPEC-PROMPT-03](../../PROJECT-SPEC.md#spec-prompt-03)
 
 ## Bối cảnh
 

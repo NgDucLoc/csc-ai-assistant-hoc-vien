@@ -43,7 +43,7 @@ uv run pre-commit install
 cp .env.example .env
 ```
 
-`uv sync` đọc `uv.lock` — tệp khóa phiên bản được commit vào repo. Nhờ nó mọi máy học viên có đúng cùng bộ thư viện, và lỗi "máy tôi chạy được" không xảy ra.
+`uv sync` đọc [`uv.lock`](../uv.lock) — tệp khóa phiên bản được commit vào repo. Nhờ nó mọi máy học viên có đúng cùng bộ thư viện, và lỗi "máy tôi chạy được" không xảy ra.
 
 `pre-commit install` gắn hook chặn commit chứa dữ liệu nhạy cảm. Không phải thủ tục hình thức: khóa truy cập server dùng chung bị lộ nghĩa là phải cấp lại cho cả lớp giữa buổi.
 
@@ -107,7 +107,7 @@ Cả hai phải `PASS`.
 
 - [ ] `uv sync` chạy xong, thư mục `.venv` tồn tại
 - [ ] `pre-commit` đã gắn vào Git
-- [ ] `.env` đã tạo từ `.env.example`
+- [ ] `.env` đã tạo từ [`.env.example`](../.env.example)
 - [ ] `check_env.py` báo PASS toàn bộ ở cấu hình chuẩn
 - [ ] Đã nộp ảnh chụp màn hình
 - [ ] (Trước Session 5) `check_env.py` PASS ở cả hai cấu hình

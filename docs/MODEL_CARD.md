@@ -53,7 +53,7 @@
 
 ## 4. Kết quả đánh giá
 
-Đo trên tập kiểm định 40 ticket, cấu hình *điền*. Chi tiết ở `docs/EVALUATION.md`.
+Đo trên tập kiểm định 40 ticket, cấu hình *điền*. Chi tiết ở [`docs/EVALUATION.md`](../docs/EVALUATION.md).
 
 | Nhóm | Chỉ số chính | Đo được |
 |---|---|---|
@@ -102,7 +102,7 @@ Chạy `uv run python scripts/bias_check.py`. Câu hỏi: **hệ thống có x�
 
 | Rủi ro | Mức | Biện pháp | Còn lại gì |
 |---|---|---|---|
-| Bịa ra chính sách không có trong kho | Cao nhất | Ngưỡng truy hồi + quy tắc từ chối + bắt buộc trích dẫn (ADR-0005) | Ngưỡng sai hướng thấp vẫn để lọt |
+| Bịa ra chính sách không có trong kho | Cao nhất | Ngưỡng truy hồi + quy tắc từ chối + bắt buộc trích dẫn ([ADR-0005](../docs/adr/0005-nguong-tu-choi-thay-vi-doan.md)) | Ngưỡng sai hướng thấp vẫn để lọt |
 | Cam kết bồi thường sai thành nghĩa vụ | Cao nhất | Guardrail đầu ra chặn cam kết tiền không có trong ngữ cảnh | Cách diễn đạt lạ có thể vượt bộ lọc |
 | Trích dẫn chính sách hết hiệu lực | Cao | Lọc theo `status`, tài liệu bị thay thế không vào chỉ mục | Phụ thuộc việc front-matter được cập nhật đúng |
 | Rò rỉ PII qua nhật ký | Cao | Che PII trước khi ghi log | Chỉ che các mẫu đã biết |

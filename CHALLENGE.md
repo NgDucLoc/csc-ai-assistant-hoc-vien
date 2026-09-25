@@ -124,7 +124,7 @@ uv run python eval/run_eval.py --set train --limit 20 --skip-adversarial
 - Chênh lệch độ trễ có đủ lớn để bù chi phí vận hành thêm một dịch vụ (vLLM cần môi trường Python riêng, khởi động chậm hơn Ollama)?
 - Đây có nên là cấu hình *mặc định* của lớp không, hay chỉ nên là lựa chọn nâng cao? Lập luận bằng số đo, không bằng cảm tính — đúng tinh thần Session 2 bước 2.
 
-> Đây là bài tập **không bắt buộc và không phải cấu hình mặc định của lớp** (xem `PROJECT-SPEC.md` Mục 17, mục v1.5 và v1.6). Đổi mặc định thật sự đòi hỏi hiệu chuẩn lại toàn bộ `SPEC-SCOPE-03` và sinh lại `.cache/llm_cache.db` — việc đó không làm tùy hứng giữa buổi.
+> Đây là bài tập **không bắt buộc và không phải cấu hình mặc định của lớp** (xem [`PROJECT-SPEC.md`](PROJECT-SPEC.md) [Mục 17](PROJECT-SPEC.md#muc-17), mục v1.5 và v1.6). Đổi mặc định thật sự đòi hỏi hiệu chuẩn lại toàn bộ [`SPEC-SCOPE-03`](PROJECT-SPEC.md#spec-scope-03) và sinh lại `.cache/llm_cache.db` — việc đó không làm tùy hứng giữa buổi.
 
 ---
 

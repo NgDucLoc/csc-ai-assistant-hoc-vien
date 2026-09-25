@@ -19,12 +19,12 @@ Nhóm đã chạy cứu hộ chưa? `[ ] Không cần`  ·  `[ ] Đã chạy`
 
 | # | Hàm | Tệp | Xong? |
 |---|---|---|---|
-| 1 | `validate_args` | `src/agent/tools.py` | `[ ]` |
-| 2 | `rule_based_plan` | `src/agent/tools.py` | `[ ]` |
-| 3 | `check_input` | `src/guardrails/input_rules.py` | `[ ]` |
-| 4 | `generate_reply` | `src/agent/generator.py` | `[ ]` |
-| 5 | `process_ticket` | `src/agent/workflow.py` | `[ ]` |
-| 6 | `Store.record_review` | `src/store.py` | `[ ]` |
+| 1 | `validate_args` | [`src/agent/tools.py`](../src/agent/tools.py) | `[ ]` |
+| 2 | `rule_based_plan` | [`src/agent/tools.py`](../src/agent/tools.py) | `[ ]` |
+| 3 | `check_input` | [`src/guardrails/input_rules.py`](../src/guardrails/input_rules.py) | `[ ]` |
+| 4 | `generate_reply` | [`src/agent/generator.py`](../src/agent/generator.py) | `[ ]` |
+| 5 | `process_ticket` | [`src/agent/workflow.py`](../src/agent/workflow.py) | `[ ]` |
+| 6 | `Store.record_review` | [`src/store.py`](../src/store.py) | `[ ]` |
 
 ---
 
@@ -40,7 +40,7 @@ Nhóm đã chạy cứu hộ chưa? `[ ] Không cần`  ·  `[ ] Đã chạy`
 | Bốn lớp phòng vệ đủ? Lớp 3 có đưa lỗi vào prompt? | `[ ]` |
 | Truy hồi có lọc `status: superseded`? | `[ ]` |
 | Bảng số liệu có cột **cấu hình**? | `[ ]` |
-| Có lời gọi model nào ngoài `src/llm/client.py`? | `[ ]` không có |
+| Có lời gọi model nào ngoài [`src/llm/client.py`](../src/llm/client.py)? | `[ ]` không có |
 
 Nhận xét gửi nhóm bạn: `______________________________________________`
 

@@ -2,7 +2,7 @@
 
 **Session 6 · Ngày 3, buổi chiều · 180 phút thực hành · Deliverable: sản phẩm hoàn chỉnh + demo**
 
-> **Chỗ ghi chép:** sao chép `workbooks/WORKBOOK-6.md` vào `docs/workbook/<tên-nhóm>-session-6.md` và điền trong giờ học. Đề bài này nói *phải làm gì*; workbook là chỗ ghi *đã đo được gì và vì sao chọn như vậy* — phần phản biện ở Session 6 hỏi đúng phần đó.
+> **Chỗ ghi chép:** sao chép [`workbooks/WORKBOOK-6.md`](../workbooks/WORKBOOK-6.md) vào `docs/workbook/<tên-nhóm>-session-6.md` và điền trong giờ học. Đề bài này nói *phải làm gì*; workbook là chỗ ghi *đã đo được gì và vì sao chọn như vậy* — phần phản biện ở Session 6 hỏi đúng phần đó.
 
 ---
 
@@ -51,7 +51,7 @@ Lưu ý giới hạn của chính phép đo: tập kiểm định 40 ticket, m�
 
 ### 2b. Model Card
 
-Điền `docs/MODEL_CARD.md`: mục đích sử dụng, phạm vi áp dụng, **giới hạn đã biết**, kết quả đánh giá, rủi ro đã lường trước.
+Điền [`docs/MODEL_CARD.md`](../docs/MODEL_CARD.md): mục đích sử dụng, phạm vi áp dụng, **giới hạn đã biết**, kết quả đánh giá, rủi ro đã lường trước.
 
 > **Mục "Giới hạn đã biết" để trống là không chấp nhận được.** Tối thiểu ba giới hạn cụ thể, rút ra từ phân tích lỗi ở Session 5. Viết chung chung kiểu "hệ thống có thể sai trong một số trường hợp" không tính.
 

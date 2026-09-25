@@ -37,7 +37,7 @@ uv run pre-commit install
 cp .env.example .env
 ```
 
-`uv sync` đọc `uv.lock` được commit trong repo, nên mọi máy có đúng cùng bộ thư viện.
+`uv sync` đọc [`uv.lock`](uv.lock) được commit trong repo, nên mọi máy có đúng cùng bộ thư viện.
 
 ## 3. Chọn cấu hình
 
@@ -106,7 +106,7 @@ Chuyển đổi giữa ba lớp **chỉ bằng biến môi trường**, không s
 |---|---|
 | `uv sync` lỗi phiên bản Python | `uv python install 3.11` rồi chạy lại |
 | `check_env` báo không kết nối được model | Cấu hình L: `ollama serve` đang chạy chưa? · Cấu hình S: kiểm tra `LLM_API_KEY` và mạng |
-| `FileNotFoundError` khi truy hồi | Dùng bản dựng sẵn: `data/index_prebuilt/`, hoặc `uv run python scripts/build_index.py` |
+| `FileNotFoundError` khi truy hồi | Dùng bản dựng sẵn: [`data/index_prebuilt/`](data/index_prebuilt/), hoặc `uv run python scripts/build_index.py` |
 | Docker lỗi trên Windows | Chạy trực tiếp các dịch vụ. Phần đóng gói được chấm qua tệp cấu hình |
 | pre-commit chặn commit | Đọc thông báo — thường là số điện thoại thật hoặc khóa truy cập lọt vào repo |
 | Đĩa đầy giữa khóa | `docker system prune`, xóa `eval/mlruns/` cũ |

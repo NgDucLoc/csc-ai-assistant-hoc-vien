@@ -1,6 +1,6 @@
 # LAB 5 — Production-ready Prototype
 
-**Session 5 · Ngày 3, buổi sáng · 120 phút thực hành · Deliverable: `docs/EVALUATION.md` + hệ thống đóng gói**
+**Session 5 · Ngày 3, buổi sáng · 120 phút thực hành · Deliverable: [`docs/EVALUATION.md`](../docs/EVALUATION.md) + hệ thống đóng gói**
 
 > **Đọc mục "Việc chạy nền" bên dưới TRƯỚC khi bắt đầu.** Hai việc phải khởi động ngay phút đầu, nếu không sẽ vỡ giờ.
 
@@ -25,7 +25,7 @@ Khe của nhóm bạn: `________`
 
 `bench_server.py` tự từ chối chạy sai khe. Đó là chủ ý, không phải lỗi.
 
-> **Chỗ ghi chép:** sao chép `workbooks/WORKBOOK-5.md` vào `docs/workbook/<tên-nhóm>-session-5.md` và điền trong giờ học. Đề bài này nói *phải làm gì*; workbook là chỗ ghi *đã đo được gì và vì sao chọn như vậy* — phần phản biện ở Session 6 hỏi đúng phần đó.
+> **Chỗ ghi chép:** sao chép [`workbooks/WORKBOOK-5.md`](../workbooks/WORKBOOK-5.md) vào `docs/workbook/<tên-nhóm>-session-5.md` và điền trong giờ học. Đề bài này nói *phải làm gì*; workbook là chỗ ghi *đã đo được gì và vì sao chọn như vậy* — phần phản biện ở Session 6 hỏi đúng phần đó.
 
 ---
 
@@ -54,7 +54,7 @@ Kiểm tra tài liệu API tự sinh tại `http://localhost:8000/docs`.
 docker compose up --build
 ```
 
-Ba dịch vụ: `api`, `ui`, `mlflow`. **Dịch vụ model đặt ngoài container** — xem ADR-0004 cho lý do.
+Ba dịch vụ: `api`, `ui`, `mlflow`. **Dịch vụ model đặt ngoài container** — xem [ADR-0004](../docs/adr/0004-dich-vu-model-ngoai-container.md) cho lý do.
 
 **Nếu Docker lỗi trên Windows:** chạy trực tiếp các dịch vụ. Phần đóng gói được chấm qua tệp cấu hình đã viết, vì nút thắt nằm ở Docker Desktop chứ không ở thiết kế của nhóm.
 
@@ -74,7 +74,7 @@ Mọi bảng **bắt buộc ghi cấu hình đã dùng**.
 
 Trả lời: **nhóm vấn đề nào bị nhầm nhiều nhất, và vì sao?**
 
-> Kết quả thường gặp: `cuoc_thanh_toan` bị nhầm với `goi_cuoc_khuyen_mai`, do hai nhóm chồng lấn về ngữ nghĩa. Từ đó rút ra bài học: **đôi khi vấn đề nằm ở định nghĩa nhãn chứ không nằm ở model.** Mở `data/LABEL_GUIDE.md` và kiểm tra ranh giới đã được định nghĩa rõ chưa.
+> Kết quả thường gặp: `cuoc_thanh_toan` bị nhầm với `goi_cuoc_khuyen_mai`, do hai nhóm chồng lấn về ngữ nghĩa. Từ đó rút ra bài học: **đôi khi vấn đề nằm ở định nghĩa nhãn chứ không nằm ở model.** Mở [`data/LABEL_GUIDE.md`](../data/LABEL_GUIDE.md) và kiểm tra ranh giới đã được định nghĩa rõ chưa.
 
 Phân tích không phải là liệt kê số. Với mỗi cặp nhầm nhiều nhất, trả lời ba câu trong mục 3 của `EVALUATION.md`.
 
@@ -171,7 +171,7 @@ Phần đo trên server đã làm ở khe giờ riêng trong buổi sáng.
 
 ## Nộp sau buổi học
 
-- `docs/EVALUATION.md` đầy đủ 5 nhóm chỉ số, bảng năng lực hai cấu hình, phân tích lỗi, đề xuất cải tiến. **Mọi bảng ghi rõ cấu hình.**
+- [`docs/EVALUATION.md`](../docs/EVALUATION.md) đầy đủ 5 nhóm chỉ số, bảng năng lực hai cấu hình, phân tích lỗi, đề xuất cải tiến. **Mọi bảng ghi rõ cấu hình.**
 - Hệ thống khởi động được bằng một lệnh từ máy sạch
 - Kết quả bộ 12 ca đối kháng
 

@@ -13,7 +13,7 @@
 
 ### 1.1 Cấu trúc năm phần bắt buộc
 
-Mọi prompt trong `src/agent/prompts/` có đủ: **VAI TRÒ · NHIỆM VỤ · RÀNG BUỘC · NGỮ CẢNH · ĐỊNH DẠNG ĐẦU RA**. Ràng buộc này được ép bằng `tests/test_lab3.py::test_all_prompts_have_five_sections`, không bằng lời nhắc.
+Mọi prompt trong [`src/agent/prompts/`](../src/agent/prompts/) có đủ: **VAI TRÒ · NHIỆM VỤ · RÀNG BUỘC · NGỮ CẢNH · ĐỊNH DẠNG ĐẦU RA**. Ràng buộc này được ép bằng [`tests/test_lab3.py::test_all_prompts_have_five_sections`](../tests/test_lab3.py), không bằng lời nhắc.
 
 Lý do ép bằng kiểm thử: prompt thiếu phần RÀNG BUỘC là nguyên nhân phổ biến nhất khiến model nhỏ trả về đầu ra không dùng được. Với model 7B trở lên, thiếu phần này vẫn thường ra kết quả ổn, nên lỗi không lộ ra cho tới khi chuyển sang cấu hình L.
 
@@ -52,7 +52,7 @@ Nội dung ticket nằm giữa thẻ `<ticket>` … `</ticket>`, kèm câu nói 
 | Đoạn tri thức truy hồi | ≤ 1.200 | 5 đoạn × ~240 token, cắt theo `context_block(max_chars=2000)` |
 | Kết quả gọi công cụ | ≤ 300 | JSON rút gọn |
 | Chừa cho đầu ra | ≤ 400 | |
-| **Tổng mỗi lời gọi** | **≤ 3.000** | `SPEC-INFRA-04` |
+| **Tổng mỗi lời gọi** | **≤ 3.000** | [`SPEC-INFRA-04`](../PROJECT-SPEC.md#spec-infra-04) |
 
 **Vì sao ngân sách được ép bằng kiểm thử tự động thay vì để tốc độ phần cứng tự ép:** khi lớp chạy ở cấu hình S trên GPU, mọi thứ đủ nhanh và không ai thấy lý do phải tối ưu ngữ cảnh. Kỷ luật đó chỉ còn giữ được bằng cổng kiểm tra. Đến khi chuyển sang cấu hình L để đo đường nền, prompt đã phình ra và hệ thống chậm gấp ba — nhưng lúc đó đã muộn.
 
@@ -117,7 +117,7 @@ Nội dung ticket nằm giữa thẻ `<ticket>` … `</ticket>`, kèm câu nói 
 | Kết hợp | 0.75 × vector + 0.25 × từ khóa | Tiếng Việt và mã gói cước — từ khóa bắt được cái vector bỏ sót |
 | Viết lại truy vấn | Có, `rewrite_query.v1` | Khách hàng viết "tự nhiên mất tiền", tài liệu viết "khấu trừ cước dịch vụ giá trị gia tăng" |
 
-**Quy tắc từ chối:** điểm cao nhất dưới ngưỡng → **không gọi model sinh phản hồi**, chuyển thẳng giao dịch viên. Kiểm tra diễn ra trước khi gọi model, không phải sau. Xem ADR-0005 cho lập luận đầy đủ.
+**Quy tắc từ chối:** điểm cao nhất dưới ngưỡng → **không gọi model sinh phản hồi**, chuyển thẳng giao dịch viên. Kiểm tra diễn ra trước khi gọi model, không phải sau. Xem [ADR-0005](../docs/adr/0005-nguong-tu-choi-thay-vi-doan.md) cho lập luận đầy đủ.
 
 ## 6. Thí nghiệm cải tiến truy hồi
 

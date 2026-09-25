@@ -3,7 +3,7 @@
 - **Trạng thái:** đã chấp thuận
 - **Ngày:** 2026-01-15
 - **Người quyết định:** Hội đồng xây dựng chương trình
-- **Mã spec liên quan:** SPEC-INFRA-01, SPEC-INFRA-02, SPEC-INFRA-07
+- **Mã spec liên quan:** [SPEC-INFRA-01](../../PROJECT-SPEC.md#spec-infra-01), [SPEC-INFRA-02](../../PROJECT-SPEC.md#spec-infra-02), [SPEC-INFRA-07](../../PROJECT-SPEC.md#spec-infra-07)
 
 ## Bối cảnh
 
@@ -25,7 +25,7 @@ Chọn phương án 3. Cả hai cấu hình là **công dân hạng nhất**: c�
 
 Tiêu chí quyết định: **đường lùi không được kiểm thử là đường lùi hỏng.** Một phương án dự phòng chỉ tồn tại trên giấy sẽ hỏng đúng lúc cần dùng. Cách duy nhất giữ nó sống là để nó là một lựa chọn chính thức, không phải một nhánh phụ.
 
-Cấu hình nào làm chuẩn của lớp được quyết bằng phép đo (`scripts/bench_server.py`) trước khóa một tuần, không quyết trước bằng phỏng đoán.
+Cấu hình nào làm chuẩn của lớp được quyết bằng phép đo ([`scripts/bench_server.py`](../../scripts/bench_server.py)) trước khóa một tuần, không quyết trước bằng phỏng đoán.
 
 ## Hệ quả chấp nhận
 

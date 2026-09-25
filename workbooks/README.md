@@ -33,4 +33,4 @@ Phần phản biện ở Session 6 hỏi *"nhóm đã thử phương án nào kh
 | `S / L` | Khoanh cấu hình đang dùng |
 | ⚠︎ | Chỗ hay bị bỏ trống, giảng viên sẽ kiểm |
 
-**Mọi bảng số liệu bắt buộc ghi cấu hình.** Một con số không kèm cấu hình sinh ra nó là một con số vô nghĩa (`SPEC-INFRA-03`).
+**Mọi bảng số liệu bắt buộc ghi cấu hình.** Một con số không kèm cấu hình sinh ra nó là một con số vô nghĩa ([`SPEC-INFRA-03`](../PROJECT-SPEC.md#spec-infra-03)).
