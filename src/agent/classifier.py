@@ -79,24 +79,3 @@ def classify(
     # TODO(LAB-3): Gọi model qua bốn lớp phòng vệ; không bao giờ ném lỗi ra ngoài
     #   Chạy "uv run pytest -m lab3" để biết mình đã đúng chưa.
     raise NotImplementedError("LAB-3: Gọi model qua bốn lớp phòng vệ; không bao giờ ném lỗi ra ngoài")
-
-
-def rewrite_query(ticket_text: str, category: str, *, client: LLMClient | None = None) -> str | None:
-    """Viết lại lời phàn nàn thành truy vấn tra cứu chính sách.
-
-    Đây là một trong hai cải tiến truy hồi mà Session 3 bước 4 yêu cầu đo. Trả
-    về None khi model không phản hồi được, để bên gọi rơi về truy vấn gốc thay
-    vì dừng cả quy trình.
-    """
-    client = client or get_client()
-    prompt = load_prompt("rewrite_query")
-    try:
-        resp = client.complete(
-            task="rewrite_query",
-            system="Bạn viết lại truy vấn tra cứu. Chỉ trả về một dòng.",
-            user=prompt.render(ticket_text=ticket_text, category=category),
-        )
-    except Exception:  # noqa: BLE001 — suy giảm có kiểm soát, SPEC-ARCH-02
-        return None
-    line = resp.text.strip().splitlines()[0] if resp.text.strip() else ""
-    return line.strip().strip('"') or None

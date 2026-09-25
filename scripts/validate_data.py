@@ -25,7 +25,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.data import load_adversarial, load_gold_qa, load_gold_test, load_train  # noqa: E402
-from src.knowledge.loader import conflict_report, load_documents  # noqa: E402
+from src.knowledge.governance import conflict_report, load_documents  # noqa: E402
 
 CATEGORIES = {
     "cuoc_thanh_toan",

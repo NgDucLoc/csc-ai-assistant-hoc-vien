@@ -6,7 +6,7 @@ Phân biệt ba loại tài liệu, đừng lẫn:
 |---|---|---|
 | `labs/LAB-N.md` | **Đề bài.** Phải làm gì, thang điểm, lỗi thường gặp | Giảng viên, cố định |
 | `workbooks/WORKBOOK-N.md` | **Chỗ viết trong giờ học.** Bảng để điền, quyết định để ghi, số đo để chép | Học viên, mỗi nhóm một bản |
-| `docs/canvas.md`, `docs/blueprint.md`… | **Deliverable.** Bản sạch nộp sau buổi | Học viên, chắt lọc từ workbook |
+| [`docs/canvas.md`](../docs/canvas.md), [`docs/blueprint.md`](../docs/blueprint.md)… | **Deliverable.** Bản sạch nộp sau buổi | Học viên, chắt lọc từ workbook |
 
 ## Dùng thế nào
 

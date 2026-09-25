@@ -21,7 +21,7 @@ Model 3 tỉ tham số, khi được đưa các đoạn tài liệu không liên
 
 ## Quyết định
 
-Chọn phương án 3. Kiểm tra `retrieval.grounded` diễn ra **trước** khi gọi model sinh phản hồi, không phải sau. Ngưỡng mặc định `RETRIEVE_MIN_SCORE=0.35`, là tham số cấu hình được để học viên hiệu chỉnh và đo lại ở Session 6.
+Chọn phương án 3. Kiểm tra `retrieval.grounded` diễn ra **trước** khi gọi model sinh phản hồi, không phải sau. Ngưỡng mặc định `RETRIEVE_MIN_SCORE=0.62`, là tham số cấu hình được để học viên hiệu chuẩn và đo lại. Giá trị này chọn từ bảng quét ngưỡng (`scripts/lab3_check.py retrieval --sweep`) với tìm kiếm hybrid dùng `bge-m3`: điểm cao nhất của 5 câu không có đáp án nằm trong khoảng 0.51 đến 0.59, còn của 40 câu có đáp án từ 0.65 đến 0.86.
 
 Prompt sinh phản hồi có thêm lớp phòng vệ thứ hai: model được yêu cầu trả về đúng chuỗi `KHÔNG ĐỦ CĂN CỨ` khi tự thấy ngữ cảnh không đủ.
 
@@ -30,6 +30,6 @@ Tiêu chí quyết định: **với bài toán chăm sóc khách hàng, một tr
 ## Hệ quả chấp nhận
 
 - Chỉ số `over_escalation_rate` sẽ cao hơn so với phương án 1, và đó là kết quả mong muốn chứ không phải khuyết điểm cần che.
-- Ngưỡng 0.35 là một con số chọn theo kinh nghiệm, không có căn cứ lý thuyết. Nó **phải** được hiệu chuẩn lại nếu đổi model embedding hoặc đổi chiến lược chia đoạn — và việc hiệu chuẩn đó là một trong hai cải tiến gợi ý cho Session 6.
+- Ngưỡng 0.62 là một con số đo được, không phải hằng số. Nó **phải** được hiệu chuẩn lại nếu đổi model embedding, đổi chiến lược chia đoạn hoặc đổi kiểu tìm: với tìm kiếm chỉ dùng từ khóa, điểm của câu không có đáp án lên tới 0.73 và không ngưỡng nào tách sạch hai nhóm. Bản đầu của tài liệu này ghi 0.35, là con số chọn theo kinh nghiệm, cho tỉ lệ từ chối đúng 0/5 khi đo thật.
 - Bộ chỉ số đánh giá phải đo `refusal_accuracy` tách riêng khỏi `recall`, vì một hệ thống truy hồi kém nhưng từ chối đúng vẫn an toàn hơn một hệ thống truy hồi khá nhưng không bao giờ từ chối.
 - Guardrail đầu ra vẫn phải chặn cam kết tiền một lần nữa, kể cả khi đã có căn cứ. Hai lớp phòng vệ cho cùng một rủi ro là có chủ ý: đây là rủi ro nghiêm trọng nhất của hệ thống.

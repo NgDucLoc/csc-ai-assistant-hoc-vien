@@ -31,7 +31,9 @@ docker compose up --build                             # cả ba dịch vụ
 src/
   config.py            Nơi DUY NHẤT đọc biến môi trường
   llm/                 client · cache · schema (4 lớp phòng vệ đầu ra)
-  knowledge/           loader · indexer · retriever
+  knowledge/           sourcing · governance · preparation · embedding · indexing (Knowledge Engineering)
+  retrieval/           transform · search · filters · rerank · pipeline (Retrieval Engineering)
+  context/             assemble (Context Engineering)
   agent/               prompts/ · classifier · tools · generator · workflow
   guardrails/          input_rules · output_rules · runtime (logging, trace)
   api/main.py          API bất đồng bộ + worker nền
@@ -56,7 +58,7 @@ Không phải sáu bài tập độc lập. Mỗi buổi bổ sung một tầng 
 |---|---|---|
 | 1 | AI Opportunity Canvas | Phạm vi và ranh giới. Chưa viết code |
 | 2 | AI Solution Blueprint | Kiến trúc. Khung chạy được |
-| 3 | Context Specification | **Bộ não** — prompt, ngữ cảnh, tri thức, truy hồi |
+| 3 | Context Specification | **Bộ não** — tri thức, embedding, truy hồi, context, dùng model |
 | 4 | AI Prototype v1 | **Quy trình** — workflow, công cụ, human-in-the-loop |
 | 5 | Production-ready Prototype | **Vỏ bọc** — API, Docker, đánh giá, guardrails, logging |
 | 6 | Final AI Application | Cải tiến dựa trên số liệu, demo, phản biện |

@@ -52,9 +52,27 @@ def extract_json(raw: str) -> dict[str, Any] | None:
     Returns:
         Từ điển đã phân tích, hoặc None nếu không cứu được.
     """
-    # TODO(LAB-3): Lớp 2 — bóc JSON khỏi văn bản thừa: khối mã, lời dẫn, nháy đơn
-    #   Chạy "uv run pytest -m lab3" để biết mình đã đúng chưa.
-    raise NotImplementedError("LAB-3: Lớp 2 — bóc JSON khỏi văn bản thừa: khối mã, lời dẫn, nháy đơn")
+    if not raw:
+        return None
+
+    candidates: list[str] = []
+    fenced = _FENCE.search(raw)
+    if fenced:
+        candidates.append(fenced.group(1))
+    obj = _FIRST_OBJ.search(raw)
+    if obj:
+        candidates.append(obj.group(0))
+    candidates.append(raw.strip())
+
+    for cand in candidates:
+        for text in (cand, cand.replace("'", '"')):
+            try:
+                parsed = json.loads(text)
+            except (json.JSONDecodeError, TypeError):
+                continue
+            if isinstance(parsed, dict):
+                return parsed
+    return None
 
 
 # --- Lớp 1: khai báo lược đồ ----------------------------------------------
@@ -82,9 +100,32 @@ def validate(data: dict[str, Any], schema: dict[str, Any]) -> list[str]:
     Returns:
         Danh sách lỗi. Rỗng nghĩa là hợp lệ.
     """
-    # TODO(LAB-3): Lớp 1 — kiểm tra theo lược đồ: kiểu dữ liệu, enum, khoảng giá trị
-    #   Chạy "uv run pytest -m lab3" để biết mình đã đúng chưa.
-    raise NotImplementedError("LAB-3: Lớp 1 — kiểm tra theo lược đồ: kiểu dữ liệu, enum, khoảng giá trị")
+    errors: list[str] = []
+    for name, spec in schema.items():
+        if name not in data:
+            if spec.get("required", True):
+                errors.append(f"thiếu trường bắt buộc '{name}'")
+            continue
+        value = data[name]
+        expected = spec.get("type", "string")
+        if expected == "string" and not isinstance(value, str):
+            errors.append(f"'{name}' phải là chuỗi, nhận được {type(value).__name__}")
+        elif expected == "number" and not isinstance(value, int | float):
+            errors.append(f"'{name}' phải là số, nhận được {type(value).__name__}")
+        elif expected == "array" and not isinstance(value, list):
+            errors.append(f"'{name}' phải là mảng, nhận được {type(value).__name__}")
+        elif expected == "object" and not isinstance(value, dict):
+            errors.append(f"'{name}' phải là đối tượng, nhận được {type(value).__name__}")
+        allowed = spec.get("enum")
+        if allowed and value not in allowed:
+            errors.append(f"'{name}' = {value!r} không thuộc {allowed}")
+        if expected == "number" and isinstance(value, int | float):
+            lo, hi = spec.get("min"), spec.get("max")
+            if lo is not None and value < lo:
+                errors.append(f"'{name}' = {value} nhỏ hơn mức tối thiểu {lo}")
+            if hi is not None and value > hi:
+                errors.append(f"'{name}' = {value} lớn hơn mức tối đa {hi}")
+    return errors
 
 
 # --- Lớp 3 + 4: thử lại và dự phòng ---------------------------------------
@@ -111,9 +152,29 @@ def parse_with_retry(
         ``ParseOutcome`` ghi rõ lớp nào đã cứu được kết quả — số liệu này chính
         là bảng "trước và sau" mà Session 3 bước 2 yêu cầu học viên nộp.
     """
-    # TODO(LAB-3): Lớp 3 và 4 — thử lại có đưa lỗi vào prompt, rồi dự phòng needs_human
-    #   Chạy "uv run pytest -m lab3" để biết mình đã đúng chưa.
-    raise NotImplementedError("LAB-3: Lớp 3 và 4 — thử lại có đưa lỗi vào prompt, rồi dự phòng needs_human")
+    errors: list[str] = []
+    last_error: str | None = None
+
+    for attempt in range(max_retries + 1):
+        raw = call(last_error)
+        data = extract_json(raw)
+        if data is None:
+            last_error = "Đầu ra không chứa JSON hợp lệ."
+            errors.append(f"lần {attempt + 1}: {last_error}")
+            continue
+
+        problems = validate(data, schema)
+        if not problems:
+            layer = "direct" if attempt == 0 else f"retry_{attempt}"
+            return ParseOutcome(data=data, ok=True, attempts=attempt + 1, layer=layer, errors=errors)
+
+        last_error = "Các lỗi cần sửa: " + "; ".join(problems)
+        errors.append(f"lần {attempt + 1}: {last_error}")
+
+    out = dict(fallback)
+    out["needs_human"] = True
+    out["fallback_reason"] = "structured_output_failed"
+    return ParseOutcome(data=out, ok=False, attempts=max_retries + 1, layer="fallback", errors=errors)
 
 
 # --- Lược đồ dùng chung ----------------------------------------------------

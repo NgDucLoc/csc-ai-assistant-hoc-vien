@@ -137,7 +137,7 @@ def check_data() -> Check:
     """Bộ dữ liệu và kho tri thức đầy đủ."""
     try:
         from src.data import load_adversarial, load_gold_qa, load_train
-        from src.knowledge.loader import load_documents
+        from src.knowledge.governance import load_documents
 
         n_train = len(load_train())
         n_docs = len(load_documents(include_superseded=True))
@@ -160,7 +160,7 @@ def check_data() -> Check:
 def check_retrieval() -> Check:
     """Truy hồi chạy được, kể cả khi chưa có chỉ mục vector."""
     try:
-        from src.knowledge.retriever import Retriever
+        from src.retrieval.pipeline import Retriever
 
         r = Retriever()
         hits = r.search("phí chậm nộp cước")

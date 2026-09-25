@@ -1,6 +1,6 @@
 # AI SOLUTION BLUEPRINT — <Tên nhóm>
 
-> **Cách dùng khung này:** sao chép thành `docs/blueprint.md` rồi điền. Lệnh: `cp docs/blueprint-template.md docs/blueprint.md` (Windows: `copy docs\blueprint-template.md docs\blueprint.md`). Xóa các dòng hướng dẫn bắt đầu bằng "Gợi ý:" sau khi điền xong.
+> **Cách dùng khung này:** sao chép thành [`docs/blueprint.md`](../docs/blueprint.md) rồi điền. Lệnh: `cp docs/blueprint-template.md docs/blueprint.md` (Windows: `copy docs\blueprint-template.md docs\blueprint.md`). Xóa các dòng hướng dẫn bắt đầu bằng "Gợi ý:" sau khi điền xong.
 >
 > Blueprint mô tả **trách nhiệm và giao diện giữa các thành phần**, không mô tả cách hiện thực bên trong. Viết đủ rõ để một người chưa dự buổi học đọc xong vẫn hiểu hệ thống gồm những gì và mảnh nào hỏng thì chuyện gì xảy ra.
 

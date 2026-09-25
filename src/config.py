@@ -86,7 +86,13 @@ class Settings:
     chunk_size: int = field(default_factory=lambda: _env_int("CHUNK_SIZE", 700))
     chunk_overlap: int = field(default_factory=lambda: _env_int("CHUNK_OVERLAP", 100))
     retrieve_top_k: int = field(default_factory=lambda: _env_int("RETRIEVE_TOP_K", 5))
-    retrieve_min_score: float = field(default_factory=lambda: _env_float("RETRIEVE_MIN_SCORE", 0.35))
+    retrieve_min_score: float = field(default_factory=lambda: _env_float("RETRIEVE_MIN_SCORE", 0.62))
+    retrieve_mode: str = field(default_factory=lambda: _env("RETRIEVE_MODE", "auto"))  # auto | keyword
+    vector_weight: float = field(default_factory=lambda: _env_float("RETRIEVE_VECTOR_WEIGHT", 0.75))
+    rerank_enabled: bool = field(
+        default_factory=lambda: _env("RERANK_ENABLED", "false").lower() in ("1", "true", "yes", "on")
+    )
+    embed_batch_size: int = field(default_factory=lambda: _env_int("EMBED_BATCH_SIZE", 16))
     chroma_path: str = field(default_factory=lambda: _env("CHROMA_PATH", "data/index"))
 
     # --- Vận hành ----------------------------------------------------------
@@ -120,10 +126,15 @@ settings = Settings()
 # Kết luận rút ra từ thí nghiệm ở Session 2 bước 2: một ứng dụng AI không dùng
 # chung một cấu hình model cho mọi bước. Phân loại cần tất định; soạn phản hồi
 # cần đủ độ linh hoạt để câu văn không cứng.
-TASK_PARAMS: dict[str, dict[str, float | int]] = {
-    "classify": {"temperature": 0.0, "top_p": 1.0, "max_tokens": 400},
-    "extract": {"temperature": 0.0, "top_p": 1.0, "max_tokens": 400},
-    "rewrite_query": {"temperature": 0.0, "top_p": 1.0, "max_tokens": 120},
-    "tool_select": {"temperature": 0.0, "top_p": 1.0, "max_tokens": 300},
-    "generate": {"temperature": 0.3, "top_p": 0.9, "max_tokens": 700},
+#
+# ``reasoning_effort: "none"`` tắt chế độ suy luận (thinking) của Qwen3. Nếu bật, model
+# dành hết ``max_tokens`` để "nghĩ" và trả về nội dung rỗng (đo được: phân loại một ticket
+# với max_tokens=400 dừng ở giới hạn độ dài và ``content`` rỗng). Tham số này nằm trong khóa
+# cache vì nó làm đổi đầu ra.
+TASK_PARAMS: dict[str, dict[str, float | int | str]] = {
+    "classify": {"temperature": 0.0, "top_p": 1.0, "max_tokens": 400, "reasoning_effort": "none"},
+    "extract": {"temperature": 0.0, "top_p": 1.0, "max_tokens": 400, "reasoning_effort": "none"},
+    "rewrite_query": {"temperature": 0.0, "top_p": 1.0, "max_tokens": 120, "reasoning_effort": "none"},
+    "tool_select": {"temperature": 0.0, "top_p": 1.0, "max_tokens": 300, "reasoning_effort": "none"},
+    "generate": {"temperature": 0.3, "top_p": 0.9, "max_tokens": 700, "reasoning_effort": "none"},
 }

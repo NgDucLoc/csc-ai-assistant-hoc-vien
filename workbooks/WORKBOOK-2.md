@@ -1,6 +1,6 @@
 # WORKBOOK 2 — Thiết kế kiến trúc ứng dụng AI
 
-Session 2 · Sản phẩm: `docs/blueprint.md` và 5 ADR
+Session 2 · Sản phẩm: [`docs/blueprint.md`](../docs/blueprint.md) và 5 ADR
 
 | | |
 |---|---|
@@ -85,7 +85,7 @@ Slide 10 chia theo chức năng AI. [`PROJECT-SPEC.md`](../PROJECT-SPEC.md) mụ
 Đọc:
 
 - Đường T: [SPEC-ARCH-01](../PROJECT-SPEC.md#spec-arch-01) (sơ đồ năm tầng) và [SPEC-ARCH-02](../PROJECT-SPEC.md#spec-arch-02) (sáu nguyên tắc ràng buộc).
-- Đường C: mô tả đầu tệp của [`src/ui/app.py`](../src/ui/app.py), [`src/api/main.py`](../src/api/main.py), [`src/agent/workflow.py`](../src/agent/workflow.py), [`src/agent/classifier.py`](../src/agent/classifier.py), [`src/agent/generator.py`](../src/agent/generator.py), [`src/agent/tools.py`](../src/agent/tools.py), [`src/knowledge/retriever.py`](../src/knowledge/retriever.py), [`src/store.py`](../src/store.py), [`src/guardrails/input_rules.py`](../src/guardrails/input_rules.py), [`src/llm/client.py`](../src/llm/client.py), [`src/llm/cache.py`](../src/llm/cache.py).
+- Đường C: mô tả đầu tệp của [`src/ui/app.py`](../src/ui/app.py), [`src/api/main.py`](../src/api/main.py), [`src/agent/workflow.py`](../src/agent/workflow.py), [`src/agent/classifier.py`](../src/agent/classifier.py), [`src/agent/generator.py`](../src/agent/generator.py), [`src/agent/tools.py`](../src/agent/tools.py), [`src/retrieval/pipeline.py`](../src/retrieval/pipeline.py), [`src/store.py`](../src/store.py), [`src/guardrails/input_rules.py`](../src/guardrails/input_rules.py), [`src/llm/client.py`](../src/llm/client.py), [`src/llm/cache.py`](../src/llm/cache.py).
 
 **Bảng 1.** Với mỗi thành phần của slide, tìm tệp đảm nhận và ghi hậu quả nếu bỏ nó đi (viết hậu quả, không viết lại tên tệp).
 
@@ -327,7 +327,7 @@ Pattern là cách giải quyết đã được kiểm chứng cho một loại v
 | Bounded Agent | Nhân viên tự quyết trong phạm vi đã vạch: AI chọn bước tiếp theo nhưng có rào |
 | Human-in-the-Loop | Quyết định rủi ro cao phải qua người duyệt |
 
-Đi qua năm câu hỏi dưới đây. Câu nào trả lời "Có" thì hệ thống dùng pattern đó, và bạn phải chỉ ra dấu hiệu trong tài liệu hoặc code. Nơi nên xem: dòng đầu mô tả `retriever.py`; `tools.py`; mô tả `process_ticket`; hai biến ngân sách ở [`.env.example`](../.env.example); hàm `submit_review` ở `api/main.py` và `record_review` ở `store.py`.
+Đi qua năm câu hỏi dưới đây. Câu nào trả lời "Có" thì hệ thống dùng pattern đó, và bạn phải chỉ ra dấu hiệu trong tài liệu hoặc code. Nơi nên xem: dòng đầu mô tả `pipeline.py` trong [`src/retrieval/`](../src/retrieval/); `tools.py`; mô tả `process_ticket`; hai biến ngân sách ở [`.env.example`](../.env.example); hàm `submit_review` ở `api/main.py` và `record_review` ở `store.py`.
 
 | Câu hỏi chọn pattern (slide 41) | Có / Không | Dấu hiệu tìm thấy (tệp / mục) | Nếu thiếu pattern này, rủi ro là gì |
 |---|---|---|---|
@@ -510,7 +510,7 @@ Công cụ này chỉ xác nhận các tệp có tồn tại và các bài kiể
 - ☐ Có ít nhất 5 ADR mới (từ 0006), mỗi ADR nêu được phương án đã loại
 - ☐ Có kết quả 6a và ảnh chụp giao diện 6b
 
-Nộp: `docs/blueprint.md`, ít nhất 5 ADR mới trong [`docs/adr/`](../docs/adr/), workbook này đã điền, ảnh chụp giao diện và thông báo lỗi ở 6b.
+Nộp: [`docs/blueprint.md`](../docs/blueprint.md), ít nhất 5 ADR mới trong [`docs/adr/`](../docs/adr/), workbook này đã điền, ảnh chụp giao diện và thông báo lỗi ở 6b.
 
 ---
 
@@ -593,10 +593,12 @@ Các hàm hiện để trống (mỗi hàm chỉ có dòng `raise NotImplemented
 
 | Hàm | Tệp | Nhiệm vụ (theo mô tả trong code) | Làm ở |
 |---|---|---|---|
-| `extract_json`, `validate`, `parse_with_retry` | [`src/llm/schema.py`](../src/llm/schema.py) | Ba lớp trong bốn lớp phòng vệ đầu ra có cấu trúc | Lab 3 |
 | `classify` | [`src/agent/classifier.py`](../src/agent/classifier.py) | Phân loại ticket qua bốn lớp phòng vệ, không ném lỗi ra ngoài | Lab 3 |
-| `chunk_document` | [`src/knowledge/indexer.py`](../src/knowledge/indexer.py) | Chia tài liệu theo mục, gắn tiêu đề vào đầu mỗi chunk | Lab 3 |
-| `retrieve` (phần ngưỡng) | [`src/knowledge/retriever.py`](../src/knowledge/retriever.py) | Điểm dưới ngưỡng thì không đủ căn cứ, chuyển người | Lab 3 |
+| `chunk_document` | [`src/knowledge/preparation.py`](../src/knowledge/preparation.py) | Chia tài liệu theo mục, giữ siêu dữ liệu để trích dẫn | Lab 3 |
+| `embed_chunks` | [`src/knowledge/embedding.py`](../src/knowledge/embedding.py) | Gọi model embedding theo lô, giữ nguyên thứ tự | Lab 3 |
+| `hybrid_search` | [`src/retrieval/search.py`](../src/retrieval/search.py) | Chấm điểm keyword, semantic, hybrid rồi lấy top-k | Lab 3 |
+| `judge_evidence` | [`src/retrieval/filters.py`](../src/retrieval/filters.py) | Điểm dưới ngưỡng thì không đủ căn cứ, chuyển người | Lab 3 |
+| `assemble_context` | [`src/context/assemble.py`](../src/context/assemble.py) | Ghép đoạn có trích dẫn trong ngân sách ký tự | Lab 3 |
 | `validate_args`, `rule_based_plan` | [`src/agent/tools.py`](../src/agent/tools.py) | Xác thực tham số trước khi chạy công cụ; đường lùi theo luật | Lab 4 |
 | `generate_reply` | [`src/agent/generator.py`](../src/agent/generator.py) | Không đủ căn cứ thì không gọi model | Lab 4 |
 | `check_input` | [`src/guardrails/input_rules.py`](../src/guardrails/input_rules.py) | Ba kiểm tra đầu vào: chèn lệnh, thông tin cá nhân, ticket rác | Lab 4 |

@@ -17,7 +17,7 @@ import pytest
 
 from src.config import ROOT
 from src.data import load_adversarial, load_gold_qa, load_gold_test, load_train
-from src.knowledge.loader import conflict_report
+from src.knowledge.governance import conflict_report
 
 pytestmark = pytest.mark.lab1
 

@@ -9,10 +9,14 @@ không cần model, và đó là một tính chất của thiết kế chứ kh�
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
 import pytest
+
+# Bộ kiểm thử không gọi model embedding: truy hồi luôn chạy ở chế độ keyword trừ khi bài kiểm thử tự đặt khác.
+os.environ.setdefault("RETRIEVE_MODE", "keyword")
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))

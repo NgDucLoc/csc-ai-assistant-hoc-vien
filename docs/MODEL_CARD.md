@@ -90,7 +90,7 @@ Chạy `uv run python scripts/bias_check.py`. Câu hỏi: **hệ thống có x�
 
 1. **Nhầm lẫn giữa `cuoc_thanh_toan` và `goi_cuoc_khuyen_mai`.** *Điền tỉ lệ đo được.* Nguyên nhân là hai nhóm chồng lấn về ngữ nghĩa: ticket nhắc tên gói nhưng vấn đề thực là tiền đã bị trừ. Đây là giới hạn ở **định nghĩa nhãn**, không phải ở model — sửa bằng cách sửa model sẽ không hiệu quả.
 
-2. **Ngưỡng truy hồi 0.35 chọn theo kinh nghiệm, không có căn cứ lý thuyết.** Phải hiệu chuẩn lại nếu đổi model embedding hoặc chiến lược chia đoạn. Ngưỡng đặt sai theo hướng thấp làm hệ thống bịa chính sách; đặt sai theo hướng cao làm tỉ lệ chuyển người tăng vô ích.
+2. **Ngưỡng truy hồi 0.62 hiệu chuẩn bằng số đo cho hybrid `bge-m3`, không có căn cứ lý thuyết.** Phải hiệu chuẩn lại nếu đổi model embedding hoặc chiến lược chia đoạn. Ngưỡng đặt sai theo hướng thấp làm hệ thống bịa chính sách; đặt sai theo hướng cao làm tỉ lệ chuyển người tăng vô ích.
 
 3. *Điền giới hạn thứ ba từ phân tích lỗi của nhóm.*
 

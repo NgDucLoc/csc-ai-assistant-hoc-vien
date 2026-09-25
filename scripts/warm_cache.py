@@ -21,10 +21,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from src.agent.classifier import classify, rewrite_query  # noqa: E402
+from src.agent.classifier import classify  # noqa: E402
 from src.config import settings  # noqa: E402
 from src.data import load_adversarial, load_gold_qa, load_train  # noqa: E402
 from src.llm.client import get_client  # noqa: E402
+from src.retrieval.transform import rewrite_query  # noqa: E402
 
 
 def main() -> int:

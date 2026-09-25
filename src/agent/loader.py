@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Any
 
 from src.config import ROOT, settings
-from src.knowledge.loader import parse_front_matter
+from src.knowledge.sourcing import parse_front_matter
 
 PROMPT_DIR = ROOT / "src" / "agent" / "prompts"
 

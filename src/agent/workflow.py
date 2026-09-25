@@ -17,16 +17,18 @@ from dataclasses import asdict, dataclass, field
 from enum import StrEnum
 from typing import Any
 
-from src.agent.classifier import Classification, classify, rewrite_query
+from src.agent.classifier import Classification, classify
 from src.agent.generator import Draft, generate_reply
 from src.agent.tools import ToolRunner, rule_based_plan
 from src.config import settings
 from src.guardrails.input_rules import check_input
 from src.guardrails.output_rules import check_output
 from src.guardrails.runtime import TraceLogger, new_trace_id
-from src.knowledge.retriever import RetrievalResult, Retriever, get_retriever
 from src.llm.cache import CacheMissError
 from src.llm.client import BudgetExceededError, CircuitOpenError, LLMClient, get_client
+from src.retrieval.models import RetrievalResult
+from src.retrieval.pipeline import Retriever, get_retriever
+from src.retrieval.transform import rewrite_query
 
 CONFIDENCE_THRESHOLD = 0.60
 

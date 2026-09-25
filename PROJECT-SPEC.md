@@ -293,7 +293,9 @@ csc-ai-assistant/
 ├── src/
 │   ├── config.py
 │   ├── llm/{client.py, cache.py, schema.py}
-│   ├── knowledge/{loader.py, indexer.py, retriever.py}
+│   ├── knowledge/{sourcing.py, governance.py, preparation.py, embedding.py, indexing.py}
+│   ├── retrieval/{transform.py, search.py, filters.py, rerank.py, pipeline.py, models.py}
+│   ├── context/assemble.py
 │   ├── agent/{prompts/, classifier.py, tools.py, generator.py, workflow.py}
 │   ├── guardrails/{input_rules.py, output_rules.py, runtime.py}
 │   ├── api/main.py
@@ -344,7 +346,7 @@ csc-ai-assistant/
 | GitHub Actions (hoặc GitLab CI) | Tích hợp liên tục, chạy test và eval | BẮT BUỘC | Lab 2 (giới thiệu), Lab 5 (đầy đủ) |
 | ADR template | Ghi nhận quyết định kiến trúc | BẮT BUỘC | Lab 2 |
 | Ollama `Modelfile` | Ghim tham số model, tái lập được cấu hình | BẮT BUỘC | Lab 2 |
-| `promptfoo` | So sánh và đánh giá prompt | BẮT BUỘC | Lab 3 |
+| `promptfoo` | So sánh và đánh giá prompt | TÙY CHỌN | Lab 3 (phần mở rộng; [`scripts/lab3_check.py`](scripts/lab3_check.py) thay cho các bước đo bắt buộc) |
 | MLflow (backend SQLite, chạy local) | Theo dõi thí nghiệm và so sánh lần chạy | BẮT BUỘC | Lab 5 |
 | Docker + Docker Compose | Đóng gói và triển khai | BẮT BUỘC | Lab 5 |
 | Langfuse / OpenTelemetry | Tracing LLM chuyên dụng | NGOÀI PHẠM VI | Chỉ demo, không thực hành |
@@ -722,7 +724,7 @@ Prompt sinh phản hồi khách hàng **BẮT BUỘC** chứa đủ các ràng b
 |---|---|
 | Vector store | ChromaDB, persistent |
 | Số kết quả trả về | `k = 5` |
-| Ngưỡng điểm tối thiểu | `0.35` (cosine) |
+| Ngưỡng điểm tối thiểu | `0.62` (điểm hybrid với `bge-m3`; **BẮT BUỘC** hiệu chuẩn lại khi đổi model embedding, chiến lược chia đoạn hoặc kiểu tìm) |
 | Lọc theo trạng thái | **BẮT BUỘC** loại chunk có `status = superseded` |
 | Viết lại truy vấn | **NÊN** — rút gọn ticket dài thành câu truy vấn trước khi tìm |
 
@@ -747,6 +749,186 @@ Mọi phản hồi sinh ra **BẮT BUỘC** kèm danh sách nguồn dạng cấu
 ```
 
 Phản hồi không có trích dẫn bị guardrail đầu ra chặn (xem [`SPEC-GUARD-02`](#spec-guard-02)).
+
+
+<a id="spec-rag-05"></a>
+
+### SPEC-RAG-05 — Kiến trúc pipeline tri thức và truy hồi
+
+Mã của phần tri thức đi theo đúng ba sơ đồ trong slide Session 3: vòng đời tri thức (slide 34), RAG Pipeline (slide 39) và Context Engineering Pipeline (slide 24). Mỗi giai đoạn của sơ đồ là một hàm trong một module, để từ slide tìm được mã và từ mã tìm được slide.
+
+| Giai đoạn (slide) | Module | Hàm chính | Mã spec |
+|---|---|---|---|
+| Discover (34) | [`src/knowledge/sourcing.py`](src/knowledge/sourcing.py) | `discover_documents` | [SPEC-RAG-06](#spec-rag-06) |
+| Ingest, Parse (34, 39) | [`src/knowledge/sourcing.py`](src/knowledge/sourcing.py) | `ingest_document`, `parse_front_matter` | [SPEC-RAG-06](#spec-rag-06) |
+| Govern (34) | [`src/knowledge/governance.py`](src/knowledge/governance.py) | `load_documents`, `conflict_report` | [SPEC-DATA-05](#spec-data-05), [SPEC-DATA-06](#spec-data-06) |
+| Prepare, Organize & Enrich, Chunk (34, 39) | [`src/knowledge/preparation.py`](src/knowledge/preparation.py) | `chunk_document` | [SPEC-RAG-07](#spec-rag-07) |
+| Embed (39) | [`src/knowledge/embedding.py`](src/knowledge/embedding.py) | `embed_chunks` | [SPEC-RAG-08](#spec-rag-08) |
+| Index (39) | [`src/knowledge/indexing.py`](src/knowledge/indexing.py) | `build_index`, `find_index`, `read_index` | [SPEC-RAG-06](#spec-rag-06) |
+| Query Transformation (39) | [`src/retrieval/transform.py`](src/retrieval/transform.py) | `rewrite_query` | [SPEC-RAG-02](#spec-rag-02) |
+| Retrieve (39, 40) | [`src/retrieval/search.py`](src/retrieval/search.py) | `hybrid_search` | [SPEC-RAG-09](#spec-rag-09) |
+| Filter (39, 44) | [`src/retrieval/filters.py`](src/retrieval/filters.py) | `filter_hits`, `judge_evidence` | [SPEC-RAG-10](#spec-rag-10) |
+| Rerank (39, 44) | [`src/retrieval/rerank.py`](src/retrieval/rerank.py) | `rerank` | [SPEC-RAG-09](#spec-rag-09) |
+| Select, Assemble (24, 39) | [`src/context/assemble.py`](src/context/assemble.py) | `assemble_context` | [SPEC-CTX-01](#spec-ctx-01) |
+| Điều phối pha runtime | [`src/retrieval/pipeline.py`](src/retrieval/pipeline.py) | `Retriever.retrieve` | [SPEC-RAG-09](#spec-rag-09) |
+
+**Quy tắc phụ thuộc (BẮT BUỘC):**
+
+1. [`src/knowledge/`](src/knowledge/) không import [`src/retrieval/`](src/retrieval/) hay [`src/context/`](src/context/). Tri thức được dựng trước, truy hồi đọc chỉ mục qua [`src/knowledge/indexing.py`](src/knowledge/indexing.py).
+2. Mọi lời gọi model (embedding và sinh văn bản) đi qua [`src/llm/client.py`](src/llm/client.py) ([`SPEC-ARCH-02`](#spec-arch-02) nguyên tắc 2).
+3. Không module nào đọc thẳng [`data/knowledge/`](data/knowledge/) ngoài `sourcing.py`, và không module nào đọc thẳng tệp chỉ mục ngoài `indexing.py`.
+
+**Viết mã với trợ lý AI.** Các spec [`SPEC-RAG-07`](#spec-rag-07) đến [`SPEC-RAG-10`](#spec-rag-10) và [`SPEC-CTX-01`](#spec-ctx-01) mỗi cái tự đủ để giao cho một trợ lý AI viết một hàm: chữ ký hàm, dữ liệu vào và ra, quy tắc, các trường hợp biên và bài kiểm thử phải qua. Dán spec, mô tả (docstring) của hàm và bài kiểm thử tương ứng cho trợ lý, rồi kiểm chứng bằng `pytest -m lab3` ([`SPEC-TOOLING-07`](#spec-tooling-07): mọi dòng mã nộp bài phải giải thích được).
+
+<a id="spec-rag-06"></a>
+
+### SPEC-RAG-06 — Hợp đồng dữ liệu của tri thức
+
+**Document** (`sourcing.Document`): `doc_id`, `title`, `category` (một trong sáu nhóm ticket), `version`, `effective_date` (`YYYY-MM-DD`), `status` (`active` hoặc `superseded`), `supersedes` (mã tài liệu bị thay thế hoặc rỗng), `body` (nội dung Markdown đã bỏ front-matter), `path`. Thiếu một trong sáu trường đầu ở front-matter thì `ingest_document` ném `ValueError` nêu tên tệp và trường thiếu.
+
+**Chunk** (`preparation.Chunk`): `chunk_id`, `doc_id`, `doc_title`, `section`, `category`, `version`, `effective_date`, `text`.
+
+- `chunk_id` có dạng `{doc_id}#{số thứ tự hai chữ số}`, số thứ tự tăng dần trong một tài liệu, ví dụ `KB-001#03`.
+- `section` là tiêu đề mục. Đoạn thứ hai trở đi của cùng một mục thêm hậu tố ` (tiếp)`.
+- Văn bản đem nhúng là `doc_title — section` xuống dòng rồi `text` (`Chunk.embedding_text()`), để vector mang tên tài liệu và tên mục.
+
+**Chỉ mục** (`index.json`, do `indexing.build_index` ghi, do `indexing.read_index` đọc):
+
+```json
+{
+  "config_profile": "L",
+  "embed_model": "bge-m3",
+  "chunk_size": 700,
+  "chunks": [
+    {"chunk_id": "KB-001#00", "doc_id": "KB-001", "doc_title": "…", "section": "…",
+     "category": "cuoc_thanh_toan", "version": "3.0", "effective_date": "2026-01-01",
+     "text": "…", "embedding": [0.01, -0.02, "… 1024 số với bge-m3"]}
+  ]
+}
+```
+
+Tìm chỉ mục theo thứ tự: thư mục `CHROMA_PATH` (chỉ mục tự dựng), rồi [`data/index_prebuilt/`](data/index_prebuilt/) (bản dựng sẵn). Không có tệp nào thì `Retriever` dựng chỉ mục từ khóa trong bộ nhớ.
+
+<a id="spec-rag-07"></a>
+
+### SPEC-RAG-07 — Chia đoạn: `chunk_document`
+
+`chunk_document(doc: Document, *, max_chars: int | None = None, overlap: int | None = None) -> list[Chunk]` trong [`src/knowledge/preparation.py`](src/knowledge/preparation.py). Mở rộng [`SPEC-RAG-01`](#spec-rag-01).
+
+**Quy tắc:**
+
+1. `max_chars` bỏ trống thì lấy `settings.chunk_size`. `overlap` bỏ trống thì lấy `settings.chunk_overlap`. `overlap = 0` là giá trị hợp lệ.
+2. Chia theo mục bằng `split_sections(doc)` (đã có sẵn, trả về danh sách cặp tiêu đề và nội dung).
+3. Mục có độ dài không quá `max_chars` thành một đoạn. Mục dài hơn được cắt bằng `_split_long(text, max_chars, overlap)` (đã có sẵn), cắt theo ranh giới câu và có chồng lấn.
+4. Mỗi đoạn mang đủ trường theo [`SPEC-RAG-06`](#spec-rag-06). `text` đã bỏ khoảng trắng đầu và cuối. `chunk_id` đánh số liên tục trong toàn tài liệu, không đặt lại theo mục.
+5. Tài liệu không có tiêu đề mục thì cả thân là một mục có tiêu đề là `title` của tài liệu (đã được `split_sections` xử lý).
+
+**Nghiệm thu** (`pytest -m lab3 -k chunk`): mỗi đoạn có `doc_id`, `version`, `effective_date`, và tiêu đề tài liệu nằm trong `embedding_text()`; tài liệu nhiều mục cho nhiều đoạn theo mục; không đoạn nào dài hơn `1.5 × chunk_size`.
+
+**Sai lầm thường gặp:** cắt cứng theo số ký tự làm đứt điều khoản; quên hậu tố ` (tiếp)`; đặt lại số thứ tự `chunk_id` ở mỗi mục nên trùng mã.
+
+<a id="spec-rag-08"></a>
+
+### SPEC-RAG-08 — Embedding: `embed_chunks`
+
+`embed_chunks(chunks: list[Chunk], client, *, batch_size: int = 16, on_progress=None) -> list[list[float]]` trong [`src/knowledge/embedding.py`](src/knowledge/embedding.py).
+
+**Quy tắc:**
+
+1. `batch_size` nhỏ hơn 1 thì ném `ValueError`.
+2. Gửi `client.embed(texts)` theo từng lô `batch_size` đoạn, với `texts` là `chunk.embedding_text()` của từng đoạn trong lô, đúng thứ tự.
+3. Vector trả về cùng thứ tự với `chunks`, mỗi đoạn đúng một vector.
+4. Lô nào model trả về số vector khác số đoạn đã gửi thì ném `ValueError` nêu hai con số.
+5. Có `on_progress` thì gọi sau mỗi lô với (số đoạn đã nhúng, tổng số đoạn).
+6. Danh sách rỗng trả về danh sách rỗng, không gọi model.
+
+**Ràng buộc hạ tầng:** model embedding giống nhau ở cả hai cấu hình ([`SPEC-INFRA-01`](#spec-infra-01)). `bge-m3` cho vector 1024 chiều. Đổi model thì mọi vector cũ vô nghĩa và phải dựng lại chỉ mục.
+
+**Nghiệm thu** (`pytest -m lab3 -k embed`): đúng số lô và thứ tự; văn bản gửi là `embedding_text()`; báo tiến độ; từ chối `batch_size = 0` và số vector sai.
+
+<a id="spec-rag-09"></a>
+
+### SPEC-RAG-09 — Tìm kiếm và pipeline runtime: `hybrid_search` và `Retriever.retrieve`
+
+`hybrid_search(query, chunks, *, query_vector=None, top_k=5, vector_weight=0.75, hybrid=True) -> list[Hit]` trong [`src/retrieval/search.py`](src/retrieval/search.py). Mở rộng [`SPEC-RAG-02`](#spec-rag-02).
+
+**Cách chấm điểm** cho mỗi đoạn (ba kiểu ở slide 40):
+
+| Điều kiện | Điểm |
+|---|---|
+| Không có `query_vector`, hoặc đoạn không có `embedding` | `keyword` |
+| Có vector, `hybrid=True` | `vector_weight × cosine + (1 − vector_weight) × keyword` |
+| Có vector, `hybrid=False` | `cosine` (semantic thuần) |
+
+`keyword` = tỉ lệ từ (viết thường) của truy vấn có mặt trong tập từ của đoạn (tiêu đề tài liệu, tiêu đề mục và nội dung), dùng `keyword_score` và `chunk_tokens` (đã có sẵn). `cosine` dùng hàm `cosine` (đã có sẵn).
+
+Trả về tối đa `top_k` `Hit`, sắp giảm dần theo điểm, `score` làm tròn 4 chữ số, mang đủ `chunk_id`, `doc_id`, `doc_title`, `section`, `version`, `effective_date`, `category`, `text`.
+
+**`Retriever.retrieve`** (đã có sẵn, ghép các bước) chạy theo thứ tự: văn bản tìm là `rewritten or query` → lấy vector truy vấn nếu chỉ mục có vector → `hybrid_search` → `filter_hits` → `rerank` (chỉ khi `RERANK_ENABLED=true`) → `judge_evidence` → `RetrievalResult`.
+
+**Vector truy vấn** chỉ được dùng khi chỉ mục có vector, `RETRIEVE_MODE` khác `keyword`, `CACHE_MODE` khác `cache_only` và model embedding phản hồi. Model không phản hồi thì rơi về keyword, `RetrievalResult.mode` ghi `keyword` (suy giảm có kiểm soát, [`SPEC-ARCH-02`](#spec-arch-02) nguyên tắc 3).
+
+**Tham số cấu hình:** `RETRIEVE_TOP_K` (5), `RETRIEVE_MODE` (`auto` hoặc `keyword`), `RETRIEVE_VECTOR_WEIGHT` (0.75), `RERANK_ENABLED` (`false`), `EMBED_BATCH_SIZE` (16).
+
+**Nghiệm thu** (`pytest -m lab3 -k "search or retriever or cosine"`): keyword khi không có vector; semantic thuần xếp theo vector; hybrid đúng công thức; tối đa `top_k`; kết quả sắp giảm dần và điểm nằm trong [0, 1].
+
+<a id="spec-rag-10"></a>
+
+### SPEC-RAG-10 — Đủ căn cứ và ngưỡng: `judge_evidence`
+
+`judge_evidence(hits: list[Hit], min_score: float) -> tuple[bool, str]` trong [`src/retrieval/filters.py`](src/retrieval/filters.py). Cài đặt [`SPEC-RAG-03`](#spec-rag-03).
+
+| Điều kiện | Kết quả |
+|---|---|
+| `hits` rỗng | `(False, "Kho tri thức không trả về kết quả nào.")` |
+| `hits[0].score < min_score` | `(False, lý do chứa cụm "Không đủ căn cứ" và nêu điểm cao nhất cùng ngưỡng)` |
+| còn lại (kể cả điểm bằng ngưỡng) | `(True, "Đủ căn cứ.")` |
+
+`hits` đã sắp giảm dần nên chỉ cần xét phần tử đầu. Kiểm tra này diễn ra **trước** khi gọi model sinh phản hồi ([`ADR-0005`](docs/adr/0005-nguong-tu-choi-thay-vi-doan.md)).
+
+**Ngưỡng mặc định `0.62`** được chọn từ bảng quét ngưỡng (`uv run python scripts/lab3_check.py retrieval --sweep`) trên bộ 45 câu hỏi vàng, tìm kiếm hybrid với `bge-m3`: điểm cao nhất của 5 câu không có đáp án nằm trong 0.51 đến 0.59, của 40 câu có đáp án từ 0.65 đến 0.86, nên ngưỡng từ 0.60 đến 0.65 cho tỉ lệ từ chối đúng 1.00 và từ chối thừa 0.00. Với tìm kiếm chỉ dùng từ khóa, hai khoảng điểm chồng nhau (0.44 đến 0.73 so với 0.62 đến 1.00) nên không ngưỡng nào tách sạch, và ngưỡng 0.35 cũ cho tỉ lệ từ chối đúng 0/5.
+
+**BẮT BUỘC hiệu chuẩn lại** ngưỡng khi đổi model embedding, chiến lược chia đoạn, kiểu tìm hoặc bộ tài liệu, rồi ghi ngưỡng mới cùng bảng quét vào [`docs/context_spec.md`](docs/context_spec.md).
+
+`filter_hits(hits, *, categories=None, as_of=None)` (đã có sẵn) loại kết quả theo nhóm và theo ngày hiệu lực; dùng để chống Stale Retrieval (slide 44).
+
+**Nghiệm thu** (`pytest -m lab3 -k judge`): ba nhánh ở bảng trên, gồm cả trường hợp điểm bằng ngưỡng.
+
+<a id="spec-ctx-01"></a>
+
+### SPEC-CTX-01 — Ghép context: `assemble_context`
+
+`assemble_context(hits: list[Hit], max_chars: int = 2000) -> str` trong [`src/context/assemble.py`](src/context/assemble.py). Cài đặt các bước Select, Transform và Assemble của Context Engineering Pipeline (slide 24) cho phần tri thức.
+
+**Quy tắc:**
+
+1. Mỗi đoạn thành một khối: dòng đầu là trích dẫn, tiêu đề tài liệu, dấu `—`, tiêu đề mục; dòng sau là nội dung. Cụ thể: `[{doc_id} v{version}, hiệu lực {effective_date}] {doc_title} — {section}` xuống dòng rồi `text`.
+2. Các khối theo đúng thứ tự `hits`, cách nhau một dòng trống.
+3. Ngân sách tính bằng số ký tự của các khối (không tính dòng trống ngăn cách). Khối nào làm tổng vượt `max_chars` thì dừng ở đó: không cắt cụt giữa đoạn, không bỏ qua khối đó để lấy khối nhỏ hơn phía sau.
+4. Không có đoạn nào vừa ngân sách, hoặc `hits` rỗng, thì trả chuỗi rỗng.
+
+**Ngân sách:** `max_chars = 2000` ứng với khoảng 625 token (hệ số 3.2 ký tự mỗi token), nằm trong phần dành cho tri thức của tổng 3.000 token mỗi lời gọi ([`SPEC-INFRA-04`](#spec-infra-04)). Nhiều context không đồng nghĩa với context tốt hơn (slide 25).
+
+**Nghiệm thu** (`pytest -m lab3 -k assemble`): đúng khuôn, đúng thứ tự, dừng đúng ngân sách, rỗng khi không vừa.
+
+<a id="spec-ctx-02"></a>
+
+### SPEC-CTX-02 — Sáu thành phần của context trong hệ thống này
+
+Ghép slide 20 và 21 với hệ thống, để biết một thành phần nào của context đến từ đâu:
+
+| Thành phần | Nguồn trong hệ thống | Bước của [`SPEC-FLOW-01`](#spec-flow-01) |
+|---|---|---|
+| Instructions / Constraints | `src/agent/prompts/*.md` ([`SPEC-PROMPT-01`](#spec-prompt-01)) | mọi bước gọi model |
+| Enterprise Knowledge | `assemble_context` trên kết quả truy hồi | Truy hồi tri thức |
+| Subscriber State | kết quả `get_subscriber_info` | Gọi công cụ |
+| Tool Results | `ToolRunner.results_block` | Gọi công cụ |
+| Conversation / Task State | chưa có (mỗi ticket độc lập, không có lịch sử hội thoại) | — |
+| System State | `trace_id`, lý do chuyển người tích lũy trong `process_ticket` | toàn quy trình |
+| Permissions | guardrail và ranh giới công cụ chỉ đọc ([`SPEC-TOOL-02`](#spec-tool-02)); xác thực người dùng ngoài phạm vi | Guardrail |
+
+Năm phép kiểm tra chất lượng context của slide 22 (Sufficient, Relevant, Fresh, Consistent, Trusted) tương ứng: ngưỡng đủ căn cứ ([`SPEC-RAG-10`](#spec-rag-10)), top-k cộng ngân sách ([`SPEC-CTX-01`](#spec-ctx-01)), lọc `status` ([`SPEC-DATA-06`](#spec-data-06)), xử lý hai cặp tài liệu mâu thuẫn ([`SPEC-DATA-05`](#spec-data-05)), thẻ `<ticket>` cộng guardrail đầu vào ([`SPEC-GUARD-01`](#spec-guard-01)).
+
 
 ---
 
@@ -960,7 +1142,7 @@ Bản sao dạng tệp vẫn được ghi kèm tại `eval/results/<timestamp>/r
   "model": "Qwen3-8B",
   "embedding_model": "bge-m3",
   "prompt_versions": {"classifier": "v3", "generator": "v2"},
-  "rag_config": {"chunk_size": 600, "overlap": 80, "k": 5, "threshold": 0.35},
+  "rag_config": {"chunk_size": 600, "overlap": 80, "k": 5, "threshold": 0.62},
   "dataset": "gold_test.jsonl@v1",
   "cache_hit_rate": 0.42
 }
@@ -1037,8 +1219,8 @@ Nếu không đáp ứng tiêu chí này, hệ thống chưa đạt "production-
 
 | # | Yêu cầu đầu ra (theo đề cương) | Session | Deliverable | Artifact trong repo | Bằng chứng nghiệm thu |
 |---|---|---|---|---|---|
-| YC1 | Phân tích bài toán và xác định cơ hội ứng dụng AI | 1 | AI Opportunity Canvas | `docs/canvas.md` | Canvas đủ 7 ô, chỉ số đo được bằng số |
-| YC2 | Thiết kế AI Architecture cho bài toán doanh nghiệp | 2 | AI Solution Blueprint | `docs/blueprint.md`, [`docs/adr/`](docs/adr/) | Sơ đồ 5 tầng + bảng quyết định có lý do |
+| YC1 | Phân tích bài toán và xác định cơ hội ứng dụng AI | 1 | AI Opportunity Canvas | [`docs/canvas.md`](docs/canvas.md) | Canvas đủ 7 ô, chỉ số đo được bằng số |
+| YC2 | Thiết kế AI Architecture cho bài toán doanh nghiệp | 2 | AI Solution Blueprint | [`docs/blueprint.md`](docs/blueprint.md), [`docs/adr/`](docs/adr/) | Sơ đồ 5 tầng + bảng quyết định có lý do |
 | YC3 | Thiết kế AI Workflow (Prompt, Context, Knowledge, Tool) | 3, 4 | Context Specification, AI Prototype v1 | [`docs/context_spec.md`](docs/context_spec.md), [`src/agent/`](src/agent/) | Bảng thí nghiệm RAG có số đo; workflow chạy end-to-end |
 | YC4 | Phát triển AI Application dựa trên Starter Kit | 3, 4, 5 | Prototype hoạt động | [`src/`](src/) | `docker compose up` chạy được từ máy sạch |
 | YC5 | Đánh giá và triển khai AI Application Prototype | 5, 6 | Production-ready Prototype, Final Application | [`docs/EVALUATION.md`](docs/EVALUATION.md), `eval/results/` | Đủ 5 nhóm chỉ số + phân tích lỗi + 12/12 ca đối kháng |
@@ -1062,8 +1244,8 @@ Nếu không đáp ứng tiêu chí này, hệ thống chưa đạt "production-
 
 | # | Yêu cầu đầu ra | Hoạt động tương ứng | Bằng chứng nghiệm thu |
 |---|---|---|---|
-| M2-1 | Thiết kế được ngữ cảnh và tri thức cho AI Application | Lab 3 bước 1 (thiết kế prompt + ngân sách ngữ cảnh) và bước 3 (dựng kho tri thức) | `context_spec.md` có mẫu prompt 5 phần và chiến lược chunking |
-| M2-2 | Xây dựng được chiến lược khai thác tri thức | Lab 3 bước 4: thí nghiệm cải tiến truy hồi có đo lường | Bảng ≥ 2 thí nghiệm kèm Recall@5 trước–sau |
+| M2-1 | Thiết kế được ngữ cảnh và tri thức cho AI Application | Lab 3 bước 1 (instruction), bước 2 đến 4 (Knowledge, chia đoạn, embedding) và bước 6 (context, ngân sách) | `context_spec.md` có mẫu prompt 5 phần và chiến lược chunking |
+| M2-2 | Xây dựng được chiến lược khai thác tri thức | Lab 3 bước 5: thí nghiệm cải tiến truy hồi có đo lường | Bảng ≥ 2 thí nghiệm kèm Recall@5 trước–sau |
 | M2-3 | Thiết kế được quy trình xử lý AI | Lab 4 bước 1: vẽ sơ đồ luồng đủ nhánh rẽ và điểm quyết định | Sơ đồ luồng + danh sách ≥ 4 điều kiện chuyển người |
 | M2-4 | Xây dựng được AI Prototype hoạt động | Lab 4 bước 2, 3, 4 | Chạy end-to-end trên 5 ticket; video 3 tình huống |
 
@@ -1123,8 +1305,8 @@ Bảng này dùng để kiểm tra độ phủ. Mọi mục "Nội dung" và "Wo
 | Retrieval-Augmented Generation | Nội dung | Lý thuyết, 30 phút |
 | Quản lý tri thức doanh nghiệp | Nội dung | Lý thuyết, 15 phút |
 | Thiết kế Prompt | Workshop | Lab 3 bước 1 |
-| Thiết kế Context | Workshop | Lab 3 bước 1 (phân bổ ngân sách ngữ cảnh, phân tách bằng thẻ) và bước 3 (lắp ngữ cảnh truy hồi) |
-| Xây dựng Knowledge Base | Workshop | Lab 3 bước 3, đo chất lượng ở bước 4 |
+| Thiết kế Context | Workshop | Lab 3 bước 1 (phân tách bằng thẻ) và bước 6 (sáu thành phần và ngân sách context, ghép context truy hồi) |
+| Xây dựng Knowledge Base | Workshop | Lab 3 bước 2 đến 4, đo chất lượng ở bước 5 |
 
 **Session 4**
 
@@ -1172,7 +1354,7 @@ Bảng này dùng để kiểm tra độ phủ. Mọi mục "Nội dung" và "Wo
 | Lab | Điều kiện hoàn thành |
 |---|---|
 | 0 | `uv sync` thành công; `check_env.py` trả PASS toàn bộ; `pre-commit` đã cài; nộp ảnh chụp màn hình |
-| 1 | `docs/canvas.md` đủ 7 ô; ≥ 2 chỉ số định lượng kèm ước lượng ROI và điểm hòa vốn; phần "KHÔNG làm" ≥ 4 mục |
+| 1 | [`docs/canvas.md`](docs/canvas.md) đủ 7 ô; ≥ 2 chỉ số định lượng kèm ước lượng ROI và điểm hòa vốn; phần "KHÔNG làm" ≥ 4 mục |
 | 2 | Sơ đồ 5 tầng; ≥ 5 ADR trong [`docs/adr/`](docs/adr/); `Modelfile` ghim tham số; CI giai đoạn lint chạy xanh; UI chạy được với dữ liệu giả |
 | 3 | `pytest tests/test_lab3.py` xanh trên CI; index dựng được; ≥ 2 thí nghiệm RAG có số đo; ≥ 2 phiên bản prompt so sánh bằng `promptfoo`; nộp qua pull request đã được nhóm khác duyệt |
 | 4 | Chạy end-to-end trên 5 ticket; ≥ 4 điều kiện escalate hoạt động; màn hình duyệt ghi được log; CI vẫn xanh |
@@ -1288,6 +1470,8 @@ Hệ thống không huấn luyện mô hình nên không có trôi dữ liệu t
 | Phiên bản | Ngày | Người thay đổi | Nội dung | Lý do |
 |---|---|---|---|---|
 | v1.0 | 2026-08-25 | — | Bản khởi tạo | Thiết lập ràng buộc ban đầu cho khóa học |
+| v1.9 | 2026-09-25 | — | **Cấu trúc lại phần tri thức theo kiến trúc trong slide Session 3.** `src/knowledge/{loader,indexer,retriever}.py` tách thành [`src/knowledge/`](src/knowledge/) (Knowledge Engineering: `sourcing`, `governance`, `preparation`, `embedding`, `indexing`), [`src/retrieval/`](src/retrieval/) (Retrieval Engineering: `transform`, `search`, `filters`, `rerank`, `pipeline`) và [`src/context/`](src/context/) (Context Engineering: `assemble`). Thêm [SPEC-RAG-05](#spec-rag-05) đến [SPEC-RAG-10](#spec-rag-10), [SPEC-CTX-01](#spec-ctx-01), [SPEC-CTX-02](#spec-ctx-02). Lab 3 có 6 khối code: `chunk_document`, `embed_chunks`, `hybrid_search`, `judge_evidence`, `assemble_context`, `classify`; bốn lớp phòng vệ đầu ra là mã cho sẵn. Thêm [`scripts/lab3_check.py`](scripts/lab3_check.py), [`docs/context-spec-template.md`](docs/context-spec-template.md) và chỉ mục dựng sẵn [`data/index_prebuilt/index.json`](data/index_prebuilt/index.json). `TASK_PARAMS` thêm `reasoning_effort: "none"` để model Qwen3 không dùng hết ngân sách token cho phần suy luận; ngưỡng mặc định `RETRIEVE_MIN_SCORE` đổi sang 0.62 (xem [ADR-0005](docs/adr/0005-nguong-tu-choi-thay-vi-doan.md)). | Cấu trúc mã cần khớp sơ đồ slide để người học lần được từ slide sang mã |
+| v1.8 | 2026-09-25 | — | **Thiết kế lại Workbook 2 và Lab 2 bám slide Session 2.** Thêm [`docs/blueprint-template.md`](docs/blueprint-template.md) (khung Blueprint chín mục) và [`scripts/temperature_demo.py`](scripts/temperature_demo.py). | Người học cần đọc-hiểu-phân tích thay vì điền bảng ngắn |
 | v1.7 | 2026-09-23 | — | **Kiểm chứng thật một phần rủi ro R17 (thinking-mode Qwen3).** Cài Ollama 0.34.3 + pull `qwen3:1.7b` (bản nhỏ cùng họ, dùng để kiểm chứng cơ chế — không đại diện accuracy của `qwen3:8b` thật) trên máy không có GPU rời, chạy `uv sync` đầy đủ, gọi thẳng endpoint `/v1/chat/completions` bằng đúng prompt thật (`classify.v1.md` + `schema_hint()` + `SYSTEM` của `classifier.py`), rồi xác nhận qua đúng `extract_json()`/`validate()`/`parse_with_retry()` của [`src/llm/schema.py`](src/llm/schema.py). **Kết quả:** Ollama tự tách khối suy luận ra field `message.reasoning` riêng, `message.content` luôn sạch — không ca nào hỏng vì thinking-mode, ở cả nhiệt độ 0 (classify) và 0.3 (generate). Gỡ chỉ dẫn `/no_think` khỏi `models/Modelfile` (đã xác nhận vô tác dụng — Ollama không đọc nó như token điều khiển, chỉ tốn thêm ~50% completion token cho suy luận ẩn không hiển thị). Chạy thật `pytest -m lab2` (7/7 pass) và `compare_models.py --tickets 3` qua model cục bộ: 1/3 ca cần lớp 3 (retry) mới đúng, 2/3 rơi fallback đúng cách — xác nhận pipeline 4 lớp phòng vệ chạy trơn tru end-to-end, không lỗi hệ thống. Khởi động thử `streamlit run src/ui/app.py` — boot thành công (HTTP 200), tắt ngay sau khi xác nhận. **CHƯA kiểm chứng:** hành vi tương đương trên vLLM/cấu hình S (thêm cờ `--reasoning-parser qwen3` vào [`scripts/run_vllm_local.sh`](scripts/run_vllm_local.sh) dựa trên suy luận kỹ thuật, chưa chạy thật vì không có GPU); accuracy thật của `qwen3:8b` đầy đủ (test dùng bản 1.7B nhỏ hơn nhiều); độ trễ trên phần cứng RTX 5080 thật (đo trên Apple M4 cho ra ~18-19 giây/ticket, không đại diện) | Trả lời trực tiếp yêu cầu kiểm chứng của người phụ trách khóa trước khi tin buổi học sẽ trôi chảy; máy có sẵn Homebrew nhưng bottle qua ghcr.io bị nghẽn mạng nặng trong môi trường này nên chuyển sang tải thẳng bản Ollama chính thức từ GitHub Releases |
 | v1.6 | 2026-09-19 | — | Đổi model sinh văn bản mặc định của **cả hai cấu hình** từ `qwen2.5:3b-instruct` (L) / `Qwen2.5-7B-Instruct` (S) sang **`Qwen3-8B`** dùng chung (khác nhau ở backend: Ollama cho L, vLLM cho S — không còn khác nhau ở kích cỡ model). Đã cập nhật: [`.env.example`](.env.example), `models/Modelfile` (kèm cảnh báo thinking-mode của Qwen3 cần kiểm chứng thật), [`docker-compose.yml`](docker-compose.yml), [`src/config.py`](src/config.py), các script setup/so sánh, và nhãn "3B/7B" trong [`README.md`](README.md), [`SETUP.md`](SETUP.md), [`labs/LAB-0.md`](labs/LAB-0.md), [`CHALLENGE.md`](CHALLENGE.md) mục 5.4, `tai-lieu-bien-soan/workbooks/WORKBOOK-2.md`. **CHƯA LÀM** (cần GPU thật, ngoài khả năng chỉnh sửa văn bản): sinh lại `.cache/llm_cache.db` bằng `warm_cache.py` trên Qwen3-8B thật; đo lại toàn bộ ngưỡng [`SPEC-SCOPE-03`](#spec-scope-03) ([Mục 1](#muc-1), bảng ở dòng ~69) và ngưỡng CI ở `.github/workflows/ci.yml`; xác nhận thinking-mode của Qwen3 tắt được sạch qua Ollama; pilot Lab 3/4 để xem model có còn tự nhiên tạo ra JSON sai định dạng / gọi công cụ sai tham số hay không — xem rủi ro mới R17 (xem thêm v1.7). Thêm R17 | Yêu cầu trực tiếp từ đơn vị tổ chức khóa học, sau khi đánh giá Qwen2.5 (3B lẫn 7B) có hỗ trợ tiếng Việt nhưng ở mức trung bình, đặc biệt ở tác vụ sinh văn bản tự do của model nhỏ. Chọn hợp nhất về một model cho cả hai cấu hình theo lựa chọn tường minh của đơn vị tổ chức, chấp nhận đánh đổi: bài so sánh 3B/7B ở Lab 2 bước 2 mất trục "kích cỡ model", chỉ còn trục "hạ tầng" |
 | v1.5 | 2026-09-19 | — | Xác nhận hạ tầng phòng Lab AI thật: 8 AI Workstation độc lập (i9-14900K, 64GB RAM, 1× RTX 5080 16GB, 2TB NVMe), mạng 10GbE nội bộ, 500Mbps Internet. **Quyết định: 1 nhóm = 1 workstation, không cluster hóa 8 GPU thành một server dùng chung.** Kiến trúc suy luận mặc định của mỗi workstation vẫn là cấu hình L (Ollama, `qwen2.5:3b-instruct`) theo [ADR-0001](docs/adr/0001-hai-cau-hinh-ngang-hang.md) — mỗi máy phục vụ đúng một nhóm nên lợi ích gộp lô liên tục của vLLM không phát huy, trong khi tính cách ly lỗi (không điểm hỏng chung) vẫn quan trọng như cũ. **Không bổ sung fine-tuning** — giữ nguyên [`SPEC-SCOPE-02`](#spec-scope-02). Bổ sung nội dung nâng cao TÙY CHỌN ở Session 5 ([`CHALLENGE.md`](CHALLENGE.md) mục 5.4): triển khai vLLM thật trên GPU của nhóm, tận dụng phần VRAM dư (~13GB/16GB chưa dùng ở cấu hình mặc định) mà không đổi cấu hình mặc định của lớp | Đã có số liệu phần cứng thật của phòng Lab, không còn phải áp dụng [`SPEC-INFRA-02`](#spec-infra-02) bằng phỏng đoán. GPU 16GB/máy dư sức chạy model lớn hơn 3B, nhưng vì mỗi máy chỉ phục vụ một nhóm (đồng thời ~1-2), giá trị chính của vLLM so với Ollama không phải continuous batching mà là tốc độ suy luận thô — đưa vào như bài tập nâng cao thay vì đổi mặc định, để không phải hiệu chuẩn lại toàn bộ [`SPEC-SCOPE-03`](#spec-scope-03) và cache/index đã đóng băng |
@@ -1311,7 +1495,8 @@ Hệ thống không huấn luyện mô hình nên không có trôi dữ liệu t
 | Dữ liệu | `SPEC-DATA-`[01](#spec-data-01) · [02](#spec-data-02) · [03](#spec-data-03) · [04](#spec-data-04) · [05](#spec-data-05) · [06](#spec-data-06) | Nguyên tắc, lược đồ, taxonomy, cơ cấu tập, bẫy, tri thức |
 | LLM | `SPEC-LLM-`[01](#spec-llm-01) · [02](#spec-llm-02) · [03](#spec-llm-03) · [04](#spec-llm-04) · [05](#spec-llm-05) | Giao diện, cache, tham số, đầu ra cấu trúc, ngắt mạch |
 | Prompt | `SPEC-PROMPT-`[01](#spec-prompt-01) · [02](#spec-prompt-02) · [03](#spec-prompt-03) | Cấu trúc, quy định, ràng buộc sinh phản hồi |
-| RAG | `SPEC-RAG-`[01](#spec-rag-01) · [02](#spec-rag-02) · [03](#spec-rag-03) · [04](#spec-rag-04) | Chunking, truy hồi, không đủ căn cứ, trích dẫn |
+| RAG | `SPEC-RAG-`[01](#spec-rag-01) · [02](#spec-rag-02) · [03](#spec-rag-03) · [04](#spec-rag-04) · [05](#spec-rag-05) · [06](#spec-rag-06) · [07](#spec-rag-07) · [08](#spec-rag-08) · [09](#spec-rag-09) · [10](#spec-rag-10) | Chunking, truy hồi, không đủ căn cứ, trích dẫn, kiến trúc pipeline, hợp đồng dữ liệu, chia đoạn, embedding, tìm kiếm, ngưỡng |
+| Context | `SPEC-CTX-`[01](#spec-ctx-01) · [02](#spec-ctx-02) | Ghép context, sáu thành phần của context |
 | Công cụ | `SPEC-TOOL-`[01](#spec-tool-01) · [02](#spec-tool-02) · [03](#spec-tool-03) | Danh mục, ràng buộc, dự phòng theo luật |
 | Quy trình | `SPEC-FLOW-`[01](#spec-flow-01) · [02](#spec-flow-02) · [03](#spec-flow-03) · [04](#spec-flow-04) | Luồng chuẩn, escalate, bất biến, ghi nhận duyệt |
 | Guardrails | `SPEC-GUARD-`[01](#spec-guard-01) · [02](#spec-guard-02) · [03](#spec-guard-03) · [04](#spec-guard-04) | Đầu vào, đầu ra, vận hành, bộ đối kháng |

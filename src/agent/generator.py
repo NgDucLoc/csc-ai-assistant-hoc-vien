@@ -17,8 +17,8 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from src.agent.loader import load_prompt
-from src.knowledge.retriever import RetrievalResult
 from src.llm.client import LLMClient, get_client
+from src.retrieval.models import RetrievalResult
 
 SYSTEM = (
     "Bạn soạn dự thảo phản hồi cho giao dịch viên chăm sóc khách hàng viễn thông. "

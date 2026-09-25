@@ -10,11 +10,13 @@ from __future__ import annotations
 
 import pytest
 
+from src.agent.classifier import classify
 from src.agent.loader import list_prompts, load_prompt, validate_structure
 from src.config import settings
-from src.knowledge.indexer import build_chunks, chunk_document
-from src.knowledge.loader import conflict_report, load_documents
-from src.knowledge.retriever import Retriever
+from src.context.assemble import assemble_context
+from src.knowledge.embedding import embed_chunks
+from src.knowledge.governance import conflict_report, load_documents
+from src.knowledge.preparation import Chunk, build_chunks, chunk_document
 from src.llm.schema import (
     CLASSIFICATION_FALLBACK,
     CLASSIFICATION_SCHEMA,
@@ -22,6 +24,10 @@ from src.llm.schema import (
     parse_with_retry,
     validate,
 )
+from src.retrieval.filters import filter_hits, judge_evidence
+from src.retrieval.models import Hit
+from src.retrieval.pipeline import Retriever
+from src.retrieval.search import cosine, hybrid_search
 
 pytestmark = pytest.mark.lab3
 
@@ -207,10 +213,164 @@ def test_chunking_respects_section_boundaries() -> None:
     assert all(len(c.text) <= settings.chunk_size * 1.5 for c in chunks)
 
 
+# --- embedding -------------------------------------------------------------
+class _FakeEmbedClient:
+    """Model embedding giả: vector của một đoạn phụ thuộc độ dài văn bản, ghi lại các lô đã nhận."""
+
+    def __init__(self) -> None:
+        self.batches: list[list[str]] = []
+
+    def embed(self, texts: list[str]) -> list[list[float]]:
+        self.batches.append(list(texts))
+        return [[float(len(t)), 1.0] for t in texts]
+
+
+def _chunk(i: int) -> Chunk:
+    return Chunk(
+        f"KB-999#{i:02d}",
+        "KB-999",
+        "Tài liệu thử",
+        f"Mục {i}",
+        "khac",
+        "1.0",
+        "2026-01-01",
+        f"nội dung số {i}",
+    )
+
+
+def test_embed_chunks_batches_and_keeps_order() -> None:
+    """Embed — gọi theo lô, vector trả về đúng thứ tự đoạn, dùng văn bản có tiêu đề dẫn đầu."""
+    chunks = [_chunk(i) for i in range(5)]
+    client = _FakeEmbedClient()
+    vectors = embed_chunks(chunks, client, batch_size=2)
+    assert [len(b) for b in client.batches] == [2, 2, 1]
+    assert client.batches[0][0] == chunks[0].embedding_text()
+    assert [v[0] for v in vectors] == [float(len(c.embedding_text())) for c in chunks]
+
+
+def test_embed_chunks_reports_progress_and_validates() -> None:
+    """Embed — báo tiến độ sau mỗi lô, và từ chối khi model trả sai số vector."""
+    seen: list[tuple[int, int]] = []
+    embed_chunks(
+        [_chunk(i) for i in range(3)],
+        _FakeEmbedClient(),
+        batch_size=2,
+        on_progress=lambda d, t: seen.append((d, t)),
+    )
+    assert seen == [(2, 3), (3, 3)]
+
+    class Broken:
+        def embed(self, texts: list[str]) -> list[list[float]]:
+            return [[1.0]]
+
+    with pytest.raises(ValueError):
+        embed_chunks([_chunk(0), _chunk(1)], Broken(), batch_size=2)
+    with pytest.raises(ValueError):
+        embed_chunks([_chunk(0)], _FakeEmbedClient(), batch_size=0)
+
+
 # --- truy hồi --------------------------------------------------------------
+def _index_chunks() -> list[dict]:
+    def make(i: str, title: str, text: str, vec: list[float]) -> dict:
+        return {
+            "chunk_id": f"KB-{i}#00",
+            "doc_id": f"KB-{i}",
+            "doc_title": title,
+            "section": "Mục 1",
+            "version": "1.0",
+            "effective_date": "2026-01-01",
+            "category": "cuoc_thanh_toan",
+            "text": text,
+            "embedding": vec,
+        }
+
+    return [
+        make("001", "Phí chậm nộp", "phí chậm nộp cước được tính mỗi ngày", [1.0, 0.0]),
+        make("002", "Cẩm nang SIM", "hướng dẫn đổi SIM tại cửa hàng", [0.0, 1.0]),
+        make("003", "Gói TS149", "cước gói TS149 mỗi tháng", [0.6, 0.8]),
+    ]
+
+
+def test_cosine_of_parallel_and_orthogonal_vectors() -> None:
+    """Cosine — vector song song bằng 1, vuông góc bằng 0."""
+    assert cosine([1.0, 2.0], [2.0, 4.0]) == pytest.approx(1.0)
+    assert cosine([1.0, 0.0], [0.0, 1.0]) == pytest.approx(0.0)
+
+
+def test_keyword_search_without_vector() -> None:
+    """Retrieve — không có vector thì dùng keyword, kết quả sắp giảm dần."""
+    hits = hybrid_search("phí chậm nộp cước", _index_chunks(), top_k=3)
+    assert hits[0].doc_id == "KB-001"
+    assert hits == sorted(hits, key=lambda h: h.score, reverse=True)
+    assert all(0.0 <= h.score <= 1.0 for h in hits)
+
+
+def test_semantic_search_ranks_by_vector() -> None:
+    """Retrieve — semantic thuần: câu hỏi không chung từ nào vẫn tìm đúng nhờ vector."""
+    hits = hybrid_search("zzz", _index_chunks(), query_vector=[0.0, 1.0], top_k=3, hybrid=False)
+    assert hits[0].doc_id == "KB-002"
+    assert hits[0].score == pytest.approx(1.0)
+
+
+def test_hybrid_search_mixes_vector_and_keyword() -> None:
+    """Retrieve — hybrid: điểm là trọng số vector cộng phần còn lại của keyword."""
+    chunks = _index_chunks()
+    hits = hybrid_search("phí chậm nộp", chunks, query_vector=[1.0, 0.0], top_k=1, vector_weight=0.75)
+    # vector = 1.0, keyword = 1.0 (cả ba từ đều có) => 0.75 * 1 + 0.25 * 1
+    assert hits[0].doc_id == "KB-001"
+    assert hits[0].score == pytest.approx(1.0)
+    only_vector = hybrid_search("phí chậm nộp", chunks, query_vector=[1.0, 0.0], top_k=1, vector_weight=1.0)
+    assert only_vector[0].score == pytest.approx(1.0)
+
+
+def test_search_returns_at_most_top_k() -> None:
+    """Retrieve — trả tối đa top_k kết quả."""
+    assert len(hybrid_search("cước", _index_chunks(), top_k=2)) == 2
+
+
+def test_filter_hits_by_category_and_date() -> None:
+    """Filter — loại theo nhóm và theo ngày hiệu lực."""
+    hits = [
+        Hit("a#0", "A", "Tài liệu A", "Mục", "1.0", "2026-01-01", "x", 0.9, "cuoc_thanh_toan"),
+        Hit("b#0", "B", "Tài liệu B", "Mục", "1.0", "2026-06-01", "y", 0.8, "thiet_bi_sim"),
+    ]
+    assert [h.doc_id for h in filter_hits(hits, categories={"thiet_bi_sim"})] == ["B"]
+    assert [h.doc_id for h in filter_hits(hits, as_of="2026-03-01")] == ["A"]
+    assert filter_hits(hits) == hits
+
+
+def test_judge_evidence_rules() -> None:
+    """Filter — SPEC-RAG-03: không kết quả hoặc điểm dưới ngưỡng thì không đủ căn cứ."""
+    ok, reason = judge_evidence([], 0.35)
+    assert not ok and "không trả về kết quả" in reason.lower()
+    low = [Hit("a#0", "A", "Tài liệu A", "Mục", "1.0", "2026-01-01", "x", 0.2)]
+    ok, reason = judge_evidence(low, 0.35)
+    assert not ok and "không đủ căn cứ" in reason.lower()
+    high = [Hit("a#0", "A", "Tài liệu A", "Mục", "1.0", "2026-01-01", "x", 0.6)]
+    assert judge_evidence(high, 0.35)[0] is True
+    assert judge_evidence(high, 0.6)[0] is True, "Điểm bằng ngưỡng vẫn đủ căn cứ"
+
+
+# --- context ---------------------------------------------------------------
+def test_assemble_context_format_and_budget() -> None:
+    """Assemble — có trích dẫn, đúng thứ tự, không vượt ngân sách và không cắt cụt giữa đoạn."""
+    hits = [
+        Hit("a#0", "KB-001", "Cước", "Hạn nộp", "1.0", "2026-01-01", "Hạn nộp là ngày 20.", 0.9),
+        Hit("b#0", "KB-002", "SIM", "Đổi SIM", "2.1", "2026-02-01", "Đổi SIM tại cửa hàng.", 0.8),
+    ]
+    block = assemble_context(hits, max_chars=2000)
+    assert block.startswith("[KB-001 v1.0, hiệu lực 2026-01-01] Cước — Hạn nộp\nHạn nộp là ngày 20.")
+    assert "\n\n[KB-002 v2.1" in block
+    first_only = assemble_context(hits, max_chars=len(block.split("\n\n")[0]) + 5)
+    assert first_only == block.split("\n\n")[0]
+    assert assemble_context(hits, max_chars=10) == ""
+    assert assemble_context([], 2000) == ""
+
+
+# --- pipeline retrieval ----------------------------------------------------
 @pytest.fixture(scope="module")
 def retriever() -> Retriever:
-    """Retriever dùng chỉ mục dựng sẵn."""
+    """Retriever dùng chỉ mục dựng sẵn (không có thì dựng chỉ mục từ khóa trong bộ nhớ)."""
     from src.config import ROOT
 
     return Retriever(ROOT / "data" / "index_prebuilt")
@@ -231,9 +391,32 @@ def test_retriever_refuses_when_below_threshold(retriever: Retriever) -> None:
     hàng, một trợ lý bịa ra chính sách gây rủi ro nghiệp vụ nghiêm trọng hơn
     nhiều so với một trợ lý im lặng và chuyển tiếp cho người xử lý.
     """
-    out = retriever.retrieve("công thức nấu phở bò truyền thống Hà Nội", min_score=0.35)
+    out = retriever.retrieve("công thức nấu phở bò truyền thống Hà Nội")
     assert not out.grounded
     assert "không đủ căn cứ" in out.reason.lower() or "không trả về kết quả" in out.reason.lower()
+
+
+def test_retriever_uses_vector_when_index_has_embeddings() -> None:
+    """Pipeline — chỉ mục có vector thì nhúng truy vấn và chạy hybrid; model lỗi thì rơi về keyword."""
+    r = Retriever(client=_FakeEmbedClient())
+    r.chunks = _index_chunks()
+    r.has_vectors = True
+    out = r.retrieve("phí chậm nộp", query_vector=[1.0, 0.0])
+    assert out.mode == "hybrid" and out.hits[0].doc_id == "KB-001"
+
+    class Down:
+        def embed(self, texts: list[str]) -> list[list[float]]:
+            raise ConnectionError("model embedding không phản hồi")
+
+    r2 = Retriever(client=Down())
+    r2.chunks = _index_chunks()
+    r2.has_vectors = True
+    object.__setattr__(settings, "retrieve_mode", "auto")
+    try:
+        out2 = r2.retrieve("phí chậm nộp")
+    finally:
+        object.__setattr__(settings, "retrieve_mode", "keyword")
+    assert out2.mode == "keyword" and out2.hits
 
 
 def test_citation_format_is_traceable(retriever: Retriever) -> None:
@@ -241,3 +424,45 @@ def test_citation_format_is_traceable(retriever: Retriever) -> None:
     hit = retriever.search("bồi thường gián đoạn dịch vụ")[0]
     citation = hit.citation()
     assert citation.startswith("[KB-") and "hiệu lực" in citation and "v" in citation
+
+
+# --- classify (dùng model qua LLMClient) ----------------------------------
+class _FakeLLM:
+    """Model ngôn ngữ giả: trả lần lượt các câu trả lời đã định, ghi lại nội dung gửi đi."""
+
+    def __init__(self, replies: list[str]) -> None:
+        self.replies = replies
+        self.sent: list[str] = []
+
+    def complete(self, *, task: str, system: str, user: str, params: dict | None = None):  # noqa: ANN201
+        from types import SimpleNamespace
+
+        self.sent.append(user)
+        return SimpleNamespace(text=self.replies[len(self.sent) - 1], from_cache=False)
+
+
+_GOOD = '{"category": "cuoc_thanh_toan", "priority": "P2", "sentiment": "buc_boi", "confidence": 0.8}'
+
+
+def test_classify_returns_classification_directly() -> None:
+    """classify — model trả JSON đúng thì đi thẳng, lớp direct, gọi model một lần."""
+    llm = _FakeLLM([_GOOD])
+    result = classify("Tháng này tôi bị trừ tiền lạ.", client=llm)
+    assert result.category == "cuoc_thanh_toan"
+    assert result.defense_layer == "direct" and result.attempts == 1 and not result.needs_human
+    assert "<ticket>" in llm.sent[0] and "Tháng này tôi bị trừ tiền lạ." in llm.sent[0]
+
+
+def test_classify_retries_with_error_feedback_in_prompt() -> None:
+    """classify — lần thử lại phải nhận được thông báo lỗi của lần trước ngay trong prompt."""
+    llm = _FakeLLM(["Tôi nghĩ là cước.", _GOOD])
+    result = classify("Ticket thử", client=llm)
+    assert result.attempts == 2 and result.defense_layer == "retry_1"
+    assert "SỬA LỖI" in llm.sent[1] and "SỬA LỖI" not in llm.sent[0]
+
+
+def test_classify_never_raises_on_garbage() -> None:
+    """classify — hỏng hết vẫn không ném lỗi, thành một ca chuyển người."""
+    result = classify("Ticket thử", client=_FakeLLM(["rác"] * 3))
+    assert result.needs_human and result.defense_layer == "fallback"
+    assert result.category == "khac" and result.confidence == 0.0

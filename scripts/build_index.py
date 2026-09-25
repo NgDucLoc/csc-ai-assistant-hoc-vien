@@ -18,7 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.config import settings  # noqa: E402
-from src.knowledge.indexer import build_index  # noqa: E402
+from src.knowledge.indexing import build_index  # noqa: E402
 
 
 def main() -> int:

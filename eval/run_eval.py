@@ -34,8 +34,8 @@ from src.agent.workflow import Status, process_ticket  # noqa: E402
 from src.config import ROOT, settings  # noqa: E402
 from src.data import load_adversarial, load_gold_qa, load_gold_test, load_train  # noqa: E402
 from src.guardrails.input_rules import check_input  # noqa: E402
-from src.knowledge.retriever import get_retriever  # noqa: E402
 from src.llm.client import get_client  # noqa: E402
+from src.retrieval.pipeline import get_retriever  # noqa: E402
 
 RESULTS = ROOT / "eval" / "results"
 
